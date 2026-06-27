@@ -6,844 +6,687 @@
 <title>Reed's CSU Business Planner</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0f1013;
-    --surface-0: #161719;
-    --surface-1: #1e2023;
-    --surface-2: #25272b;
-    --border: #2e3035;
-    --border-strong: #3a3d44;
-    --text-primary: #e8e9eb;
-    --text-secondary: #9a9da6;
-    --text-muted: #5c6070;
-    --accent: #4f8ef7;
-    --accent-dim: #1a2d52;
-    --accent-text: #7fb3ff;
-    --green: #3d9e5f;
-    --green-dim: #0f2a1a;
-    --green-text: #6dcc94;
-    --amber: #c47d1a;
-    --amber-dim: #2d1f06;
-    --amber-text: #f0a840;
-    --red-dim: #2a0f0f;
-    --red-text: #f07070;
-    --radius: 10px;
-    --radius-sm: 6px;
-    --radius-lg: 14px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  /* ── Header ── */
-  .header {
-    background: var(--surface-0);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .header-left { display: flex; align-items: center; gap: 12px; }
-  .header-logo {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0;
-  }
-  .header-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
-  .header-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-  .header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
-  .stat-pill {
-    background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: 20px; padding: 4px 12px;
-    font-size: 12px; color: var(--text-secondary);
-  }
-  .stat-pill strong { color: var(--text-primary); font-weight: 500; }
-
-  /* ── Nav tabs ── */
-  .nav-wrap {
-    background: var(--surface-0);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex; gap: 0;
-  }
-  .nav-tab {
-    padding: 12px 18px; font-size: 13px; font-weight: 500;
-    color: var(--text-muted); cursor: pointer; border: none;
-    background: none; border-bottom: 2px solid transparent;
-    transition: color .15s, border-color .15s;
-  }
-  .nav-tab:hover { color: var(--text-secondary); }
-  .nav-tab.active { color: var(--accent-text); border-bottom-color: var(--accent); }
-
-  /* ── Main layout ── */
-  .main { padding: 24px; max-width: 1200px; margin: 0 auto; }
-  .panel { display: none; }
-  .panel.show { display: block; }
-
-  /* ── Section labels ── */
-  .section-label {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: .07em; color: var(--text-muted);
-    margin: 20px 0 10px; display: flex; align-items: center; gap: 10px;
-  }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
-  /* ── Concentration tabs ── */
-  .conc-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-  .conc-tab {
-    padding: 6px 14px; border-radius: 20px;
-    border: 1px solid var(--border-strong);
-    font-size: 12px; font-weight: 500; cursor: pointer;
-    color: var(--text-secondary); background: var(--surface-1);
-    transition: all .12s;
-  }
-  .conc-tab:hover { background: var(--surface-2); }
-  .conc-tab.active { background: var(--accent-dim); color: var(--accent-text); border-color: var(--accent); }
-  .conc-tab .pip {
-    display: inline-block; width: 7px; height: 7px;
-    border-radius: 50%; margin-left: 5px; vertical-align: middle;
-  }
-
-  /* ── Concentration panels ── */
-  .conc-panel { display: none; }
-  .conc-panel.show { display: block; }
-
-  /* ── Progress bar ── */
-  .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .progress-wrap { flex: 1; height: 6px; background: var(--surface-0); border-radius: 3px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .4s; }
-  .progress-pct { font-size: 13px; font-weight: 600; color: var(--text-primary); min-width: 38px; text-align: right; }
-  .progress-label { font-size: 12px; color: var(--text-muted); }
-
-  /* ── Course grid ── */
-  .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
-  .cc {
-    border-radius: var(--radius); border: 1px solid var(--border);
-    padding: 10px 12px; position: relative;
-  }
-  .cc.done    { background: var(--green-dim);  border-left: 3px solid var(--green); }
-  .cc.inprog  { background: var(--amber-dim);  border-left: 3px solid var(--amber); }
-  .cc.req     { background: var(--surface-1);  border-left: 3px solid var(--accent); }
-  .cc.choice  { background: var(--surface-1);  border-left: 3px solid var(--border-strong); }
-  .cc-code { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
-  .cc-code.done   { color: var(--green-text); }
-  .cc-code.inprog { color: var(--amber-text); }
-  .cc-code.req    { color: var(--accent-text); }
-  .cc-code.choice { color: var(--text-muted); }
-  .cc-name { font-size: 12px; color: var(--text-primary); line-height: 1.35; }
-  .cc-grade { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
-  .cc-badge {
-    font-size: 10px; padding: 2px 7px; border-radius: 20px; margin-top: 5px; display: inline-block;
-  }
-  .b-done   { background: var(--green-dim);  color: var(--green-text); }
-  .b-inprog { background: var(--amber-dim);  color: var(--amber-text); }
-  .b-req    { background: var(--accent-dim); color: var(--accent-text); }
-  .b-choice { background: var(--surface-0);  color: var(--text-muted); border: 1px solid var(--border); }
-
-  /* ── Sub-option tabs (Finance) ── */
-  .sub-tabs { display: flex; gap: 6px; margin: 12px 0 8px; flex-wrap: wrap; }
-  .sub-tab {
-    font-size: 11px; padding: 4px 12px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border); cursor: pointer;
-    color: var(--text-secondary); background: var(--surface-1);
-  }
-  .sub-tab.active { background: var(--green-dim); color: var(--green-text); border-color: var(--green); }
-  .sub-panel { display: none; }
-  .sub-panel.show { display: block; }
-
-  /* ── Note box ── */
-  .note-box {
-    background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 10px 14px;
-    font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-top: 12px;
-  }
-  .note-box strong { color: var(--text-primary); }
-
-  /* ── Flag ── */
-  .flag {
-    background: var(--amber-dim); border: 1px solid var(--amber);
-    border-radius: var(--radius); padding: 10px 14px;
-    font-size: 12px; color: var(--amber-text); margin-bottom: 16px; line-height: 1.6;
-  }
-
-  /* ── Legend ── */
-  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
-  .leg { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-secondary); }
-  .leg-dot { width: 10px; height: 10px; border-radius: 2px; }
-
-  /* ── Core status tab ── */
-  .core-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6; }
-
-  /* ── Certificate cards ── */
-  .cert-toolbar { margin-bottom: 16px; }
-  .sort-select {
-    background: var(--surface-1); border: 1px solid var(--border-strong);
-    border-radius: var(--radius); padding: 9px 14px;
-    font-size: 13px; color: var(--text-primary);
-    appearance: none; cursor: pointer; font-family: inherit;
-    width: 100%; max-width: 320px;
-  }
-  .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
-  .cert-card {
-    background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 16px; display: flex;
-    flex-direction: column; gap: 10px; transition: border-color .15s;
-  }
-  .cert-card:hover { border-color: var(--border-strong); }
-  .cert-badges { display: flex; gap: 6px; flex-wrap: wrap; min-height: 22px; }
-  .badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
-  .badge-close { background: var(--green-dim); color: var(--green-text); }
-  .badge-prog  { background: var(--amber-dim); color: var(--amber-text); }
-  .cert-name { font-size: 15px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
-  .cert-sub  { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .cert-prog-wrap { height: 6px; background: var(--surface-0); border-radius: 3px; overflow: hidden; margin-bottom: 5px; }
-  .cert-prog-fill { height: 100%; border-radius: 3px; background: var(--accent); }
-  .cert-prog-row { display: flex; justify-content: space-between; }
-  .cert-pct { font-size: 13px; color: var(--text-secondary); }
-  .cert-rem { font-size: 13px; color: var(--text-muted); }
-  .cert-needed {
-    font-size: 12px; color: var(--text-secondary);
-    padding-top: 8px; border-top: 1px solid var(--border); line-height: 1.55;
-  }
-  .cert-needed strong { color: var(--text-primary); }
-
-  /* ── Chip row ── */
-  .chip-row { display: flex; flex-wrap: wrap; gap: 5px; }
-  .chip { font-size: 11px; padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); }
-  .chip-done  { background: var(--green-dim);  color: var(--green-text);  border-color: var(--green); }
-  .chip-prog  { background: var(--amber-dim);  color: var(--amber-text);  border-color: var(--amber); }
-  .chip-todo  { background: var(--surface-0);  color: var(--text-muted); }
-
-  /* ── Responsive ── */
-  @media (max-width: 640px) {
-    .header { padding: 12px 16px; }
-    .main { padding: 16px; }
-    .nav-tab { padding: 10px 12px; font-size: 12px; }
-    .course-grid { grid-template-columns: 1fr 1fr; }
-    .cert-grid { grid-template-columns: 1fr; }
-  }
+:root{--bg:#0f1013;--s0:#161719;--s1:#1e2023;--s2:#25272b;--bd:#2e3035;--bds:#3a3d44;--tp:#e8e9eb;--ts:#9a9da6;--tm:#5c6070;--ac:#4f8ef7;--ad:#1a2d52;--at:#7fb3ff;--gn:#3d9e5f;--gd:#0f2a1a;--gt:#6dcc94;--am:#c47d1a;--amd:#2d1f06;--amt:#f0a840;--r:10px;--rs:6px;--rl:14px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tp);min-height:100vh;font-size:14px;line-height:1.5}
+.header{background:var(--s0);border-bottom:1px solid var(--bd);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100}
+.hlogo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0}
+.htitle{font-size:15px;font-weight:600}.hsub{font-size:12px;color:var(--tm);margin-top:1px}
+.hstats{display:flex;gap:8px;flex-wrap:wrap}
+.spill{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--ts)}
+.spill strong{color:var(--tp);font-weight:500}
+.navwrap{background:var(--s0);border-bottom:1px solid var(--bd);padding:0 24px;display:flex;gap:0;overflow-x:auto}
+.nvt{padding:12px 16px;font-size:13px;font-weight:500;color:var(--tm);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
+.nvt:hover{color:var(--ts)}.nvt.active{color:var(--at);border-bottom-color:var(--ac)}
+.main{padding:20px 24px;max-width:1200px;margin:0 auto}
+.panel{display:none}.panel.show{display:block}
+.slab{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);margin:18px 0 10px;display:flex;align-items:center;gap:10px}
+.slab::after{content:'';flex:1;height:1px;background:var(--bd)}
+.ctabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.ctab{padding:6px 13px;border-radius:20px;border:1px solid var(--bds);font-size:12px;font-weight:500;cursor:pointer;color:var(--ts);background:var(--s1);transition:all .12s}
+.ctab:hover{background:var(--s2)}.ctab.active{background:var(--ad);color:var(--at);border-color:var(--ac)}
+.pip{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px;vertical-align:middle}
+.cpanel{display:none}.cpanel.show{display:block}
+.prow{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.pwrap{flex:1;height:6px;background:var(--s0);border-radius:3px;overflow:hidden}
+.pfill{height:100%;border-radius:3px;background:var(--ac)}
+.ppct{font-size:13px;font-weight:600;color:var(--tp);min-width:38px;text-align:right}
+.plab{font-size:12px;color:var(--tm)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.cc{border-radius:var(--r);border:1px solid var(--bd);padding:10px 12px}
+.cc.dn{background:var(--gd);border-left:3px solid var(--gn)}
+.cc.ip{background:var(--amd);border-left:3px solid var(--am)}
+.cc.rq{background:var(--s1);border-left:3px solid var(--ac)}
+.cc.ch{background:var(--s1);border-left:3px solid var(--bds)}
+.ccode{font-size:11px;font-weight:600;margin-bottom:3px}
+.ccode.dn{color:var(--gt)}.ccode.ip{color:var(--amt)}.ccode.rq{color:var(--at)}.ccode.ch{color:var(--tm)}
+.cname{font-size:12px;color:var(--tp);line-height:1.35}.cgrade{font-size:10px;color:var(--tm);margin-top:3px}
+.cbdg{font-size:10px;padding:2px 7px;border-radius:20px;margin-top:5px;display:inline-block}
+.bdn{background:var(--gd);color:var(--gt)}.bip{background:var(--amd);color:var(--amt)}
+.brq{background:var(--ad);color:var(--at)}.bch{background:var(--s0);color:var(--tm);border:1px solid var(--bd)}
+.stabs{display:flex;gap:5px;margin:10px 0 8px;flex-wrap:wrap}
+.stab{font-size:11px;padding:4px 11px;border-radius:var(--rs);border:1px solid var(--bd);cursor:pointer;color:var(--ts);background:var(--s1)}
+.stab.active{background:var(--gd);color:var(--gt);border-color:var(--gn)}
+.spanel{display:none}.spanel.show{display:block}
+.nbox{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--ts);line-height:1.6;margin-top:12px}
+.nbox strong{color:var(--tp)}
+.flag{background:var(--amd);border:1px solid var(--am);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--amt);margin-bottom:14px;line-height:1.6}
+.warn{background:#2a0f0f;border:1px solid #f07070;border-radius:var(--r);padding:10px 14px;font-size:12px;color:#f07070;margin-bottom:14px;line-height:1.6}
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.lgi{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--ts)}
+.lgd{width:10px;height:10px;border-radius:2px}
+/* AUCC tab */
+.aucc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.aucc-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px}
+.aucc-cat{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tm);margin-bottom:6px}
+.aucc-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+.aucc-code{font-size:12px;font-weight:500;white-space:nowrap}
+.aucc-code.dn{color:var(--gt)}.aucc-code.ip{color:var(--amt)}.aucc-code.nd{color:var(--at)}
+.aucc-name{font-size:11px;color:var(--ts);text-align:right;line-height:1.3}
+.aucc-status{font-size:10px;padding:2px 7px;border-radius:20px;margin-top:2px;display:inline-block;white-space:nowrap}
+/* Certs */
+.sortsel{background:var(--s1);border:1px solid var(--bds);border-radius:var(--r);padding:9px 14px;font-size:13px;color:var(--tp);appearance:none;cursor:pointer;font-family:inherit;width:100%;max-width:320px;margin-bottom:14px}
+.certgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.certcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:16px;display:flex;flex-direction:column;gap:10px}
+.certcard:hover{border-color:var(--bds)}
+.certbdgs{display:flex;gap:6px;flex-wrap:wrap;min-height:22px}
+.bdg{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
+.bclose{background:var(--gd);color:var(--gt)}.bprog{background:var(--amd);color:var(--amt)}
+.cname2{font-size:15px;font-weight:600;color:var(--tp);line-height:1.3}
+.csub{font-size:12px;color:var(--tm);margin-top:2px}
+.cpwrap{height:6px;background:var(--s0);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.cpfill{height:100%;border-radius:3px;background:var(--ac)}
+.cprow{display:flex;justify-content:space-between}
+.cpct{font-size:13px;color:var(--ts)}.crem{font-size:13px;color:var(--tm)}
+.cneeded{font-size:12px;color:var(--ts);padding-top:8px;border-top:1px solid var(--bd);line-height:1.55}
+.cneeded strong{color:var(--tp)}
+.chiprow{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--bd)}
+.cpdn{background:var(--gd);color:var(--gt);border-color:var(--gn)}
+.cpip{background:var(--amd);color:var(--amt);border-color:var(--am)}
+.cptd{background:var(--s0);color:var(--tm)}
+@media(max-width:640px){.header{padding:10px 14px}.main{padding:14px}.cgrid{grid-template-columns:1fr 1fr}.certgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <div class="header">
-  <div class="header-left">
-    <div class="header-logo">R</div>
-    <div>
-      <div class="header-title">Reed's CSU Business Planner</div>
-      <div class="header-sub">College of Business · BS Business Administration</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="hlogo">R</div>
+    <div><div class="htitle">Reed's CSU Business Planner</div><div class="hsub">College of Business · BS Business Administration · 2025-2026 catalog</div></div>
+  </div>
+  <div class="hstats">
+    <div class="spill">GPA <strong>3.259</strong></div>
+    <div class="spill"><strong>70</strong> credits earned</div>
+    <div class="spill">Fall 2026 <strong>in progress</strong></div>
+    <div class="spill">Junior standing</div>
+  </div>
+</div>
+
+<div class="navwrap">
+  <button class="nvt active" onclick="showNav('core',this)">Lower Division Core</button>
+  <button class="nvt" onclick="showNav('conc',this)">Concentrations</button>
+  <button class="nvt" onclick="showNav('certs',this)">Certificates</button>
+</div>
+
+<div class="main">
+
+<!-- ══════════════════════════════════════
+     LOWER DIVISION CORE + AUCC
+     ══════════════════════════════════════ -->
+<div id="nav-core" class="panel show">
+
+  <div class="warn">⚑ <strong>BUS 225 missing:</strong> "Transforming Business for Sustainable Impact" (3 cr, AUCC 3B) does not appear on Reed's transcript and is required for all concentrations. BUS 201 (Foundations of Sustainable Enterprise, 1 cr, completed) is a separate course and does not substitute. Resolve with advisor before Spring 2027 registration — it may gate upper-division enrollment.</div>
+
+  <div class="slab">All-University Core Curriculum (AUCC) — required of all CSU undergraduates</div>
+  <div class="aucc-grid">
+    <div class="aucc-card">
+      <div class="aucc-cat">1A — Written Composition</div>
+      <div class="aucc-row"><span class="aucc-code dn">CO 150</span><span class="aucc-name">College Composition (GT-CO2)</span></div>
+      <span class="aucc-status bdn">done · A- · Sp 2025</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">1B — Quantitative Reasoning</div>
+      <div class="aucc-row"><span class="aucc-code dn">MATH 117/118/124</span><span class="aucc-name">College Algebra (transfer, 4 cr)</span></div>
+      <span class="aucc-status bdn">done · TA · Arapahoe CC</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">1B — Statistics</div>
+      <div class="aucc-row"><span class="aucc-code dn">STAT 201 → STAT 204</span><span class="aucc-name">Intro to Statistics (transfer equiv.)</span></div>
+      <span class="aucc-status bip">done · verify STAT 204 equivalency</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">1C — Global & Cultural Awareness</div>
+      <div class="aucc-row"><span class="aucc-code dn">SOC 205</span><span class="aucc-name">Sociology of Race and Racism (GT-SS3)</span></div>
+      <span class="aucc-status bdn">done · A- · Fa 2024</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">2 — Written Communication Upper Div</div>
+      <div class="aucc-row"><span class="aucc-code ip">JTC 300</span><span class="aucc-name">Strategic Writing & Communication (GT-CO3)</span></div>
+      <span class="aucc-status bip">in progress · Fall 2026</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">3A — Biological & Physical Sciences (7 cr)</div>
+      <div class="aucc-row"><span class="aucc-code dn">GEOL 120</span><span class="aucc-name">Geology and Society (GT-SC2, 3 cr)</span></div>
+      <div class="aucc-row"><span class="aucc-code dn">GEOL 121</span><span class="aucc-name">Intro Geology Lab (GT-SC1, 1 cr)</span></div>
+      <div class="aucc-row"><span class="aucc-code dn">AA 100</span><span class="aucc-name">Intro to Astronomy (GT-SC2, 3 cr)</span></div>
+      <span class="aucc-status bdn">done · 7 cr satisfied</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">3B — Arts & Humanities (two courses)</div>
+      <div class="aucc-row"><span class="aucc-code dn">BUS 220</span><span class="aucc-name">Ethics in Contemp. Orgs (GT-AH3)</span></div>
+      <div class="aucc-row"><span class="aucc-code nd">BUS 225</span><span class="aucc-name">Transforming Business for Sustainable Impact (GT-AH3)</span></div>
+      <span class="aucc-status" style="background:#2a0f0f;color:#f07070">BUS 225 MISSING ⚑</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">3C — Social & Behavioral Sciences (6 cr)</div>
+      <div class="aucc-row"><span class="aucc-code dn">ECON 202</span><span class="aucc-name">Microeconomics (GT-SS1)</span></div>
+      <div class="aucc-row"><span class="aucc-code dn">ECON 204</span><span class="aucc-name">Macroeconomics (GT-SS1)</span></div>
+      <span class="aucc-status bdn">done</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">3D — Historical Perspectives</div>
+      <div class="aucc-row"><span class="aucc-code dn">HIST 151</span><span class="aucc-name">U.S. History Since 1876 (GT-HI1)</span></div>
+      <span class="aucc-status bdn">done · B+ · Fa 2024</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">4A — Capstone & Finance</div>
+      <div class="aucc-row"><span class="aucc-code dn">FIN 300</span><span class="aucc-name">Principles of Finance</span></div>
+      <div class="aucc-row"><span class="aucc-code nd">BUS 479</span><span class="aucc-name">Strategic Management (capstone)</span></div>
+      <span class="aucc-status bip">FIN 300 done · BUS 479 needed senior yr</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">4B — Marketing</div>
+      <div class="aucc-row"><span class="aucc-code dn">MKT 300</span><span class="aucc-name">Marketing</span></div>
+      <span class="aucc-status bdn">done · B · Fa 2025</span>
+    </div>
+    <div class="aucc-card">
+      <div class="aucc-cat">4C — Sustainability / Ethics</div>
+      <div class="aucc-row"><span class="aucc-code nd">BUS 479</span><span class="aucc-name">Strategic Management (satisfies 4A + 4C)</span></div>
+      <span class="aucc-status brq">needed — senior year</span>
     </div>
   </div>
-  <div class="header-stats">
-    <div class="stat-pill">GPA <strong>3.259</strong></div>
-    <div class="stat-pill"><strong>70</strong> credits earned</div>
-    <div class="stat-pill">Fall 2026 <strong>in progress</strong></div>
-    <div class="stat-pill">Junior standing</div>
-  </div>
-</div>
 
-<!-- Nav -->
-<div class="nav-wrap">
-  <button class="nav-tab active" onclick="showNav('concentrations',this)">Concentrations</button>
-  <button class="nav-tab" onclick="showNav('core',this)">Business Core</button>
-  <button class="nav-tab" onclick="showNav('certificates',this)">Certificates</button>
-</div>
-
-<!-- ════════════════════════════════════════════
-     CONCENTRATIONS TAB
-     ════════════════════════════════════════════ -->
-<div class="main">
-<div id="nav-concentrations" class="panel show">
-
-  <div class="flag">⚑ <strong>Flag:</strong> MGT 301 (Supply Chain Management) earned a C+. The college requires a cumulative 2.000 GPA across all business and economics courses for graduation — monitor this if additional C-range grades accumulate. BUS 260 also came in at C.</div>
-
-  <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Completed</div>
-    <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>In progress (Fall 2026)</div>
-    <div class="leg"><div class="leg-dot" style="background:var(--accent)"></div>Required — still needed</div>
-    <div class="leg"><div class="leg-dot" style="background:var(--border-strong)"></div>Elective choice — still needed</div>
+  <div class="slab">Lower-division business core (all concentrations share these)</div>
+  <div class="cgrid">
+    <div class="cc dn"><div class="ccode dn">BUS 100</div><div class="cname">Introduction to Business</div><div class="cgrade">A · Fa 2024 · 1 cr</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">BUS 220</div><div class="cname">Ethics in Contemporary Organizations</div><div class="cgrade">A · Fa 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc rq"><div class="ccode rq">BUS 225</div><div class="cname">Transforming Business for Sustainable Impact</div><span class="cbdg brq">MISSING ⚑</span></div>
+    <div class="cc dn"><div class="ccode dn">BUS 260</div><div class="cname">Social-Ethical-Regulatory Issues in Business</div><div class="cgrade">C · Fa 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">ACT 210</div><div class="cname">Introduction to Financial Accounting</div><div class="cgrade">A- · Fa 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">ACT 220</div><div class="cname">Introduction to Managerial Accounting</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">CIS 200</div><div class="cname">Business Information Systems</div><div class="cgrade">B- · Sp 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">ECON 202</div><div class="cname">Principles of Microeconomics</div><div class="cgrade">A- · Fa 2024</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">ECON 204</div><div class="cname">Principles of Macroeconomics</div><div class="cgrade">A- · Sp 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">STAT 204</div><div class="cname">Statistics with Business Applications</div><div class="cgrade">transfer equiv. — verify</div><span class="cbdg bip">verify equiv.</span></div>
+    <div class="cc dn"><div class="ccode dn">CO 150</div><div class="cname">College Composition</div><div class="cgrade">A- · Sp 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">MATH 117–124</div><div class="cname">College Algebra (3 cr)</div><div class="cgrade">transfer · Arapahoe CC</div><span class="cbdg bdn">done</span></div>
   </div>
 
-  <div class="conc-tabs">
-    <button class="conc-tab active" onclick="showConc('mkt',this)">Marketing <span class="pip" style="background:#3d9e5f"></span></button>
-    <button class="conc-tab" onclick="showConc('mgti',this)">Mgmt &amp; Innovation <span class="pip" style="background:#3d9e5f"></span></button>
-    <button class="conc-tab" onclick="showConc('hrm',this)">HR Management <span class="pip" style="background:#3d9e5f"></span></button>
-    <button class="conc-tab" onclick="showConc('fin',this)">Finance <span class="pip" style="background:#c47d1a"></span></button>
-    <button class="conc-tab" onclick="showConc('acct',this)">Accounting <span class="pip" style="background:#5c6070"></span></button>
-    <button class="conc-tab" onclick="showConc('scm',this)">Supply Chain <span class="pip" style="background:#c47d1a"></span></button>
-    <button class="conc-tab" onclick="showConc('is',this)">Information Systems <span class="pip" style="background:#c47d1a"></span></button>
+  <div class="slab">Upper-division business core (shared across all concentrations)</div>
+  <div class="cgrid">
+    <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+    <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025 ⚑</div><span class="cbdg bdn">done</span></div>
+    <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management Principles/Practices</div><span class="cbdg bip">Fa 2026</span></div>
+    <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+    <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+    <div class="cc ip"><div class="ccode ip">JTC 300</div><div class="cname">Strategic Writing & Communication (GT-CO3)</div><span class="cbdg bip">Fa 2026</span></div>
+    <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">senior year</span></div>
+  </div>
+
+  <div class="nbox" style="margin-top:16px"><strong>GPA flag:</strong> BUS 260 (C) and MGT 301 (C+) are the two lowest grades. The college requires a minimum 2.000 GPA across all business and economics courses for graduation — monitor this carefully as upper-division coursework begins.</div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     CONCENTRATIONS
+     ══════════════════════════════════════ -->
+<div id="nav-conc" class="panel">
+
+  <div class="flag">⚑ All course data verified against the 2025-2026 catalog (biz.colostate.edu curriculum pages, fetched June 2026). Prior versions contained fabricated course numbers — all concentrations have been corrected from source.</div>
+
+  <div class="leg">
+    <div class="lgi"><div class="lgd" style="background:var(--gn)"></div>Completed</div>
+    <div class="lgi"><div class="lgd" style="background:var(--am)"></div>In progress (Fall 2026)</div>
+    <div class="lgi"><div class="lgd" style="background:var(--ac)"></div>Required — still needed</div>
+    <div class="lgi"><div class="lgd" style="background:var(--bds)"></div>Elective choice — still needed</div>
+  </div>
+
+  <div class="ctabs">
+    <button class="ctab active" onclick="showConc('mkt',this)">Marketing <span class="pip" style="background:#3d9e5f"></span></button>
+    <button class="ctab" onclick="showConc('mgti',this)">Mgmt &amp; Innovation <span class="pip" style="background:#3d9e5f"></span></button>
+    <button class="ctab" onclick="showConc('hrm',this)">HR Management <span class="pip" style="background:#c47d1a"></span></button>
+    <button class="ctab" onclick="showConc('scm',this)">Supply Chain <span class="pip" style="background:#c47d1a"></span></button>
+    <button class="ctab" onclick="showConc('fin',this)">Finance <span class="pip" style="background:#c47d1a"></span></button>
+    <button class="ctab" onclick="showConc('fpl',this)">Financial Planning <span class="pip" style="background:#5c6070"></span></button>
+    <button class="ctab" onclick="showConc('re',this)">Real Estate <span class="pip" style="background:#5c6070"></span></button>
+    <button class="ctab" onclick="showConc('acct',this)">Accounting <span class="pip" style="background:#5c6070"></span></button>
+    <button class="ctab" onclick="showConc('is',this)">Information Systems <span class="pip" style="background:#5c6070"></span></button>
+    <button class="ctab" onclick="showConc('sub',this)">Sustainable Business <span class="pip" style="background:#5c6070"></span></button>
   </div>
 
   <!-- MARKETING -->
-  <div id="conc-mkt" class="conc-panel show">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:46%"></div></div>
-      <span class="progress-pct">46%</span>
+  <div id="c-mkt" class="cpanel show">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:46%"></div></div><span class="ppct">~46%</span></div>
+    <div class="slab">Required upper-level courses</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">MKT 361</div><div class="cname">Buyer Behavior</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MKT 410</div><div class="cname">Marketing Research</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MKT 479</div><div class="cname">Marketing Strategy and Management</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
     </div>
-    <div class="section-label">Required upper-level courses</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">MKT 361</div><div class="cc-name">Buyer Behavior</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">MKT 410</div><div class="cc-name">Marketing Research</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">MKT 479</div><div class="cc-name">Marketing Strategy &amp; Management</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
+    <div class="slab">Choose 4 electives — 2 in Junior year, 2 in Senior year (MKT 365 in progress = #1)</div>
+    <div class="cgrid">
+      <div class="cc ip"><div class="ccode ip">MKT 365</div><div class="cname">International Marketing</div><span class="cbdg bip">Fa 2026 — elective #1</span></div>
+      <div class="cc ch"><div class="ccode ch">BUS 361</div><div class="cname">Principles of Music Marketing</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 315</div><div class="cname">Marketing Communication Design</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 320</div><div class="cname">Integrated Marketing Communications</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 330</div><div class="cname">Business Customer Relationships</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 360/DM 360</div><div class="cname">Retailing</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 362</div><div class="cname">Professional Selling</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 363</div><div class="cname">Sales Management</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 364</div><div class="cname">Product Design</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 366</div><div class="cname">Services Marketing</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 367</div><div class="cname">Sports Marketing</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 370</div><div class="cname">Digital Marketing</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 420</div><div class="cname">Marketing and Societal Well-Being</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 440</div><div class="cname">Pricing — Strategy, Tactics and Analysis</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 450</div><div class="cname">Marketing Analytics</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 487</div><div class="cname">Internship</div><span class="cbdg bch">choose 3 more</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 492</div><div class="cname">Seminar</div><span class="cbdg bch">choose 3 more</span></div>
     </div>
-    <div class="section-label">Choose 4 electives (12 credits) — MKT 365 in progress counts as #1</div>
-    <div class="course-grid">
-      <div class="cc inprog"><div class="cc-code inprog">MKT 365</div><div class="cc-name">International Marketing</div><span class="cc-badge b-inprog">Fall 2026 — elective #1</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 315</div><div class="cc-name">Marketing Communication Design</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 320</div><div class="cc-name">Integrated Marketing Communications</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 330</div><div class="cc-name">Business Customer Relationships</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 360</div><div class="cc-name">Retailing</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 362</div><div class="cc-name">Professional Selling</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 363</div><div class="cc-name">Sales Management</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 364</div><div class="cc-name">Product Design</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 366</div><div class="cc-name">Services Marketing</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 367</div><div class="cc-name">Sports Marketing</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 370</div><div class="cc-name">Digital Marketing</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 420</div><div class="cc-name">Marketing &amp; Societal Well-Being</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 440</div><div class="cc-name">Pricing – Strategy, Tactics &amp; Analysis</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 450</div><div class="cc-name">Marketing Analytics</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">MKT 487</div><div class="cc-name">Internship</div><span class="cc-badge b-choice">choose 3 more</span></div>
-      <div class="cc choice"><div class="cc-code choice">BUS 361</div><div class="cc-name">Principles of Music Marketing</div><span class="cc-badge b-choice">choose 3 more</span></div>
-    </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 4 required courses (MKT 361, MKT 410, MKT 479, BUS 479) + 3 more elective choices. MKT 365 in progress counts as elective #1 of 4.</div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> MKT 361, MKT 410, MKT 479, BUS 479 (all required) + 3 more elective choices. MKT 365 in progress counts as elective #1. 21 credits of marketing-specific courses total required.</div>
   </div>
 
   <!-- MGMT & INNOVATION -->
-  <div id="conc-mgti" class="conc-panel">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:55%"></div></div>
-      <span class="progress-pct">55%</span>
+  <div id="c-mgti" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:55%"></div></div><span class="ppct">~55%</span></div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MGT 310</div><div class="cname">Human Resource Management</div><div class="cgrade">B+ · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MGT 320</div><div class="cname">Contemporary Management</div><div class="cgrade">in progress</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc dn"><div class="ccode dn">MGT 340</div><div class="cname">Fundamentals of Entrepreneurship</div><div class="cgrade">B+ · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 410</div><div class="cname">Leadership and Organizational Behavior</div><span class="cbdg brq">required · junior yr</span></div>
     </div>
-    <div class="section-label">Required upper-level courses</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 310</div><div class="cc-name">Human Resource Management</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 340</div><div class="cc-name">Fundamentals of Entrepreneurship</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">MGT 410</div><div class="cc-name">Leadership &amp; Organizational Behavior</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required · senior yr</span></div>
     </div>
-    <div class="section-label">Choose 4 management electives (12 credits)</div>
-    <div class="course-grid">
-      <div class="cc choice"><div class="cc-code choice">MGT 330</div><div class="cc-name">Creativity, Innovation &amp; Value Creation</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 350</div><div class="cc-name">Employment Relations: Legal Environment</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 360</div><div class="cc-name">Social and Sustainable Venturing</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 375</div><div class="cc-name">Advanced Supply Management</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 411</div><div class="cc-name">Leading High Performance Teams</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 420</div><div class="cc-name">New Venture Creation</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 435</div><div class="cc-name">Global Ethical Leadership &amp; Stakeholder Mgmt</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 440</div><div class="cc-name">New Venture Management</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 468</div><div class="cc-name">Negotiating Globally</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 475</div><div class="cc-name">International Business Management</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 476</div><div class="cc-name">Negotiation and Conflict Management</div><span class="cc-badge b-choice">choose 4</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 486A</div><div class="cc-name">Practicum: Consulting</div><span class="cc-badge b-choice">choose 4</span></div>
+    <div class="slab">Choose 4 electives from this list (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">MGT 330</div><div class="cname">Creativity, Innovation and Value Creation</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 350</div><div class="cname">Employment Relations: The Legal Environment</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 360</div><div class="cname">Social and Sustainable Venturing</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 375</div><div class="cname">Advanced Supply Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 411</div><div class="cname">Leading High Performance Teams</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 420</div><div class="cname">New Venture Creation</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 435</div><div class="cname">Global Ethical Leadership &amp; Stakeholder Mgmt</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 440</div><div class="cname">New Venture Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 468</div><div class="cname">Negotiating Globally</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 475</div><div class="cname">International Business Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 476</div><div class="cname">Negotiation and Conflict Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 486A</div><div class="cname">Practicum: Consulting</div><span class="cbdg bch">choose 4</span></div>
     </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 2 required courses (MGT 410, BUS 479) + all 4 elective choices. Strongest position of any concentration — 5 of 9 required upper-level courses done or in progress.</div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> MGT 410 + BUS 479 (both required) + all 4 senior-year electives. Strongest position of any concentration — 5 of 6 junior required courses done or in progress. 21 credits of management-specific courses total required.</div>
   </div>
 
   <!-- HRM -->
-  <div id="conc-hrm" class="conc-panel">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:52%"></div></div>
-      <span class="progress-pct">52%</span>
+  <div id="c-hrm" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:35%"></div></div><span class="ppct">~35%</span></div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MGT 310</div><div class="cname">Human Resource Management</div><div class="cgrade">B+ · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 350</div><div class="cname">Employment Relations: The Legal Environment</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 474</div><div class="cname">Human Resource Planning and Development</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 260</div><div class="cname">Social-Ethical-Regulatory Issues in Business</div><div class="cgrade">C · Fa 2025</div><span class="cbdg bdn">done</span></div>
     </div>
-    <div class="section-label">Required upper-level courses</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 310</div><div class="cc-name">Human Resource Management</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">MGT 350</div><div class="cc-name">Employment Relations: Legal Environment</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">MGT 410</div><div class="cc-name">Leadership &amp; Organizational Behavior</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">MGT 411</div><div class="cc-name">Leading High Performance Teams</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 374</div><div class="cname">Total Rewards and Performance Management</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 479</div><div class="cname">Strategic HR Management Consulting</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
     </div>
-    <div class="section-label">HRM electives — choose from MGT 300–400 pool</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">MGT 340</div><div class="cc-name">Fundamentals of Entrepreneurship</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done — may count</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 330</div><div class="cc-name">Creativity, Innovation &amp; Value Creation</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 360</div><div class="cc-name">Social and Sustainable Venturing</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 420</div><div class="cc-name">New Venture Creation</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 435</div><div class="cc-name">Global Ethical Leadership</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 476</div><div class="cc-name">Negotiation and Conflict Management</div><span class="cc-badge b-choice">elective pool</span></div>
+    <div class="slab">Choose 2 senior-year electives from this list</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">MGT 410</div><div class="cname">Leadership and Organizational Behavior</div><span class="cbdg bch">choose 2</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 411</div><div class="cname">Leading High Performance Teams</div><span class="cbdg bch">choose 2</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 473</div><div class="cname">Employment Relations: Labor and Management</div><span class="cbdg bch">choose 2</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 476</div><div class="cname">Negotiation and Conflict Management</div><span class="cbdg bch">choose 2</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 486A</div><div class="cname">Practicum: Consulting</div><span class="cbdg bch">choose 2</span></div>
     </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 4 required courses (MGT 350, 410, 411, BUS 479) + elective credits. Confirm exact HRM elective count with advisor — MGT 340 already done may count.</div>
-  </div>
-
-  <!-- FINANCE -->
-  <div id="conc-fin" class="conc-panel">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:35%"></div></div>
-      <span class="progress-pct">35%</span>
-    </div>
-    <div class="section-label">Required upper-level core (all Finance options)</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">FIN 310</div><div class="cc-name">Financial Markets and Institutions</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">FIN 355</div><div class="cc-name">Principles of Investments</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">FIN 475</div><div class="cc-name">International Business Finance</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
-    </div>
-    <div class="section-label">Choose a Finance option</div>
-    <div class="sub-tabs">
-      <button class="sub-tab active" onclick="showSub('fin','corp',this)">Corporate Finance</button>
-      <button class="sub-tab" onclick="showSub('fin','inv',this)">Investment Analysis</button>
-      <button class="sub-tab" onclick="showSub('fin','re',this)">Real Estate Finance</button>
-    </div>
-    <div id="fin-corp" class="sub-panel show">
-      <div class="course-grid">
-        <div class="cc req"><div class="cc-code req">FIN 370</div><div class="cc-name">Financial Management – Theory &amp; Application</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc req"><div class="cc-code req">FIN 470</div><div class="cc-name">Derivative Securities</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc req"><div class="cc-code req">FIN 471</div><div class="cc-name">Enterprise Valuation</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc choice"><div class="cc-code choice">Upper-div ACT/FIN/REL</div><div class="cc-name">Electives (6 credits)</div><span class="cc-badge b-choice">choose 2</span></div>
-      </div>
-    </div>
-    <div id="fin-inv" class="sub-panel">
-      <div class="course-grid">
-        <div class="cc req"><div class="cc-code req">FIN 311</div><div class="cc-name">Debt Securities Analysis</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc req"><div class="cc-code req">FIN 455</div><div class="cc-name">Advanced Portfolio Management</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc req"><div class="cc-code req">FIN 470</div><div class="cc-name">Derivative Securities</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc choice"><div class="cc-code choice">Upper-div ACT/FIN/REL</div><div class="cc-name">Electives (6 credits)</div><span class="cc-badge b-choice">choose 2</span></div>
-      </div>
-    </div>
-    <div id="fin-re" class="sub-panel">
-      <div class="course-grid">
-        <div class="cc req"><div class="cc-code req">REL 360</div><div class="cc-name">Real Estate Principles</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc req"><div class="cc-code req">REL 430</div><div class="cc-name">Real Estate Market Analysis</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc req"><div class="cc-code req">REL 460</div><div class="cc-name">Real Estate Investment</div><span class="cc-badge b-req">required</span></div>
-        <div class="cc choice"><div class="cc-code choice">Upper-div ACT/FIN/REL</div><div class="cc-name">Electives (6 credits)</div><span class="cc-badge b-choice">choose 2</span></div>
-      </div>
-    </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 4 shared required courses (FIN 310, 355, 475, BUS 479) + all option-specific courses. More new ground to cover than Mgmt or Marketing tracks.</div>
-  </div>
-
-  <!-- ACCOUNTING -->
-  <div id="conc-acct" class="conc-panel">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:25%"></div></div>
-      <span class="progress-pct">25%</span>
-    </div>
-    <div class="section-label">Required upper-level courses</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">ACT 210</div><div class="cc-name">Intro to Financial Accounting</div><div class="cc-grade">A- · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">ACT 220</div><div class="cc-name">Intro to Managerial Accounting</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">ACT 311</div><div class="cc-name">Intermediate Accounting I</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">ACT 312</div><div class="cc-name">Intermediate Accounting II</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">ACT 321</div><div class="cc-name">Cost Management</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">ACT 330</div><div class="cc-name">Introduction to Taxation</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">ACT 350</div><div class="cc-name">Accounting Information Systems</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">ACT 441</div><div class="cc-name">Auditing Practices</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
-    </div>
-    <div class="section-label">Choose 1 elective (3 credits)</div>
-    <div class="course-grid">
-      <div class="cc choice"><div class="cc-code choice">ACT 411</div><div class="cc-name">Advanced Accounting</div><span class="cc-badge b-choice">choose 1</span></div>
-      <div class="cc choice"><div class="cc-code choice">ACT 421</div><div class="cc-name">Strategic Management Accounting</div><span class="cc-badge b-choice">choose 1</span></div>
-      <div class="cc choice"><div class="cc-code choice">ACT 537</div><div class="cc-name">Advanced Taxation of Business Entities</div><span class="cc-badge b-choice">choose 1</span></div>
-    </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 7 required accounting-specific courses + 1 elective. The ACT upper-division sequence hasn't started — this is the most work remaining of any concentration.</div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> MGT 350, MGT 474 (junior required) + MGT 374, MGT 479, BUS 479 (senior required) + 2 elective choices. Note: MGT 374 and MGT 479 were entirely absent from prior versions of this tool. 21 credits of HRM-specific courses total required.</div>
   </div>
 
   <!-- SUPPLY CHAIN -->
-  <div id="conc-scm" class="conc-panel">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:40%"></div></div>
-      <span class="progress-pct">40%</span>
+  <div id="c-scm" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:30%"></div></div><span class="ppct">~30%</span></div>
+    <div class="flag">⚑ Supply Chain is much more intensive than previously shown. Junior year alone requires 8 courses including MGT 376 (Advanced Service/Manufacturing Operations) and MGT 377 (Advanced Logistics) — neither appeared in prior versions.</div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 260</div><div class="cname">Social-Ethical-Regulatory Issues in Business</div><div class="cgrade">C · Fa 2025 — done</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 375</div><div class="cname">Advanced Supply Management</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 376</div><div class="cname">Advanced Service and Manufacturing Operations</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 377</div><div class="cname">Advanced Logistics</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 478</div><div class="cname">Global Supply Chain Management</div><span class="cbdg brq">required</span></div>
     </div>
-    <div class="section-label">Required upper-level courses</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done ⚑</span></div>
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">MGT 375</div><div class="cc-name">Advanced Supply Management</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">MGT 478</div><div class="cc-name">Global Supply Chain Management</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
     </div>
-    <div class="section-label">SCM electives — confirm current list with advisor</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">MGT 310</div><div class="cc-name">Human Resource Management</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done — may count</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 340</div><div class="cc-name">Fundamentals of Entrepreneurship</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done — may count</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 410</div><div class="cc-name">Leadership &amp; Organizational Behavior</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 435</div><div class="cc-name">Global Ethical Leadership</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">MGT 468</div><div class="cc-name">Negotiating Globally</div><span class="cc-badge b-choice">elective pool</span></div>
+    <div class="slab">Choose 4 SCM electives (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">CIS 411</div><div class="cname">Enterprise Resource Planning Systems</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">FIN 370</div><div class="cname">Financial Management-Theory and Application</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 330</div><div class="cname">Creativity, Innovation and Value Creation</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 411</div><div class="cname">Leading High Performance Teams</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 469A</div><div class="cname">Study Abroad — Peru: Global SCM Experience</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 475</div><div class="cname">International Business Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 476</div><div class="cname">Negotiation and Conflict Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 486B</div><div class="cname">Practicum: Supply Chain Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">MGT 492A</div><div class="cname">Seminar: Supply Chain Management</div><span class="cbdg bch">choose 4</span></div>
     </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 3 required courses (MGT 375, MGT 478, BUS 479) + electives. Verify the C+ in MGT 301 satisfies this concentration's prerequisite with your advisor.</div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> MGT 375, MGT 376, MGT 377, MGT 478 (all junior required) + BUS 479 + 4 senior electives. Significantly more work than the previous tool indicated. 24 credits of SCM-specific courses total required.</div>
   </div>
 
-  <!-- INFO SYSTEMS -->
-  <div id="conc-is" class="conc-panel">
-    <div class="progress-row">
-      <span class="progress-label">Upper-level progress</span>
-      <div class="progress-wrap"><div class="progress-fill" style="width:28%"></div></div>
-      <span class="progress-pct">28%</span>
+  <!-- FINANCE -->
+  <div id="c-fin" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:35%"></div></div><span class="ppct">~35%</span></div>
+    <div class="slab">Required upper-level core (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 310</div><div class="cname">Financial Markets and Institutions</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 355</div><div class="cname">Principles of Investments</div><span class="cbdg brq">required</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
     </div>
-    <div class="section-label">Required upper-level courses</div>
-    <div class="course-grid">
-      <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-      <div class="cc req"><div class="cc-code req">CIS 300</div><div class="cc-name">Information Systems Analysis &amp; Design</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">CIS 350</div><div class="cc-name">Database Management Systems</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">CIS 360</div><div class="cc-name">Business Application Development</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">CIS 450</div><div class="cc-name">Information Technology Management</div><span class="cc-badge b-req">required</span></div>
-      <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">required</span></div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 475</div><div class="cname">International Business Finance</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
     </div>
-    <div class="section-label">Upper-level CIS electives</div>
-    <div class="course-grid">
-      <div class="cc choice"><div class="cc-code choice">CIS 430</div><div class="cc-name">Advanced Application Development</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">CIS 440</div><div class="cc-name">Information Security Management</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">CIS 460</div><div class="cc-name">Business Intelligence</div><span class="cc-badge b-choice">elective pool</span></div>
-      <div class="cc choice"><div class="cc-code choice">CIS 470</div><div class="cc-name">IT Project Management</div><span class="cc-badge b-choice">elective pool</span></div>
+    <div class="slab">Then choose one option</div>
+    <div class="stabs">
+      <button class="stab active" onclick="showSub('fin','corp',this)">Corporate Finance</button>
+      <button class="stab" onclick="showSub('fin','inv',this)">Investment Analysis</button>
+      <button class="stab" onclick="showSub('fin','re',this)">Real Estate Finance</button>
     </div>
-    <div class="note-box"><strong>Remaining after Fall 2026:</strong> 5 required CIS-specific courses entirely new to the transcript. Feasible but requires a focused junior/senior year on CIS coursework.</div>
+    <div id="fin-corp" class="spanel show">
+      <div class="cgrid">
+        <div class="cc rq"><div class="ccode rq">FIN 370</div><div class="cname">Financial Management — Theory &amp; Application</div><span class="cbdg brq">required · Junior yr</span></div>
+        <div class="cc rq"><div class="ccode rq">FIN 470</div><div class="cname">Derivative Securities</div><span class="cbdg brq">required · Senior yr</span></div>
+        <div class="cc rq"><div class="ccode rq">FIN 471</div><div class="cname">Enterprise Valuation</div><span class="cbdg brq">required · Senior yr</span></div>
+        <div class="cc ch"><div class="ccode ch">Upper-div ACT, FIN, or REL</div><div class="cname">Electives (6 credits)</div><span class="cbdg bch">choose 2</span></div>
+      </div>
+    </div>
+    <div id="fin-inv" class="spanel">
+      <div class="cgrid">
+        <div class="cc ch"><div class="ccode ch">Upper-div ACT, FIN, or REL</div><div class="cname">Electives (6 credits)</div><span class="cbdg bch">Junior yr — choose 2</span></div>
+        <div class="cc rq"><div class="ccode rq">FIN 311</div><div class="cname">Debt Securities Analysis</div><span class="cbdg brq">required · Senior yr</span></div>
+        <div class="cc rq"><div class="ccode rq">FIN 455</div><div class="cname">Advanced Portfolio Management</div><span class="cbdg brq">required · Senior yr</span></div>
+        <div class="cc rq"><div class="ccode rq">FIN 470</div><div class="cname">Derivative Securities</div><span class="cbdg brq">required · Senior yr</span></div>
+      </div>
+    </div>
+    <div id="fin-re" class="spanel">
+      <div class="cgrid">
+        <div class="cc rq"><div class="ccode rq">REL 360</div><div class="cname">Real Estate Principles</div><span class="cbdg brq">required · Junior yr</span></div>
+        <div class="cc ch"><div class="ccode ch">Upper-div ACT, FIN, or REL</div><div class="cname">Elective (3 credits)</div><span class="cbdg bch">Junior yr — choose 1</span></div>
+        <div class="cc rq"><div class="ccode rq">REL 430</div><div class="cname">Real Estate Market Analysis</div><span class="cbdg brq">required · Senior yr</span></div>
+        <div class="cc rq"><div class="ccode rq">REL 460</div><div class="cname">Real Estate Investment</div><span class="cbdg brq">required · Senior yr</span></div>
+        <div class="cc ch"><div class="ccode ch">Upper-div ACT, FIN, or REL</div><div class="cname">Elective (3 credits)</div><span class="cbdg bch">Senior yr — choose 1</span></div>
+      </div>
+    </div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> FIN 310, FIN 355 (junior required), FIN 475, BUS 479 (senior required) + all option-specific courses. 24 credits of finance-specific courses total required.</div>
   </div>
 
-</div><!-- /concentrations -->
-
-
-<!-- ════════════════════════════════════════════
-     BUSINESS CORE TAB
-     ════════════════════════════════════════════ -->
-<div id="nav-core" class="panel">
-  <p class="core-meta">All required freshman/sophomore business core courses, plus common upper-division requirements. Based directly on Reed's FAMweb transcript (pulled June 27, 2026).</p>
-
-  <div class="flag">⚑ <strong>BUS 225 missing:</strong> "Transforming Business for Sustainable Impact" does not appear on the transcript. BUS 201 (Foundations of Sustainable Enterprise, 1 credit, B) is a separate course. Confirm with your advisor whether BUS 225 is required and whether anything satisfies it — it may gate upper-division enrollment in some concentrations.</div>
-
-  <div class="section-label">Business core courses</div>
-  <div class="course-grid">
-    <div class="cc done"><div class="cc-code done">BUS 100</div><div class="cc-name">Introduction to Business</div><div class="cc-grade">A · Fall 2024</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">BUS 201</div><div class="cc-name">Foundations of Sustainable Enterprise</div><div class="cc-grade">B · Spring 2025 (1 cr)</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">BUS 220</div><div class="cc-name">Ethics in Contemporary Organizations</div><div class="cc-grade">A · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc req"><div class="cc-code req">BUS 225</div><div class="cc-name">Transforming Business for Sustainable Impact</div><span class="cc-badge b-req">missing ⚑</span></div>
-    <div class="cc done"><div class="cc-code done">BUS 260</div><div class="cc-name">Social-Ethical-Regulatory Issues in Business</div><div class="cc-grade">C · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">ACT 210</div><div class="cc-name">Intro to Financial Accounting</div><div class="cc-grade">A- · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">ACT 220</div><div class="cc-name">Intro to Managerial Accounting</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">CIS 200</div><div class="cc-name">Business Information Systems</div><div class="cc-grade">B- · Spring 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">ECON 202</div><div class="cc-name">Principles of Microeconomics</div><div class="cc-grade">A- · Fall 2024</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">ECON 204</div><div class="cc-name">Principles of Macroeconomics</div><div class="cc-grade">A- · Spring 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">FIN 300</div><div class="cc-name">Principles of Finance</div><div class="cc-grade">B · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">MGT 301</div><div class="cc-name">Supply Chain Management</div><div class="cc-grade">C+ · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">MGT 310</div><div class="cc-name">Human Resource Management</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">MGT 340</div><div class="cc-name">Fundamentals of Entrepreneurship</div><div class="cc-grade">B+ · Spring 2026</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">MKT 300</div><div class="cc-name">Marketing</div><div class="cc-grade">B · Fall 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc done"><div class="cc-code done">STAT 201</div><div class="cc-name">Intro to Statistics (transfer equiv.)</div><div class="cc-grade">TB · Arapahoe CC</div><span class="cc-badge b-done">verify STAT 204 equiv.</span></div>
-    <div class="cc done"><div class="cc-code done">CO 150</div><div class="cc-name">College Composition</div><div class="cc-grade">A- · Spring 2025</div><span class="cc-badge b-done">done</span></div>
-    <div class="cc inprog"><div class="cc-code inprog">JTC 300</div><div class="cc-name">Strategic Writing &amp; Communication</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-    <div class="cc inprog"><div class="cc-code inprog">CIS 370</div><div class="cc-name">Analytics and AI in Business</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-    <div class="cc inprog"><div class="cc-code inprog">MGT 320</div><div class="cc-name">Contemporary Management</div><span class="cc-badge b-inprog">Fall 2026</span></div>
-    <div class="cc req"><div class="cc-code req">BUS 479</div><div class="cc-name">Strategic Management (capstone)</div><span class="cc-badge b-req">senior year</span></div>
+  <!-- FINANCIAL PLANNING -->
+  <div id="c-fpl" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:25%"></div></div><span class="ppct">~25%</span></div>
+    <div class="nbox" style="margin-bottom:12px">CFP® Board Registered Program — satisfies education requirements to sit for the CFP® exam. 24 credits of financial planning-specific courses required.</div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">ACT 330</div><div class="cname">Introduction to Taxation</div><div class="cgrade">not taken</div><span class="cbdg brq">required · Junior yr</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 310</div><div class="cname">Financial Markets and Institutions</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 320</div><div class="cname">Introduction to Financial Planning</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 342</div><div class="cname">Risk Management and Insurance</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 355</div><div class="cname">Principles of Investments</div><span class="cbdg brq">required</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+    </div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 440</div><div class="cname">Estate Planning</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 442</div><div class="cname">Employee Benefits and Retirement Planning</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 445</div><div class="cname">Financial Plan Development</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> 9 courses needed (ACT 330, FIN 310, 320, 342, 355, 440, 442, 445, BUS 479). Significant additional coursework beyond Reed's current trajectory — least compatible with what's been taken so far.</div>
   </div>
 
-  <div class="section-label">General education &amp; electives (completed)</div>
-  <div class="course-grid">
-    <div class="cc done"><div class="cc-code done">AA 100</div><div class="cc-name">Introduction to Astronomy</div><div class="cc-grade">B · Fall 2024</div><span class="cc-badge b-done">GT-SC2</span></div>
-    <div class="cc done"><div class="cc-code done">GEOL 120</div><div class="cc-name">Geology and Society</div><div class="cc-grade">A- · Spring 2025</div><span class="cc-badge b-done">GT-SC2</span></div>
-    <div class="cc done"><div class="cc-code done">GEOL 121</div><div class="cc-name">Introductory Geology Lab</div><div class="cc-grade">A · Spring 2025</div><span class="cc-badge b-done">GT-SC1</span></div>
-    <div class="cc done"><div class="cc-code done">HIST 151</div><div class="cc-name">U.S. History Since 1876</div><div class="cc-grade">B+ · Fall 2024</div><span class="cc-badge b-done">GT-HI1</span></div>
-    <div class="cc done"><div class="cc-code done">SOC 205</div><div class="cc-name">Sociology of Race and Racism</div><div class="cc-grade">A- · Fall 2024</div><span class="cc-badge b-done">GT-SS3</span></div>
-    <div class="cc done"><div class="cc-code done">CO 130</div><div class="cc-name">English Composition I (transfer)</div><div class="cc-grade">TB · Arapahoe CC</div><span class="cc-badge b-done">transfer</span></div>
-    <div class="cc done"><div class="cc-code done">E 140</div><div class="cc-name">Intro to Literature (transfer)</div><div class="cc-grade">TB · Arapahoe CC</div><span class="cc-badge b-done">transfer</span></div>
-    <div class="cc done"><div class="cc-code done">FIN 200</div><div class="cc-name">Personal Finance (transfer)</div><div class="cc-grade">TA · Arapahoe CC</div><span class="cc-badge b-done">transfer</span></div>
-    <div class="cc done"><div class="cc-code done">MATH 117/118/124</div><div class="cc-name">College Algebra (transfer, 4 cr)</div><div class="cc-grade">TA · Arapahoe CC</div><span class="cc-badge b-done">transfer</span></div>
+  <!-- REAL ESTATE -->
+  <div id="c-re" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:28%"></div></div><span class="ppct">~28%</span></div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 310</div><div class="cname">Financial Markets and Institutions</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">FIN 355</div><div class="cname">Principles of Investments</div><span class="cbdg brq">required</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">REL 360</div><div class="cname">Real Estate Principles</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">REL 367</div><div class="cname">Real Estate Law</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="slab">Choose 4 of these 5 REL courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">REL 430</div><div class="cname">Real Estate Market Analysis</div><span class="cbdg bch">choose 4 of 5</span></div>
+      <div class="cc ch"><div class="ccode ch">REL 454/AREC 454</div><div class="cname">Real Estate Appraisal</div><span class="cbdg bch">choose 4 of 5</span></div>
+      <div class="cc ch"><div class="ccode ch">REL 455</div><div class="cname">Real Estate Finance</div><span class="cbdg bch">choose 4 of 5</span></div>
+      <div class="cc ch"><div class="ccode ch">REL 460</div><div class="cname">Real Estate Investment</div><span class="cbdg bch">choose 4 of 5</span></div>
+      <div class="cc ch"><div class="ccode ch">REL 487</div><div class="cname">Real Estate Internship</div><span class="cbdg bch">choose 4 of 5</span></div>
+    </div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> FIN 310, FIN 355, REL 360, REL 367 (junior required) + BUS 479 + 4 of 5 REL senior electives. 24 credits of real estate-specific courses total required. Note: REL 367 (Real Estate Law) was not in prior versions.</div>
   </div>
+
+  <!-- ACCOUNTING -->
+  <div id="c-acct" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:22%"></div></div><span class="ppct">~22%</span></div>
+    <div class="nbox" style="margin-bottom:12px">Satisfies Colorado CPA exam education requirements. Also requires ACT 211 (Accounting Professional Skills, 1 cr) in Sophomore year — not on Reed's transcript. 23 credits of accounting-specific courses required.</div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">ACT 210</div><div class="cname">Intro to Financial Accounting</div><div class="cgrade">A- · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">ACT 220</div><div class="cname">Intro to Managerial Accounting</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 301</div><div class="cname">Financial Accounting and Applied Data Skills</div><span class="cbdg brq">required · prereq for ACT 311</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 311</div><div class="cname">Intermediate Accounting I</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 312</div><div class="cname">Intermediate Accounting II</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 321</div><div class="cname">Cost Management</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 350</div><div class="cname">Accounting Information Systems</div><span class="cbdg brq">required</span></div>
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+    </div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 330</div><div class="cname">Introduction to Taxation</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 441</div><div class="cname">Auditing Practices</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="slab">Choose 1 elective (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">ACT 411</div><div class="cname">Advanced Accounting</div><span class="cbdg bch">choose 1</span></div>
+      <div class="cc ch"><div class="ccode ch">ACT 421</div><div class="cname">Strategic Management Accounting</div><span class="cbdg bch">choose 1</span></div>
+      <div class="cc ch"><div class="ccode ch">ACT 537</div><div class="cname">Advanced Taxation of Business Entities</div><span class="cbdg bch">choose 1</span></div>
+    </div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> ACT 301 must be taken before ACT 311 (prereq: ACT 210 with min B-). Reed's ACT 210 was A- so prereq is satisfied. Still needs ACT 301, 311, 312, 321, 350 (junior) + ACT 330, 441, BUS 479 + 1 elective (senior) = 9 courses. Most work remaining of any concentration.</div>
+  </div>
+
+  <!-- INFORMATION SYSTEMS -->
+  <div id="c-is" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:25%"></div></div><span class="ppct">~25%</span></div>
+    <div class="flag">⚑ CIS 240 (Application Design and Development) is a sophomore prerequisite required before junior CIS courses. It is not on Reed's transcript. Must be resolved before taking CIS 320, CIS 355, or CIS 360.</div>
+    <div class="slab">Sophomore prerequisite (missing)</div>
+    <div class="cgrid">
+      <div class="cc rq"><div class="ccode rq">CIS 240</div><div class="cname">Application Design and Development</div><span class="cbdg brq">missing — needed before junior CIS courses</span></div>
+    </div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">BUS 260</div><div class="cname">Social-Ethical-Regulatory Issues in Business</div><div class="cgrade">C · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc rq"><div class="ccode rq">CIS 320</div><div class="cname">Project Management for Information Systems</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">CIS 355</div><div class="cname">Business Database Systems</div><span class="cbdg brq">required</span></div>
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+    </div>
+    <div class="slab">Required upper-level courses (Senior year — some also in Junior)</div>
+    <div class="cgrid">
+      <div class="cc rq"><div class="ccode rq">CIS 360</div><div class="cname">Systems Analysis and Design</div><span class="cbdg brq">required</span></div>
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="slab">Choose 4 electives from CIS upper-division list (split Junior / Senior year)</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">CIS 310</div><div class="cname">Data Preparation for Business Analytics</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 340</div><div class="cname">Advanced Application Design and Development</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 350</div><div class="cname">Operating Systems and Networks</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 410</div><div class="cname">Web Application Development</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 411</div><div class="cname">Enterprise Resource Planning Systems</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 413</div><div class="cname">Advanced Networking and Security</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 455</div><div class="cname">Advanced Database Management</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 563</div><div class="cname">Information Assurance and Security</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 575</div><div class="cname">Applied Data Mining and Analytics in Business</div><span class="cbdg bch">choose 4</span></div>
+      <div class="cc ch"><div class="ccode ch">CIS 576</div><div class="cname">Business Data Visualization</div><span class="cbdg bch">choose 4</span></div>
+    </div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> CIS 240 (must take first), CIS 320, CIS 355 (junior required) + CIS 360, BUS 479 (senior required) + 4 CIS electives. Course numbers CIS 300, CIS 450 used in prior versions of this tool were fabricated — these do not appear in the actual IS concentration.</div>
+  </div>
+
+  <!-- SUSTAINABLE BUSINESS -->
+  <div id="c-sub" class="cpanel">
+    <div class="prow"><span class="plab">Upper-level progress</span><div class="pwrap"><div class="pfill" style="width:25%"></div></div><span class="ppct">~25%</span></div>
+    <div class="nbox" style="margin-bottom:12px">21 credits of Sustainable Business-specific courses required. Also requires a lower-division elective (3 cr) from an approved sustainability list taken sophomore year.</div>
+    <div class="slab">Required upper-level courses (Junior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MKT 300</div><div class="cname">Marketing</div><div class="cgrade">B · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc dn"><div class="ccode dn">FIN 300</div><div class="cname">Principles of Finance</div><div class="cgrade">B · Sp 2026</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">CIS 370</div><div class="cname">Analytics and AI in Business</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">MGT 360</div><div class="cname">Social and Sustainable Venturing</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">MKT 420</div><div class="cname">Marketing and Societal Well-Being</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="slab">Required upper-level courses (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc dn"><div class="ccode dn">MGT 301</div><div class="cname">Supply Chain Management</div><div class="cgrade">C+ · Fa 2025</div><span class="cbdg bdn">done</span></div>
+      <div class="cc ip"><div class="ccode ip">MGT 320</div><div class="cname">Contemporary Management</div><span class="cbdg bip">Fa 2026</span></div>
+      <div class="cc rq"><div class="ccode rq">ACT 318</div><div class="cname">Fundamentals of Sustainability Reporting</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 440</div><div class="cname">Corporate Sustainability Strategy</div><span class="cbdg brq">required</span></div>
+      <div class="cc rq"><div class="ccode rq">BUS 479</div><div class="cname">Strategic Management (capstone)</div><span class="cbdg brq">required</span></div>
+    </div>
+    <div class="slab">Choose 1 upper-division elective (Senior year)</div>
+    <div class="cgrid">
+      <div class="cc ch"><div class="ccode ch">ANTH 415</div><div class="cname">Indigenous Ecologies and the Modern World</div><span class="cbdg bch">choose 1</span></div>
+      <div class="cc ch"><div class="ccode ch">BUS 469A</div><div class="cname">Study Abroad — Ecuador</div><span class="cbdg bch">choose 1</span></div>
+      <div class="cc ch"><div class="ccode ch">BUS 487</div><div class="cname">Internship</div><span class="cbdg bch">choose 1</span></div>
+      <div class="cc ch"><div class="ccode ch">MKT 364</div><div class="cname">Product Design</div><span class="cbdg bch">choose 1</span></div>
+      <div class="cc ch"><div class="ccode ch">ESS 365 / CON 450 / etc.</div><div class="cname">Other approved sustainability electives</div><span class="cbdg bch">choose 1</span></div>
+    </div>
+    <div class="nbox"><strong>Remaining after Fall 2026:</strong> MGT 360, MKT 420 (junior required) + ACT 318, BUS 440, BUS 479 (senior required) + 1 elective. MKT 365 in progress does NOT count here. Reed's entrepreneurship background (MGT 340) could naturally complement this concentration.</div>
+  </div>
+
 </div>
 
 
-<!-- ════════════════════════════════════════════
-     CERTIFICATES TAB
-     ════════════════════════════════════════════ -->
-<div id="nav-certificates" class="panel">
-  <div class="cert-toolbar">
-    <select class="sort-select" id="sortSel" onchange="renderCerts()">
-      <option value="pct">Sort by completion %</option>
-      <option value="name">Sort by name A–Z</option>
-      <option value="remaining">Sort by courses remaining</option>
-    </select>
-  </div>
-  <div class="cert-grid" id="certGrid"></div>
-  <div class="note-box" style="margin-top:16px">Certificate requirements are based on the 2025–2026 CSU catalog. Percentages reflect <strong>completed</strong> credits only — in-progress courses are not counted. Confirm all requirements in RamWeb before planning around any certificate.</div>
+<!-- ══════════════════════════════════════
+     CERTIFICATES
+     ══════════════════════════════════════ -->
+<div id="nav-certs" class="panel">
+  <select class="sortsel" id="sortSel" onchange="renderCerts()">
+    <option value="pct">Sort by completion %</option>
+    <option value="name">Sort by name A–Z</option>
+    <option value="remaining">Sort by courses remaining</option>
+  </select>
+  <div class="certgrid" id="certGrid"></div>
+  <div class="nbox" style="margin-top:14px">Certificate progress is based on completed courses only — in-progress courses not counted. All percentages and requirements are drawn from the 2025-2026 CSU catalog. Confirm requirements in RamWeb before planning around any certificate.</div>
 </div>
 
 </div><!-- /main -->
 
 <script>
-// ── Navigation ──────────────────────────────────
-function showNav(id, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('nav-' + id).classList.add('show');
+function showNav(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.nvt').forEach(t=>t.classList.remove('active'));
+  document.getElementById('nav-'+id).classList.add('show');
   btn.classList.add('active');
-  if (id === 'certificates') renderCerts();
+  if(id==='certs') renderCerts();
 }
-
-// ── Concentrations ───────────────────────────────
-function showConc(id, btn) {
-  document.querySelectorAll('.conc-panel').forEach(p => p.classList.remove('show'));
-  document.querySelectorAll('.conc-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('conc-' + id).classList.add('show');
+function showConc(id,btn){
+  document.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('c-'+id).classList.add('show');
   btn.classList.add('active');
 }
-
-// ── Finance sub-options ──────────────────────────
-function showSub(conc, opt, btn) {
-  document.querySelectorAll('#conc-' + conc + ' .sub-panel').forEach(p => p.classList.remove('show'));
-  document.querySelectorAll('#conc-' + conc + ' .sub-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(conc + '-' + opt).classList.add('show');
+function showSub(conc,opt,btn){
+  document.querySelectorAll('#c-'+conc+' .spanel').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('#c-'+conc+' .stab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(conc+'-'+opt).classList.add('show');
   btn.classList.add('active');
 }
-
-// ── Certificate data ─────────────────────────────
-const CERTS = [
-  {
-    name: "Managing Human Resources",
-    total: 3, done: 1, inprog: 0,
-    doneList: ["MGT 310 ✓"],
-    progList: [],
-    neededList: ["MGT 350", "MGT 374 or MGT 474"],
-    needed: "Choose 2 of: MGT 350, MGT 374, MGT 474",
-    credits: "9 cr"
-  },
-  {
-    name: "Entrepreneurship",
-    total: 3, done: 1, inprog: 0,
-    doneList: ["MGT 340 ✓"],
-    progList: [],
-    neededList: ["List A: MGT 341/420/424", "List B: MGT 330/360/FIN 309"],
-    needed: "1 from List A (MGT 341, 420, 424) · 1 from List B (MGT 330, 360, FIN 309)",
-    credits: "9–10 cr"
-  },
-  {
-    name: "Leadership in Organizations",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MGT 410", "MGT 411", "MGT 476"],
-    needed: "MGT 410, MGT 411, MGT 476 (all fixed)",
-    credits: "9 cr"
-  },
-  {
-    name: "Strategic Marketing",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MKT 320/330/364/440", "MKT 320/330/364/440", "MKT 320/330/364/440"],
-    needed: "Choose 3 of: MKT 320, MKT 330, MKT 364, MKT 440  (prereq MKT 300 ✓)",
-    credits: "9 cr"
-  },
-  {
-    name: "Market Research and Data Analytics",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MKT 370", "MKT 410", "MKT 450"],
-    needed: "MKT 370, MKT 410, MKT 450  (prereqs MKT 300 ✓ · STAT 204 ✓)",
-    credits: "9 cr"
-  },
-  {
-    name: "Marketing Communication and Branding",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MKT 315", "MKT 320", "1 MKT elective"],
-    needed: "MKT 315, MKT 320, + 1 MKT elective  (prereq MKT 300 ✓)",
-    credits: "9 cr"
-  },
-  {
-    name: "Customer Experience Management",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MKT 330", "MKT 361", "MKT 366"],
-    needed: "MKT 330, MKT 361, MKT 366  (prereq MKT 300 ✓)",
-    credits: "9 cr"
-  },
-  {
-    name: "Business-to-Business Selling",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MKT 362", "MKT 363", "MKT 330 or 410"],
-    needed: "MKT 362, MKT 363, + MKT 330 or 410  (prereq MKT 300 ✓)",
-    credits: "9 cr"
-  },
-  {
-    name: "Applied Management Accounting for Decision Making",
-    total: 4, done: 2, inprog: 0,
-    doneList: ["ACT 210 ✓", "ACT 220 ✓"],
-    progList: [],
-    neededList: ["ACT 301", "ACT 321"],
-    needed: "ACT 301, ACT 321",
-    credits: "12 cr"
-  },
-  {
-    name: "Financial Accounting and Reporting",
-    total: 4, done: 2, inprog: 0,
-    doneList: ["ACT 210 ✓", "ACT 220 ✓"],
-    progList: [],
-    neededList: ["ACT 301", "ACT 311"],
-    needed: "ACT 301, ACT 311",
-    credits: "12 cr"
-  },
-  {
-    name: "International Business",
-    total: 5, done: 1, inprog: 1,
-    doneList: ["MKT 300 ✓"],
-    progList: ["MKT 365"],
-    neededList: ["MKT 365 (in progress)", "MGT 435", "FIN 475", "MGT 475"],
-    needed: "MGT 435, FIN 475, MGT 475 + experiential req  (can also be added as 2nd concentration)",
-    credits: "15+ cr"
-  },
-  {
-    name: "Business Analytics",
-    total: 3, done: 0, inprog: 1,
-    doneList: [],
-    progList: ["CIS 370"],
-    neededList: ["CIS 370 (in progress)", "2 analytics electives"],
-    needed: "CIS 370 (in progress) + 2 more  (confirm full list with advisor)",
-    credits: "9 cr"
-  },
-  {
-    name: "Consulting",
-    total: 4, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["MGT 486A", "MGT elective", "MGT elective", "MGT elective"],
-    needed: "MGT 486A (practicum) + electives  (confirm full list with advisor)",
-    credits: "~12 cr"
-  },
-  {
-    name: "Operations, Logistics and Supply Management",
-    total: 4, done: 1, inprog: 0,
-    doneList: ["MGT 301 ✓ (C+)"],
-    progList: [],
-    neededList: ["MGT 375", "MGT 478", "Supply elective"],
-    needed: "MGT 375, MGT 478 + elective  (verify C+ in MGT 301 satisfies prereq)",
-    credits: "~12 cr"
-  },
-  {
-    name: "Information Technology for Business Professionals",
-    total: 3, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["CIS 300", "CIS 350", "CIS elective"],
-    needed: "CIS 300, CIS 350 + elective  (prereq CIS 200 ✓)",
-    credits: "9 cr"
-  },
-  {
-    name: "Business App Development",
-    total: 4, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["CIS 360", "CIS 430", "CIS elective", "CIS elective"],
-    needed: "CIS 360, CIS 430 + electives",
-    credits: "12 cr"
-  },
-  {
-    name: "Business Cybersecurity",
-    total: 4, done: 0, inprog: 0,
-    doneList: [],
-    progList: [],
-    neededList: ["CIS 350", "CIS 440", "CIS 450", "CIS elective"],
-    needed: "CIS 350, CIS 440, CIS 450 + elective",
-    credits: "12 cr"
-  }
+const CERTS=[
+  {name:"Managing Human Resources",total:3,done:1,inprog:0,doneList:["MGT 310 ✓"],progList:[],neededList:["MGT 350","MGT 374 or MGT 474"],needed:"MGT 310 done. Choose 2 of: MGT 350, MGT 374, MGT 474",credits:"9 cr"},
+  {name:"Entrepreneurship",total:3,done:1,inprog:0,doneList:["MGT 340 ✓"],progList:[],neededList:["List A: MGT 341/420/424","List B: MGT 330/360/FIN 309"],needed:"MGT 340 done. 1 from List A (341,420,424) + 1 from List B (330,360,FIN 309)",credits:"9-10 cr"},
+  {name:"Leadership in Organizations",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["MGT 410","MGT 411","MGT 476"],needed:"MGT 410, MGT 411, MGT 476 — all fixed requirements",credits:"9 cr"},
+  {name:"Strategic Marketing",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["MKT 320/330/364/440","MKT 320/330/364/440","MKT 320/330/364/440"],needed:"Choose 3 of: MKT 320, 330, 364, 440. Prereq: MKT 300 ✓",credits:"9 cr"},
+  {name:"Market Research and Data Analytics",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["MKT 370","MKT 410","MKT 450"],needed:"MKT 370, MKT 410, MKT 450. Prereqs: MKT 300 ✓ · STAT 204 ✓",credits:"9 cr"},
+  {name:"Marketing Communication and Branding",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["MKT 315","MKT 320","1 MKT elective"],needed:"MKT 315, MKT 320 + 1 MKT elective. Prereq: MKT 300 ✓",credits:"9 cr"},
+  {name:"Customer Experience Management",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["MKT 330","MKT 361","MKT 366"],needed:"MKT 330, MKT 361, MKT 366. Prereq: MKT 300 ✓",credits:"9 cr"},
+  {name:"Business-to-Business Selling",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["MKT 362","MKT 363","MKT 330 or 410"],needed:"MKT 362, MKT 363, + MKT 330 or 410. Prereq: MKT 300 ✓",credits:"9 cr"},
+  {name:"Applied Management Accounting for Decision Making",total:4,done:2,inprog:0,doneList:["ACT 210 ✓","ACT 220 ✓"],progList:[],neededList:["ACT 301","ACT 321"],needed:"ACT 210 & 220 done. Still need: ACT 301, ACT 321",credits:"12 cr"},
+  {name:"Financial Accounting and Reporting",total:4,done:2,inprog:0,doneList:["ACT 210 ✓","ACT 220 ✓"],progList:[],neededList:["ACT 301","ACT 311"],needed:"ACT 210 & 220 done. Still need: ACT 301, ACT 311",credits:"12 cr"},
+  {name:"International Business",total:5,done:1,inprog:1,doneList:["MKT 300 ✓"],progList:["MKT 365"],neededList:["MKT 365 (in progress)","MGT 435","FIN 475","MGT 475","Experiential learning"],needed:"MGT 435, FIN 475, MGT 475 + experiential req. Can also be added as 2nd concentration",credits:"15+ cr"},
+  {name:"Business Analytics",total:3,done:0,inprog:1,doneList:[],progList:["CIS 370"],neededList:["CIS 370 (in progress)","2 analytics electives"],needed:"CIS 370 in progress + 2 more. Confirm full elective list with advisor",credits:"9 cr"},
+  {name:"Consulting",total:4,done:0,inprog:0,doneList:[],progList:[],neededList:["MGT 486A","MGT elective","MGT elective","MGT elective"],needed:"MGT 486A (practicum) + electives — confirm full list with advisor",credits:"~12 cr"},
+  {name:"Operations, Logistics and Supply Management",total:4,done:1,inprog:0,doneList:["MGT 301 ✓ (C+)"],progList:[],neededList:["MGT 375","MGT 478","SCM elective"],needed:"MGT 375, MGT 478 + elective. Verify C+ in MGT 301 satisfies cert prereq",credits:"~12 cr"},
+  {name:"Information Technology for Business Professionals",total:3,done:0,inprog:0,doneList:[],progList:[],neededList:["CIS 300","CIS 350","CIS elective"],needed:"CIS 300, CIS 350 + elective. Prereq: CIS 200 ✓",credits:"9 cr"},
+  {name:"Business App Development",total:4,done:0,inprog:0,doneList:[],progList:[],neededList:["CIS 360","CIS 430","CIS elective","CIS elective"],needed:"CIS 360, CIS 430 + electives",credits:"12 cr"},
+  {name:"Business Cybersecurity",total:4,done:0,inprog:0,doneList:[],progList:[],neededList:["CIS 350","CIS 440","CIS 450","CIS elective"],needed:"CIS 350, CIS 440, CIS 450 + elective",credits:"12 cr"}
 ];
-
-function pct(c) { return Math.round((c.done / c.total) * 100); }
-function remaining(c) { return c.total - c.done - c.inprog; }
-
-function sortedCerts() {
-  const v = document.getElementById('sortSel').value;
-  const arr = [...CERTS];
-  if (v === 'pct') arr.sort((a, b) => pct(b) - pct(a) || remaining(a) - remaining(b));
-  else if (v === 'name') arr.sort((a, b) => a.name.localeCompare(b.name));
-  else arr.sort((a, b) => remaining(a) - remaining(b) || pct(b) - pct(a));
-  return arr;
-}
-
-function renderCerts() {
-  const grid = document.getElementById('certGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  sortedCerts().forEach(c => {
-    const p = pct(c);
-    const rem = remaining(c);
-    const isClose = p >= 33;
-    const hasInProg = c.inprog > 0;
-
-    let badges = '';
-    if (isClose) badges += `<span class="badge badge-close">Close</span>`;
-    if (hasInProg) badges += `<span class="badge badge-prog">${c.inprog} in progress</span>`;
-
-    const remText = rem === 0 ? 'complete!' : `${rem} remaining`;
-
-    let chipsHtml = '<div class="chip-row">';
-    c.doneList.forEach(d => chipsHtml += `<span class="chip chip-done">${d}</span>`);
-    c.progList.forEach(d => chipsHtml += `<span class="chip chip-prog">${d}</span>`);
-    c.neededList.forEach(d => chipsHtml += `<span class="chip chip-todo">${d}</span>`);
-    chipsHtml += '</div>';
-
-    grid.innerHTML += `
-      <div class="cert-card">
-        <div class="cert-badges">${badges}</div>
-        <div>
-          <div class="cert-name">${c.name}</div>
-          <div class="cert-sub">${c.total} courses required · ${c.credits}</div>
-        </div>
-        <div>
-          <div class="cert-prog-wrap"><div class="cert-prog-fill" style="width:${p}%"></div></div>
-          <div class="cert-prog-row">
-            <span class="cert-pct">${p}%</span>
-            <span class="cert-rem">${remText}</span>
-          </div>
-        </div>
-        ${chipsHtml}
-        <div class="cert-needed"><strong>Still needed:</strong> ${c.needed}</div>
-      </div>`;
+function pct(c){return Math.round((c.done/c.total)*100)}
+function remaining(c){return c.total-c.done-c.inprog}
+function renderCerts(){
+  const g=document.getElementById('certGrid');if(!g)return;
+  const v=document.getElementById('sortSel').value;
+  const arr=[...CERTS];
+  if(v==='pct')arr.sort((a,b)=>pct(b)-pct(a)||remaining(a)-remaining(b));
+  else if(v==='name')arr.sort((a,b)=>a.name.localeCompare(b.name));
+  else arr.sort((a,b)=>remaining(a)-remaining(b)||pct(b)-pct(a));
+  g.innerHTML='';
+  arr.forEach(c=>{
+    const p=pct(c),rem=remaining(c);
+    let bdgs='';
+    if(p>=33)bdgs+=`<span class="bdg bclose">Close</span>`;
+    if(c.inprog>0)bdgs+=`<span class="bdg bprog">${c.inprog} in progress</span>`;
+    let chips='<div class="chiprow">';
+    c.doneList.forEach(d=>chips+=`<span class="chip cpdn">${d}</span>`);
+    c.progList.forEach(d=>chips+=`<span class="chip cpip">${d}</span>`);
+    c.neededList.forEach(d=>chips+=`<span class="chip cptd">${d}</span>`);
+    chips+='</div>';
+    const remTxt=rem===0?'complete!':rem+' remaining';
+    g.innerHTML+=`<div class="certcard">
+      <div class="certbdgs">${bdgs}</div>
+      <div><div class="cname2">${c.name}</div><div class="csub">${c.total} courses · ${c.credits}</div></div>
+      <div><div class="cpwrap"><div class="cpfill" style="width:${p}%"></div></div>
+      <div class="cprow"><span class="cpct">${p}%</span><span class="crem">${remTxt}</span></div></div>
+      ${chips}
+      <div class="cneeded"><strong>Still needed:</strong> ${c.needed}</div>
+    </div>`;
   });
 }
 </script>
