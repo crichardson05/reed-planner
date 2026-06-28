@@ -128,6 +128,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   <button class="nvt" onclick="showNav('conc',this)">Concentrations</button>
   <button class="nvt" onclick="showNav('minors',this)">Minors</button>
   <button class="nvt" onclick="showNav('certs',this)">Certificates</button>
+  <button class="nvt" onclick="showNav('schedules',this)">Schedules</button>
 </div>
 
 <div class="main">
@@ -631,6 +632,18 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   <div class="nbox" style="margin-top:14px">Certificate progress reflects <strong>completed courses only</strong> — in-progress not counted. All requirements from the 2025-2026 catalog. Confirm in RamWeb before planning around any certificate.</div>
 </div>
 
+<!-- ══ SCHEDULES ══ -->
+<div id="nav-schedules" class="panel">
+  <div id="schedules-content">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:14px;text-align:center">
+      <div style="font-size:40px;opacity:.25">📅</div>
+      <div style="font-size:16px;font-weight:500;color:var(--ts)">No schedules uploaded yet</div>
+      <div style="font-size:13px;color:var(--tm);max-width:400px;line-height:1.7">Generate and save schedules in the <strong style="color:var(--tp)">What If Planner</strong>, export them as <code style="background:var(--s2);padding:1px 6px;border-radius:4px;font-size:12px">reed-schedules.json</code>, then upload that file to your GitHub repo alongside <code style="background:var(--s2);padding:1px 6px;border-radius:4px;font-size:12px">index.html</code>.</div>
+      <a href="whatif.html" style="margin-top:4px;padding:8px 18px;border-radius:var(--r);background:var(--ad);color:var(--at);border:1px solid var(--ac);font-size:13px;font-weight:500;text-decoration:none">⚡ Open What If Planner</a>
+    </div>
+  </div>
+</div>
+
 </div><!-- /main -->
 
 <script>
@@ -640,6 +653,106 @@ function showNav(id,btn){
   document.getElementById('nav-'+id).classList.add('show');
   btn.classList.add('active');
   if(id==='certs') renderCerts();
+  if(id==='schedules') loadSchedules();
+}
+
+function loadSchedules(){
+  const el = document.getElementById('schedules-content');
+  fetch('reed-schedules.json?v='+Date.now())
+    .then(r=>{ if(!r.ok) throw new Error('not found'); return r.json(); })
+    .then(data=>renderSchedules(data, el))
+    .catch(()=>{}); // keep empty state if file not uploaded yet
+}
+
+function renderSchedules(entries, el){
+  if(!entries||!entries.length) return;
+
+  const codeColor = t =>
+    t==='abroad'   ? 'var(--gt)' :
+    t==='cert'     ? 'var(--put)' :
+    t==='ib'       ? '#AFA9EC' :
+    t==='elective' ? 'var(--tm)' : 'var(--at)';
+
+  // Tab buttons across the top
+  let tabHtml = `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;border-bottom:0.5px solid var(--bd);padding-bottom:10px">`;
+  entries.forEach((e,i)=>{
+    tabHtml += `<button onclick="showSched(${i})" id="stab-${i}" class="nvt${i===0?' active':''}" style="border-bottom:2px solid ${i===0?'var(--ac)':'transparent'};padding:8px 14px;font-size:12px">${e.name}</button>`;
+  });
+  tabHtml += `</div>`;
+
+  // All schedule panels (first visible)
+  let panelsHtml = '';
+  entries.forEach((e,i)=>{
+    const s = e.schedule;
+    const sel = e.sel || {};
+    const visible = i===0 ? 'block' : 'none';
+
+    let pills = `<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px">`;
+    pills += `<span class="s-pill sp-conc">${sel.primaryName||''}</span>`;
+    if(sel.secondName) pills += `<span class="s-pill" style="background:var(--pud);color:var(--put)">${sel.secondName} (2nd)</span>`;
+    if(sel.certNameList&&sel.certNameList.length) pills += `<span class="s-pill sp-cert">${sel.certNameList.length} cert${sel.certNameList.length>1?'s':''}</span>`;
+    if(sel.abroadTerm) pills += `<span class="s-pill sp-abroad">✈ ${sel.abroadTerm}</span>`;
+    pills += `<span class="s-pill sp-total">Grad: ${s.graduationTerm}</span></div>`;
+
+    let semHtml = `<div style="display:grid;gap:10px">`;
+    (s.semesters||[]).forEach(sem=>{
+      const cr = (sem.courses||[]).reduce((a,c)=>a+c.credits,0);
+      const crOk = cr>=12&&cr<=15;
+      const abroadBadge = sem.isAbroad ? `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--gd);color:var(--gt);font-weight:500;margin-left:6px">✈ Abroad</span>` : '';
+      semHtml += `<div style="background:var(--s1);border:0.5px solid var(--bd);border-radius:14px;overflow:hidden">
+        <div style="padding:10px 14px;background:var(--s2);border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;font-weight:600;color:var(--tp)">${sem.term}${abroadBadge}</div>
+          <div style="font-size:13px;font-weight:600;color:${crOk?'#6dcc94':'#f0a840'}">${cr} cr</div>
+        </div>`;
+      (sem.courses||[]).forEach((c,ci)=>{
+        const border = ci<(sem.courses.length-1)?`border-bottom:0.5px solid var(--bd);`:'';
+        semHtml += `<div style="display:flex;align-items:baseline;gap:10px;padding:8px 14px;${border}">
+          <span style="font-size:11px;font-weight:600;color:${codeColor(c.type)};white-space:nowrap;min-width:60px">${c.code}</span>
+          <span style="font-size:12px;color:var(--tp);flex:1;line-height:1.35">${c.name}</span>
+          <span style="font-size:12px;color:var(--tm);font-weight:500;flex-shrink:0">${c.credits} cr</span>
+        </div>`;
+      });
+      semHtml += `</div>`;
+    });
+    semHtml += `</div>`;
+
+    let insHtml = '';
+    if(s.insights&&s.insights.length){
+      insHtml = `<div style="margin-top:14px">`;
+      s.insights.forEach(ins=>{
+        const bg = ins.type==='warn'?'var(--amd)':ins.type==='good'?'var(--gd)':'var(--s1)';
+        const bc = ins.type==='warn'?'var(--am)':ins.type==='good'?'var(--gn)':'var(--ac)';
+        insHtml += `<div style="background:${bg};border:0.5px solid var(--bd);border-left:3px solid ${bc};border-radius:var(--r);padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--ts);line-height:1.6">${ins.text}</div>`;
+      });
+      insHtml += `</div>`;
+    }
+
+    panelsHtml += `<div id="sched-${i}" style="display:${visible}">
+      <div style="font-size:18px;font-weight:500;color:var(--tp);margin-bottom:4px">${s.title}</div>
+      <div style="font-size:13px;color:var(--ts);margin-bottom:12px">${s.subtitle||''}</div>
+      ${pills}${semHtml}${insHtml}
+    </div>`;
+  });
+
+  el.innerHTML = tabHtml + panelsHtml;
+
+  // wire up tab clicks properly after render
+  entries.forEach((_,i)=>{
+    const t = document.getElementById('stab-'+i);
+    if(t) t.onclick = ()=>showSched(i);
+  });
+}
+
+function showSched(i){
+  document.querySelectorAll('[id^="sched-"]').forEach(p=>p.style.display='none');
+  document.querySelectorAll('[id^="stab-"]').forEach(t=>{
+    t.classList.remove('active');
+    t.style.borderBottomColor='transparent';
+  });
+  const p = document.getElementById('sched-'+i);
+  const t = document.getElementById('stab-'+i);
+  if(p) p.style.display='block';
+  if(t){ t.classList.add('active'); t.style.borderBottomColor='var(--ac)'; }
 }
 function showConc(id,btn){
   document.querySelectorAll('.cpanel').forEach(p=>p.classList.remove('show'));
