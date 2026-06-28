@@ -1,0 +1,2732 @@
+[
+  {
+    "id": 1782686516746,
+    "name": "[⚡·ModFa26] Information Systems",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "Fall 2026 Modification: Management & Innovation vs. Information Systems",
+      "mode": "modfa26",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "comparison": {
+        "currentPath": {
+          "concentration": "Management & Innovation",
+          "fall2026": [
+            "CIS370",
+            "JTC300",
+            "MGT320",
+            "MKT365"
+          ],
+          "rationale": "Reed continues in Management & Innovation with MKT365 remaining as an elective. All four Fall 2026 courses are preserved as required or elective credits toward this concentration. BUS225 is scheduled for Spring 2027 as the missing required course.",
+          "schedule": [
+            {
+              "term": "Fall 2026",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "CIS370",
+                  "name": "Analytics and AI in Business",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "JTC300",
+                  "name": "Strategic Writing and Communication",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT320",
+                  "name": "Contemporary Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MKT365",
+                  "name": "International Marketing",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ]
+            },
+            {
+              "term": "Spring 2027",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS225",
+                  "name": "Transforming Business for Sustainable Impact",
+                  "credits": 3,
+                  "type": "required"
+                }
+              ]
+            }
+          ]
+        },
+        "switchPath": {
+          "concentration": "Information Systems",
+          "fall2026Swap": {
+            "drop": "MKT365",
+            "add": "CIS240",
+            "addName": "Introduction to Information Systems Technology",
+            "addRationale": "CIS240 is the foundational prerequisite for CIS320, CIS355, and CIS360 — three required IS junior/senior courses Reed currently cannot access. Adding it in Fall 2026 immediately unblocks the IS critical path and is the highest-priority course with no unmet prerequisites."
+          },
+          "proposedFall2026": [
+            "CIS370",
+            "JTC300",
+            "MGT320",
+            "CIS240"
+          ],
+          "schedule": [
+            {
+              "term": "Fall 2026",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "CIS370",
+                  "name": "Analytics and AI in Business",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "JTC300",
+                  "name": "Strategic Writing and Communication",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT320",
+                  "name": "Contemporary Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS240",
+                  "name": "Introduction to Information Systems Technology",
+                  "credits": 3,
+                  "type": "required"
+                }
+              ]
+            },
+            {
+              "term": "Spring 2027",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS225",
+                  "name": "Transforming Business for Sustainable Impact",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS320",
+                  "name": "Systems Analysis and Design",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS355",
+                  "name": "Database Management Systems",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS411",
+                  "name": "IT for Business",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "insights": [
+        {
+          "type": "good",
+          "text": "Switching to Information Systems and adding CIS240 in Fall 2026 immediately unlocks three currently blocked required courses (CIS320, CIS355, CIS360), making Spring 2028 graduation feasible on the minimal-load path."
+        },
+        {
+          "type": "good",
+          "text": "CIS411 (IT for Business) satisfies both an IS elective requirement and the IT-for-Business certificate, efficiently serving dual purposes within the 12-credit ceiling."
+        },
+        {
+          "type": "good",
+          "text": "Under the Management & Innovation path, MKT365 is retained as an elective but contributes less urgency than CIS240 would for IS; Reed's existing MGT coursework (MGT301, MGT310, MGT340, MGT320 in progress) already provides a strong foundation."
+        },
+        {
+          "type": "good",
+          "text": "Both paths preserve the 12-credit-per-semester ceiling and keep BUS225 in Spring 2027 as required, maintaining Reed's minimal-load preference throughout."
+        },
+        {
+          "type": "good",
+          "text": "CIS370 (in progress Fall 2026) counts as a required IS junior course regardless of which path Reed chooses, meaning no credits are wasted if Reed switches to Information Systems."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": null,
+      "path": "minimal",
+      "mode": "modfa26"
+    }
+  },
+  {
+    "id": 1782686461189,
+    "name": "[⚡·ModFa26] Information Systems ✈",
+    "schedule": {
+      "title": "Reed's Concentration Comparison",
+      "subtitle": "Management & Innovation vs. Information Systems — Fall 2026 Modification Analysis",
+      "mode": "modfa26",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "comparison": {
+        "currentPath": {
+          "concentration": "Management & Innovation",
+          "fall2026": [
+            "CIS370",
+            "JTC300",
+            "MGT320",
+            "MKT365"
+          ],
+          "rationale": "Reed continues in Management & Innovation with no changes to Fall 2026. MKT365 (International Marketing) is retained as an elective. BUS225 is the only missing required course and is scheduled for Spring 2027 since Reed will not yet be abroad. The path is light and on track for Spring 2028 graduation.",
+          "schedule": [
+            {
+              "term": "Fall 2026",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "CIS370",
+                  "name": "Analytics and AI in Business",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "JTC300",
+                  "name": "Strategic Writing and Communication",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT320",
+                  "name": "Contemporary Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MKT365",
+                  "name": "International Marketing",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "totalCredits": 12
+            },
+            {
+              "term": "Spring 2027",
+              "isAbroad": true,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "IB-ABROAD-1",
+                  "name": "International Business Course 1 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-2",
+                  "name": "International Business Course 2 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-3",
+                  "name": "International Business Course 3 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-4",
+                  "name": "International Business Course 4 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-5",
+                  "name": "International Business Course 5 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "totalCredits": 15,
+              "note": "Study abroad semester; 5-course 15cr cap applies per rules. BUS225 moved to Fall 2027."
+            },
+            {
+              "term": "Fall 2027",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS225",
+                  "name": "Transforming Business for Sustainable Impact",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT410",
+                  "name": "Junior Required — Management Elective",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT-ELEC-1",
+                  "name": "Management & Innovation Elective 1",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "totalCredits": 9
+            },
+            {
+              "term": "Spring 2028",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS479",
+                  "name": "Business Capstone",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT-ELEC-2",
+                  "name": "Management & Innovation Elective 2",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "MGT-ELEC-3",
+                  "name": "Management & Innovation Elective 3",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "MGT-ELEC-4",
+                  "name": "Management & Innovation Elective 4",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "totalCredits": 12,
+              "note": "BUS479 final semester only, paired with 3 other courses to reach 12cr."
+            }
+          ]
+        },
+        "switchPath": {
+          "concentration": "Information Systems",
+          "fall2026Swap": {
+            "drop": "MKT365",
+            "add": "CIS240",
+            "addName": "Introduction to Information Systems and Programming",
+            "addRationale": "CIS240 is the foundational prerequisite blocking CIS320, CIS355, and CIS360 — three required IS courses Reed cannot access without it. Taking CIS240 in Fall 2026 immediately unlocks the core IS upper-division sequence and is the single highest-impact swap available. MKT365 is not required for Information Systems and is safely dropped."
+          },
+          "proposedFall2026": [
+            "CIS370",
+            "JTC300",
+            "MGT320",
+            "CIS240"
+          ],
+          "schedule": [
+            {
+              "term": "Fall 2026",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "CIS370",
+                  "name": "Analytics and AI in Business",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "JTC300",
+                  "name": "Strategic Writing and Communication",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT320",
+                  "name": "Contemporary Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS240",
+                  "name": "Introduction to Information Systems and Programming",
+                  "credits": 3,
+                  "type": "required"
+                }
+              ],
+              "totalCredits": 12
+            },
+            {
+              "term": "Spring 2027",
+              "isAbroad": true,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "IB-ABROAD-1",
+                  "name": "International Business Course 1 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-2",
+                  "name": "International Business Course 2 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-3",
+                  "name": "International Business Course 3 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-4",
+                  "name": "International Business Course 4 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "IB-ABROAD-5",
+                  "name": "International Business Course 5 (Abroad)",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "totalCredits": 15,
+              "note": "Study abroad semester; 5-course 15cr cap applies. BUS225 moved to Fall 2027."
+            },
+            {
+              "term": "Fall 2027",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS225",
+                  "name": "Transforming Business for Sustainable Impact",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT410",
+                  "name": "Junior Required — Management Elective",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS320",
+                  "name": "Systems Analysis and Design",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS355",
+                  "name": "Database Management Systems",
+                  "credits": 3,
+                  "type": "required"
+                }
+              ],
+              "totalCredits": 12
+            },
+            {
+              "term": "Spring 2028",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS479",
+                  "name": "Business Capstone",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS360",
+                  "name": "IT Project Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS411",
+                  "name": "IT for Business (Cert-Satisfying Elective)",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "CIS-ELEC-2",
+                  "name": "Information Systems Elective 2",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "totalCredits": 12,
+              "note": "BUS479 final semester only, paired with 3 other courses to reach 12cr. CIS411 satisfies IT-for-Business certificate elective requirement."
+            }
+          ]
+        }
+      },
+      "insights": [
+        {
+          "type": "good",
+          "text": "Swapping MKT365 for CIS240 in Fall 2026 is the critical unlock for an IS switch — without CIS240, three required IS courses (CIS320, CIS355, CIS360) remain inaccessible and Spring 2028 graduation becomes very difficult to achieve."
+        },
+        {
+          "type": "good",
+          "text": "Both paths respect the 12cr hard ceiling every non-abroad semester and the 15cr abroad cap in Spring 2027, keeping Reed's load minimal throughout."
+        },
+        {
+          "type": "good",
+          "text": "Under the IS switch, Fall 2027 is packed at 12cr with four required courses (BUS225, MGT410, CIS320, CIS355), so Reed should be prepared for a heavier return semester after study abroad."
+        },
+        {
+          "type": "good",
+          "text": "The Management & Innovation path carries less scheduling risk — BUS225 is the only missing required course — but leaves IS prerequisites permanently unresolved, making a future switch increasingly costly."
+        },
+        {
+          "type": "good",
+          "text": "CIS411 (IT for Business) in the IS Spring 2028 schedule satisfies both a required elective slot and the IT-for-Business certificate, giving Reed a credential advantage with no extra coursework."
+        },
+        {
+          "type": "good",
+          "text": "MGT301 was completed with a C+, which meets minimum passing requirements; Reed should confirm with the registrar whether the IS concentration accepts MGT301 at that grade, as some programs require a C or better in all required courses."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": "Spring 2027",
+      "path": "minimal",
+      "mode": "modfa26"
+    }
+  },
+  {
+    "id": 1782686169592,
+    "name": "[⚡·ModFa26] Information Systems +International Business ✈",
+    "schedule": {
+      "title": "Reed's Concentration Comparison",
+      "subtitle": "Management & Innovation vs. Information Systems — Fall 2026 Modification Analysis",
+      "mode": "modfa26",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "comparison": {
+        "currentPath": {
+          "concentration": "Management & Innovation",
+          "fall2026": [
+            "CIS370",
+            "JTC300",
+            "MGT320",
+            "MKT365"
+          ],
+          "rationale": "Reed stays in Management & Innovation. No changes to Fall 2026 are needed — all four courses are already locked per the immutable Fall 2026 rule. MKT365 counts as an International Business Group 1 elective and supports the IB second concentration. Spring 2027 abroad satisfies Group 3 automatically. BUS225 (missing required) moves to Fall 2027 per abroad rules. MGT410 also slots into Fall 2027. BUS479 capstone anchors Spring 2028 final semester.",
+          "schedule": [
+            {
+              "term": "Fall 2026",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "CIS370",
+                  "name": "Analytics and AI in Business",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "JTC300",
+                  "name": "Strategic Writing and Communication",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT320",
+                  "name": "Contemporary Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MKT365",
+                  "name": "International Marketing",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "semesterCredits": 12
+            },
+            {
+              "term": "Spring 2027",
+              "isAbroad": true,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "FIN475",
+                  "name": "International Finance",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT435",
+                  "name": "Managing in a Global Environment",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT475",
+                  "name": "International Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "ECON440",
+                  "name": "International Economics",
+                  "credits": 3,
+                  "type": "ib-group2"
+                },
+                {
+                  "code": "POLS232",
+                  "name": "Introduction to International Relations",
+                  "credits": 3,
+                  "type": "ib-group2"
+                }
+              ],
+              "semesterCredits": 15,
+              "note": "Abroad semester — IB required courses + 2 Group 2 credits; Group 3 auto-satisfied; 15cr abroad cap applied"
+            },
+            {
+              "term": "Fall 2027",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS225",
+                  "name": "Transforming Business for Sustainable Impact",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT410",
+                  "name": "Junior Management Seminar",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT340",
+                  "name": "Already Completed",
+                  "credits": 0,
+                  "type": "note"
+                },
+                {
+                  "code": "CIS411",
+                  "name": "IT for Business",
+                  "credits": 3,
+                  "type": "cert-elective"
+                },
+                {
+                  "code": "CIS310",
+                  "name": "Information Systems Analysis",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "semesterCredits": 12,
+              "note": "BUS225 moved from Spring 2027 per abroad rule; MGT410 placed Fall 2027 per rules; two IS electives included to maintain 12cr ceiling"
+            },
+            {
+              "term": "Spring 2028",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS479",
+                  "name": "Business Strategy Capstone",
+                  "credits": 3,
+                  "type": "capstone"
+                },
+                {
+                  "code": "MGT450",
+                  "name": "Management Elective",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "CIS340",
+                  "name": "Database Management",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "CIS350",
+                  "name": "Systems Development",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "semesterCredits": 12,
+              "note": "Final semester — BUS479 capstone with 3 supporting courses to reach 12cr ceiling"
+            }
+          ]
+        },
+        "switchPath": {
+          "concentration": "Information Systems",
+          "fall2026Swap": {
+            "drop": "MKT365",
+            "add": "CIS240",
+            "addName": "Introduction to Programming for Business",
+            "addRationale": "CIS240 is the foundational prerequisite gate for CIS320, CIS355, and CIS360 — all required IS junior/senior courses Reed currently cannot take. Swapping MKT365 for CIS240 in Fall 2026 unlocks the entire IS course sequence and is the single highest-leverage change Reed can make. MKT365 is not required for the IS primary concentration and can be dropped without consequence to IS completion."
+          },
+          "proposedFall2026": [
+            "CIS370",
+            "JTC300",
+            "MGT320",
+            "CIS240"
+          ],
+          "schedule": [
+            {
+              "term": "Fall 2026",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "CIS370",
+                  "name": "Analytics and AI in Business",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "JTC300",
+                  "name": "Strategic Writing and Communication",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT320",
+                  "name": "Contemporary Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS240",
+                  "name": "Introduction to Programming for Business",
+                  "credits": 3,
+                  "type": "required"
+                }
+              ],
+              "semesterCredits": 12
+            },
+            {
+              "term": "Spring 2027",
+              "isAbroad": true,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "FIN475",
+                  "name": "International Finance",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT435",
+                  "name": "Managing in a Global Environment",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "MGT475",
+                  "name": "International Management",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "ECON440",
+                  "name": "International Economics",
+                  "credits": 3,
+                  "type": "ib-group2"
+                },
+                {
+                  "code": "POLS232",
+                  "name": "Introduction to International Relations",
+                  "credits": 3,
+                  "type": "ib-group2"
+                }
+              ],
+              "semesterCredits": 15,
+              "note": "Abroad semester — same IB structure as current path; Group 3 auto-satisfied; 15cr abroad cap applied"
+            },
+            {
+              "term": "Fall 2027",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS225",
+                  "name": "Transforming Business for Sustainable Impact",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS320",
+                  "name": "Systems Analysis and Design",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS355",
+                  "name": "Database Systems",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS411",
+                  "name": "IT for Business",
+                  "credits": 3,
+                  "type": "cert-elective"
+                }
+              ],
+              "semesterCredits": 12,
+              "note": "CIS240 completion in Fall 2026 unlocks CIS320 and CIS355 here; BUS225 moved per abroad rule; CIS411 satisfies IT-for-Business certificate elective"
+            },
+            {
+              "term": "Spring 2028",
+              "isAbroad": false,
+              "isSummer": false,
+              "courses": [
+                {
+                  "code": "BUS479",
+                  "name": "Business Strategy Capstone",
+                  "credits": 3,
+                  "type": "capstone"
+                },
+                {
+                  "code": "CIS360",
+                  "name": "Enterprise Systems",
+                  "credits": 3,
+                  "type": "required"
+                },
+                {
+                  "code": "CIS310",
+                  "name": "Information Systems Analysis",
+                  "credits": 3,
+                  "type": "elective"
+                },
+                {
+                  "code": "CIS340",
+                  "name": "Database Management",
+                  "credits": 3,
+                  "type": "elective"
+                }
+              ],
+              "semesterCredits": 12,
+              "note": "Final semester — BUS479 capstone anchors; CIS360 completes senior IS requirements; two electives reach 12cr ceiling"
+            }
+          ]
+        }
+      },
+      "insights": [
+        {
+          "type": "good",
+          "text": "Swapping MKT365 for CIS240 in Fall 2026 is the critical unlock for the IS path — without it, CIS320, CIS355, and CIS360 are all blocked, making a Spring 2028 IS graduation impossible."
+        },
+        {
+          "type": "good",
+          "text": "Both paths preserve the Spring 2027 abroad semester intact at 15 credits with the three IB required courses plus two Group 2 selections, and both auto-satisfy Group 3."
+        },
+        {
+          "type": "good",
+          "text": "Neither path exceeds the 12cr hard ceiling in any domestic semester, and the 15cr abroad cap is respected in Spring 2027."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 is correctly reserved as the final-semester capstone in Spring 2028 in both paths, paired with three supporting courses to reach the 12cr ceiling."
+        },
+        {
+          "type": "good",
+          "text": "The IS switch path earns the IT-for-Business certificate by including CIS411 in Fall 2027, adding a credential with no additional course load beyond what IS elective requirements already demand."
+        },
+        {
+          "type": "good",
+          "text": "Reed's completed MGT301 (C+) meets the senior IS requirement — no retake needed — and MKT300 (B) similarly satisfies the senior IS marketing requirement, so neither path requires extra remediation."
+        },
+        {
+          "type": "good",
+          "text": "If Reed stays in Management & Innovation, MKT365 completed in Fall 2026 still counts toward the IB Group 1 requirement, preserving full value of that course even without the IS switch."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": "International Business",
+      "secondKey": "ib",
+      "abroadTerm": "Spring 2027",
+      "path": "minimal",
+      "mode": "modfa26"
+    }
+  },
+  {
+    "id": 1782686044132,
+    "name": "[⚡·Trad] Information Systems",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "B.S. Business Administration – Information Systems Concentration",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 42,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "semesterCredits": 12
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS240",
+              "name": "Systems Analysis and Design",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS411",
+              "name": "IT for Business",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT340",
+              "name": "Operations and Supply Chain Management",
+              "credits": 3,
+              "type": "required"
+            }
+          ],
+          "semesterCredits": 12,
+          "notes": "CIS240 is the critical prerequisite unlock for CIS320, CIS355, and CIS360. MGT340 already completed — placeholder noted; replace with an available required or elective course if registrar confirms duplication. CIS411 satisfies IT-for-Business certificate elective."
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS320",
+              "name": "Database Management Systems",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS355",
+              "name": "Enterprise Systems",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT410",
+              "name": "Leadership and Organizational Behavior",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS310",
+              "name": "Business Technology Management",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "semesterCredits": 12,
+          "notes": "CIS320 and CIS355 require CIS240 completed in Spring 2027. CIS310 counts toward concentration elective total."
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS360",
+              "name": "Information Systems Security",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS340",
+              "name": "Project Management in IT",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "CIS350",
+              "name": "IT Infrastructure and Cloud Computing",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "required"
+            }
+          ],
+          "semesterCredits": 12,
+          "notes": "BUS479 placed in final semester only per program rules. CIS360 requires CIS240. This semester completes 4 required concentration electives (CIS411, CIS310, CIS340, CIS350)."
+        }
+      ],
+      "insights": [
+        {
+          "type": "warning",
+          "text": "CIS240 (Systems Analysis and Design) is the single most critical course in Reed's remaining plan — it is a prerequisite for CIS320, CIS355, and CIS360, and is currently missing. It must be taken in Spring 2027 to keep the remaining IS curriculum on track for Spring 2028 graduation."
+        },
+        {
+          "type": "warning",
+          "text": "BUS225 is a missing required course and has been scheduled for Spring 2027 per the non-abroad routing rule."
+        },
+        {
+          "type": "good",
+          "text": "Reed's Fall 2026 enrollment is already finalized at exactly 12 credits with all four required courses locked in — no changes needed or permitted."
+        },
+        {
+          "type": "good",
+          "text": "CIS411 (IT for Business) is scheduled in Spring 2027 and satisfies the IT-for-Business certificate elective, supporting Reed's minimal-load path while earning credential value."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 (Capstone) is correctly placed in Spring 2028, Reed's final semester, alongside exactly 3 other courses to reach the 12-credit ceiling."
+        },
+        {
+          "type": "good",
+          "text": "All 4 required IS concentration electives are fulfilled across the plan: CIS411, CIS310, CIS340, and CIS350. No Finance concentration courses are included."
+        },
+        {
+          "type": "info",
+          "text": "No semester exceeds 12 credits, consistent with Reed's minimal-load path. Every semester lands at exactly 12 credits, keeping Reed on pace for Spring 2028 graduation."
+        },
+        {
+          "type": "info",
+          "text": "MGT301 was completed with a C+. Confirm with the registrar whether the program requires a minimum grade (often C or C+) for required management courses — Reed's grade is on the boundary and should be verified to avoid a repeat requirement."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": null,
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685830569,
+    "name": "[⚡·Trad] Information Systems ✈",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "B.S. Business Administration — Information Systems Concentration",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 36,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": true,
+          "isSummer": false,
+          "credits": 15,
+          "abroadNote": "Study abroad semester — up to 15cr via international coursework. BUS225 deferred to Fall 2027 per abroad rule.",
+          "courses": [
+            {
+              "code": "IB-ELEC-1",
+              "name": "International Business Elective 1",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ELEC-2",
+              "name": "International Business Elective 2",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ELEC-3",
+              "name": "International Business Elective 3",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ELEC-4",
+              "name": "International Business Elective 4",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ELEC-5",
+              "name": "International Business Elective 5",
+              "credits": 3,
+              "type": "abroad"
+            }
+          ]
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS240",
+              "name": "Systems Analysis and Design",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS411",
+              "name": "IT for Business",
+              "credits": 3,
+              "type": "elective-cert"
+            },
+            {
+              "code": "CIS310",
+              "name": "Database Management",
+              "credits": 3,
+              "type": "elective"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "courses": [
+            {
+              "code": "CIS320",
+              "name": "Advanced Systems Analysis",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS355",
+              "name": "Information Systems Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS360",
+              "name": "Enterprise Systems",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "capstone"
+            }
+          ]
+        }
+      ],
+      "blockers": [
+        {
+          "code": "CIS240",
+          "issue": "CIS240 is missing and is a prerequisite for CIS320, CIS355, and CIS360. All three are blocked until CIS240 is completed. Earliest opportunity is Fall 2027 after returning from abroad.",
+          "dependents": [
+            "CIS320",
+            "CIS355",
+            "CIS360"
+          ]
+        }
+      ],
+      "insights": [
+        {
+          "type": "warning",
+          "text": "CIS240 was never completed and is a hard prerequisite for three senior IS requirements (CIS320, CIS355, CIS360). This creates a critical bottleneck — all three must be taken after CIS240 is done in Fall 2027, which means they all land in the final Spring 2028 semester alongside BUS479. This is tight but feasible at 12cr."
+        },
+        {
+          "type": "warning",
+          "text": "BUS225 is deferred to Fall 2027 per the study-abroad rule. Reed should confirm this is acceptable with their advisor, as BUS225 is a missing required course."
+        },
+        {
+          "type": "good",
+          "text": "CIS411 (IT for Business) is scheduled in Fall 2027 and satisfies both an IS elective and the IT-for-Business certificate requirement simultaneously, maximizing efficiency under the minimal-load path."
+        },
+        {
+          "type": "good",
+          "text": "The plan stays at or under 12 credits every domestic semester, honoring the minimal-load ceiling throughout."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 is correctly placed in the final semester (Spring 2028) alongside exactly 3 other courses to reach the 12cr cap."
+        },
+        {
+          "type": "info",
+          "text": "MGT410 was listed as a Fall 2027 junior required course in the rules, but does not appear in the provided IS concentration requirements. Reed should confirm with their advisor whether MGT410 is required — if so, it must be added to Fall 2027, which would push the credit count to 15cr and require dropping one course (recommend dropping CIS310 elective, which can move to Spring 2028 if needed, or be dropped entirely if 4 electives are already satisfied by abroad credits)."
+        },
+        {
+          "type": "info",
+          "text": "Only 2 of 4 required IS electives (CIS411, CIS310) are explicitly scheduled in domestic semesters. Reed should verify whether any study-abroad courses satisfy IS elective requirements. If not, CIS340 or another list course should be added in Fall 2027, which would require dropping CIS310 or adjusting load — consult advisor before finalizing."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": "Spring 2027",
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685781939,
+    "name": "[⚡·Trad] Information Systems +International Business ✈",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "B.S. Business Administration — Primary: Information Systems | Second: International Business",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 51,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": true,
+          "isSummer": false,
+          "credits": 15,
+          "notes": "Study abroad semester — Group 3 auto-satisfied. Cap raised to 15cr per IB abroad rule.",
+          "courses": [
+            {
+              "code": "FIN475",
+              "name": "International Finance",
+              "credits": 3,
+              "type": "required-IB"
+            },
+            {
+              "code": "MGT435",
+              "name": "International Management",
+              "credits": 3,
+              "type": "required-IB"
+            },
+            {
+              "code": "MGT475",
+              "name": "Global Strategy",
+              "credits": 3,
+              "type": "required-IB"
+            },
+            {
+              "code": "POLS232",
+              "name": "Comparative Politics",
+              "credits": 3,
+              "type": "IB-Group2"
+            },
+            {
+              "code": "ECON440",
+              "name": "International Economics",
+              "credits": 3,
+              "type": "IB-Group2"
+            }
+          ]
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS240",
+              "name": "Systems Analysis and Design",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS411",
+              "name": "IT for Business",
+              "credits": 3,
+              "type": "elective-cert"
+            },
+            {
+              "code": "CIS310",
+              "name": "Database Management",
+              "credits": 3,
+              "type": "elective"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "notes": "Final semester — BUS479 capstone included. CIS320 and CIS355 now available after CIS240 completed Fall 2027.",
+          "courses": [
+            {
+              "code": "CIS320",
+              "name": "Advanced Systems Analysis",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS360",
+              "name": "IT Infrastructure and Security",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS340",
+              "name": "Project Management in IT",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "capstone"
+            }
+          ]
+        }
+      ],
+      "missingFromPlan": [
+        {
+          "code": "CIS355",
+          "name": "Enterprise Systems",
+          "note": "Requires CIS240 — only 2 CIS elective slots remain after required courses; CIS355 may substitute CIS340 or CIS360 if scheduling allows. Reed should confirm with advisor."
+        },
+        {
+          "code": "MGT410",
+          "note": "Originally flagged for Fall 2027 as junior required — confirm with advisor whether this is required for IS concentration or if CIS240 takes priority. Could replace BUS225 or CIS411 in Fall 2027 if required, keeping under 12cr."
+        }
+      ],
+      "electivesScheduled": [
+        {
+          "code": "CIS411",
+          "satisfiesCert": "IT-for-Business",
+          "term": "Fall 2027"
+        },
+        {
+          "code": "CIS310",
+          "satisfiesCert": false,
+          "term": "Fall 2027"
+        },
+        {
+          "code": "CIS340",
+          "satisfiesCert": false,
+          "term": "Spring 2028"
+        }
+      ],
+      "electivesRemaining": 1,
+      "IBSecondConcentration": {
+        "group1": {
+          "status": "satisfied",
+          "course": "MKT365",
+          "term": "Fall 2026"
+        },
+        "group2": {
+          "status": "satisfied",
+          "courses": [
+            "POLS232",
+            "ECON440"
+          ],
+          "credits": 6,
+          "term": "Spring 2027"
+        },
+        "group3": {
+          "status": "auto-satisfied",
+          "reason": "Study abroad Spring 2027"
+        },
+        "required": {
+          "status": "scheduled",
+          "courses": [
+            "FIN475",
+            "MGT435",
+            "MGT475"
+          ],
+          "term": "Spring 2027"
+        }
+      },
+      "insights": [
+        {
+          "type": "warning",
+          "text": "CIS240 is the critical bottleneck — it is missing and is a prerequisite for CIS320, CIS355, and CIS360. Reed must register for CIS240 in Fall 2027 immediately upon return from abroad, or the Spring 2028 final semester becomes infeasible."
+        },
+        {
+          "type": "warning",
+          "text": "MGT410 was specified as a junior required course for Fall 2027 but is not included because the Fall 2027 semester is already at 12cr with BUS225, CIS240, CIS411, and CIS310. Reed should verify with an advisor whether MGT410 is mandatory for the IS concentration — if so, one elective may need to shift."
+        },
+        {
+          "type": "good",
+          "text": "Study abroad Spring 2027 satisfies the IB Group 3 requirement automatically and allows all three IB required courses (FIN475, MGT435, MGT475) plus both Group 2 courses to be completed in one semester under the 15cr abroad cap."
+        },
+        {
+          "type": "good",
+          "text": "CIS411 (IT for Business) is scheduled in Fall 2027 and satisfies the IT-for-Business certificate elective requirement, efficiently doubling as both an IS elective and a cert-satisfying course."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 capstone is correctly reserved for the final semester (Spring 2028) alongside three other courses, bringing the semester to exactly 12cr as required."
+        },
+        {
+          "type": "good",
+          "text": "BUS225 is moved to Fall 2027 per the abroad rule, keeping Spring 2027 fully dedicated to the IB abroad curriculum without exceeding the 15cr abroad cap."
+        },
+        {
+          "type": "info",
+          "text": "Reed has completed MGT301 with a C+. Some programs require a minimum grade of C in required courses — Reed should verify with the registrar that C+ meets the threshold for the IS senior required course."
+        },
+        {
+          "type": "info",
+          "text": "The fourth IS elective slot is not yet filled in this plan. Reed should choose one more course from: CIS350, CIS410, CIS413, CIS455, CIS563, CIS575, CIS576, or CIS355 (once CIS240 is complete). This could be added to Fall 2027 only if MGT410 is confirmed not required — otherwise the semester is at ceiling."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": "International Business",
+      "secondKey": "ib",
+      "abroadTerm": "Spring 2027",
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685700000,
+    "name": "[🎓·Trad] Information Systems +International Business ✈",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "B.S. Business Administration — Information Systems Primary / International Business Secondary | Certificate-Focused Path",
+      "mode": "traditional",
+      "path": "cert",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 57,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 12,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "ib-group1"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": true,
+          "isSummer": false,
+          "credits": 15,
+          "courses": [
+            {
+              "code": "FIN475",
+              "name": "International Finance",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "MGT435",
+              "name": "International Management",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "MGT475",
+              "name": "Global Strategy",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "ECON440",
+              "name": "International Economics",
+              "credits": 3,
+              "type": "ib-group2"
+            },
+            {
+              "code": "POLS232",
+              "name": "Comparative Politics",
+              "credits": 3,
+              "type": "ib-group2"
+            }
+          ]
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 15,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS240",
+              "name": "Introduction to Information Systems",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT410",
+              "name": "Operations Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS411",
+              "name": "IT for Business",
+              "credits": 3,
+              "type": "elective-cert"
+            },
+            {
+              "code": "CIS310",
+              "name": "Systems Analysis and Design",
+              "credits": 3,
+              "type": "elective"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "credits": 15,
+          "courses": [
+            {
+              "code": "CIS320",
+              "name": "Database Management Systems",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS355",
+              "name": "Business Intelligence and Reporting",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "CIS360",
+              "name": "IT Project Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "capstone"
+            }
+          ]
+        }
+      ],
+      "notes": [
+        "CIS240 must be completed Fall 2027 to unlock CIS320, CIS355, and CIS360 in the final semester.",
+        "Spring 2028 carries only 12 credits to accommodate BUS479 as a final-semester capstone with 3 companion courses.",
+        "Two IS elective slots (CIS340 or CIS350 recommended) remain unfilled due to the 15cr cap. Reed may petition to add one in Fall 2027 if BUS225 or MGT410 can be deferred, or accept graduation with the minimum 4 electives if CIS411 and CIS310 count toward that total per department approval.",
+        "IB Group 3 is auto-satisfied by the Spring 2027 abroad semester.",
+        "IB Group 2 is satisfied by ECON440 and POLS232 taken abroad (6 credits total).",
+        "MGT301 grade of C+ should be reviewed with advisor to confirm it meets the minimum grade requirement for the major."
+      ],
+      "insights": [
+        {
+          "type": "warning",
+          "text": "CIS240 is missing and is a prerequisite for CIS320, CIS355, and CIS360. It has been placed in Fall 2027 immediately after study abroad — Reed cannot take those three courses until CIS240 is complete, which compresses all three into the final semester. Reed should explore whether CIS240 can be taken online or at a host institution during the abroad term to relieve final-semester pressure."
+        },
+        {
+          "type": "good",
+          "text": "Study abroad Spring 2027 fully satisfies IB Group 3 and simultaneously completes the three required IB courses (FIN475, MGT435, MGT475) plus both Group 2 courses, making the International Business secondary concentration achievable without any additional domestic semesters."
+        },
+        {
+          "type": "good",
+          "text": "CIS411 (IT for Business) satisfies the IT-for-Business certificate elective requirement and counts toward the four IS elective slots, efficiently serving both the concentration and certificate in a single course."
+        },
+        {
+          "type": "warning",
+          "text": "BUS225 is missing from the transcript and has been moved to Fall 2027 per the abroad rule. Reed should confirm with the registrar that no other core requirements depend on BUS225 as a prerequisite."
+        },
+        {
+          "type": "info",
+          "text": "The Spring 2028 capstone semester carries only 12 credits (4 courses including BUS479), which is below the 15cr ceiling and meets the BUS479 rule requiring exactly 3 companion courses for a 12cr total."
+        },
+        {
+          "type": "warning",
+          "text": "Reed currently has only 2 confirmed IS electives planned (CIS411, CIS310). The concentration requires 4. With the 15cr cap and CIS240 also needed in Fall 2027, there is no room to add more electives without exceeding the cap. Reed should meet with their advisor to determine whether CIS340 or CIS350 can substitute for another course or whether a fifth semester or overload petition is needed."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Information Systems",
+      "secondName": "International Business",
+      "secondKey": "ib",
+      "abroadTerm": "Spring 2027",
+      "path": "cert",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685639598,
+    "name": "[⚡·Trad] Management & Innovation",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "Management & Innovation Concentration — Minimal Load Path",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 33,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT330",
+              "name": "Entrepreneurship and New Venture Creation",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT350",
+              "name": "Managing Human Resources",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT375",
+              "name": "Operations and Supply Chain Management",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "MGT410",
+              "name": "Strategic Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT411",
+              "name": "Leadership in Organizations",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT486A",
+              "name": "Consulting Practicum",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 9
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT420",
+              "name": "Entrepreneurial Finance and Strategy",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT440",
+              "name": "Innovation and Entrepreneurship",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT476",
+              "name": "Leadership Development",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        }
+      ],
+      "insights": [
+        {
+          "type": "good",
+          "text": "Fall 2026 is locked in at exactly 12 credits with all four in-progress courses as required."
+        },
+        {
+          "type": "good",
+          "text": "BUS225 is correctly placed in Spring 2027 since Reed is not studying abroad."
+        },
+        {
+          "type": "good",
+          "text": "MGT410 is scheduled in Fall 2027, satisfying the junior required sequencing rule."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 capstone appears only in the final semester (Spring 2028) alongside three other courses for a 12-credit total."
+        },
+        {
+          "type": "good",
+          "text": "All 8 electives chosen are certificate-satisfying: MGT330 and MGT420 and MGT440 and MGT476 fulfill Entrepreneurship; MGT350 fulfills Managing HR; MGT375 fulfills Ops & Supply Chain; MGT411 and MGT476 fulfill Leadership in Organizations; MGT486A fulfills Consulting."
+        },
+        {
+          "type": "good",
+          "text": "No semester exceeds the 12-credit minimal-load ceiling."
+        },
+        {
+          "type": "good",
+          "text": "Fall 2027 is intentionally lighter at 9 credits, consistent with the minimal-load path and the absence of additional required courses to fill it without exceeding concentration scope."
+        },
+        {
+          "type": "warning",
+          "text": "Reed earned a C+ in MGT301. Some graduate programs require a minimum grade in core management courses — Reed should confirm whether this meets any future academic or professional goals."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Management & Innovation",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": null,
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685609985,
+    "name": "[⚡·Trad] Management & Innovation",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "Management & Innovation Concentration — Minimal Load Path",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 33,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT330",
+              "name": "Entrepreneurship and New Venture Creation",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT350",
+              "name": "Managing Human Resources",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT375",
+              "name": "Operations and Supply Chain Management",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "MGT410",
+              "name": "Strategic Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT411",
+              "name": "Leadership in Organizations",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT486A",
+              "name": "Consulting Practicum",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 9
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT420",
+              "name": "Entrepreneurial Finance and Strategy",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT440",
+              "name": "Innovation and Entrepreneurship",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT476",
+              "name": "Leadership Development",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        }
+      ],
+      "insights": [
+        {
+          "type": "good",
+          "text": "Fall 2026 is locked in at exactly 12 credits with all four in-progress courses as required."
+        },
+        {
+          "type": "good",
+          "text": "BUS225 is correctly placed in Spring 2027 since Reed is not studying abroad."
+        },
+        {
+          "type": "good",
+          "text": "MGT410 is scheduled in Fall 2027, satisfying the junior required sequencing rule."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 capstone appears only in the final semester (Spring 2028) alongside three other courses for a 12-credit total."
+        },
+        {
+          "type": "good",
+          "text": "All 8 electives chosen are certificate-satisfying: MGT330 and MGT420 and MGT440 and MGT476 fulfill Entrepreneurship; MGT350 fulfills Managing HR; MGT375 fulfills Ops & Supply Chain; MGT411 and MGT476 fulfill Leadership in Organizations; MGT486A fulfills Consulting."
+        },
+        {
+          "type": "good",
+          "text": "No semester exceeds the 12-credit minimal-load ceiling."
+        },
+        {
+          "type": "good",
+          "text": "Fall 2027 is intentionally lighter at 9 credits, consistent with the minimal-load path and the absence of additional required courses to fill it without exceeding concentration scope."
+        },
+        {
+          "type": "warning",
+          "text": "Reed earned a C+ in MGT301. Some graduate programs require a minimum grade in core management courses — Reed should confirm whether this meets any future academic or professional goals."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Management & Innovation",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": null,
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685567879,
+    "name": "[⚡·Trad] Management & Innovation ✈",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "Management & Innovation Concentration — Minimal Load Path",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 30,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": true,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "IB-ABROAD-1",
+              "name": "International Business Elective 1 (Abroad)",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ABROAD-2",
+              "name": "International Business Elective 2 (Abroad)",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ABROAD-3",
+              "name": "International Business Elective 3 (Abroad)",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ABROAD-4",
+              "name": "International Business Elective 4 (Abroad)",
+              "credits": 3,
+              "type": "abroad"
+            },
+            {
+              "code": "IB-ABROAD-5",
+              "name": "International Business Elective 5 (Abroad)",
+              "credits": 3,
+              "type": "abroad"
+            }
+          ],
+          "totalCredits": 15
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT410",
+              "name": "Strategic Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT330",
+              "name": "Entrepreneurship and New Venture Creation",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT350",
+              "name": "Managing Human Resources",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT411",
+              "name": "Leadership in Organizations",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT420",
+              "name": "Social Entrepreneurship",
+              "credits": 3,
+              "type": "elective"
+            },
+            {
+              "code": "MGT375",
+              "name": "Operations and Supply Chain Management",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12
+        }
+      ],
+      "insights": [
+        {
+          "type": "good",
+          "text": "Fall 2026 is locked in at exactly 12 credits with all four in-progress courses confirmed — no changes needed or permitted."
+        },
+        {
+          "type": "good",
+          "text": "Spring 2027 is designated as your study abroad semester. Five international courses are reserved for abroad (15cr cap per abroad rules). BUS225 has been moved to Fall 2027 accordingly."
+        },
+        {
+          "type": "good",
+          "text": "MGT410 (junior required) is correctly placed in Fall 2027 per program rules, alongside BUS225 and two certificate-satisfying electives, keeping the semester at the 12cr ceiling."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 capstone is reserved for Spring 2028 (final semester only) alongside three electives to reach exactly 12 credits, satisfying the capstone placement rule."
+        },
+        {
+          "type": "good",
+          "text": "All four required elective slots are filled with certificate-satisfying courses: MGT330 and MGT420 count toward Entrepreneurship, MGT350 toward Managing HR, MGT411 toward Leadership in Organizations, and MGT375 toward Ops & Supply — maximizing certificate eligibility on a minimal load path."
+        },
+        {
+          "type": "warning",
+          "text": "No semester exceeds 12 credits (excluding the abroad semester which uses the 15cr abroad cap). Verify abroad course selections and credit transfers with your registrar before finalizing Spring 2027."
+        },
+        {
+          "type": "warning",
+          "text": "Reed's C+ in MGT301 meets the minimum passing threshold, but some graduate programs or honors distinctions may require a retake. Confirm with your advisor whether a grade replacement is advisable."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Management & Innovation",
+      "secondName": null,
+      "secondKey": "none",
+      "abroadTerm": "Spring 2027",
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685523565,
+    "name": "[⚡·Trad] Management & Innovation +International Business ✈",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "Management & Innovation (Primary) + International Business (Secondary) — Minimal Load Path",
+      "mode": "traditional",
+      "path": "minimal",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 36,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "totalCredits": 12,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "ib-group1"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": true,
+          "isSummer": false,
+          "totalCredits": 15,
+          "abroadNote": "Study abroad semester — Group 3 auto-satisfied. 15cr cap applies.",
+          "courses": [
+            {
+              "code": "FIN475",
+              "name": "International Finance",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "MGT435",
+              "name": "Global Business Strategy",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "MGT475",
+              "name": "International Management",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "POLS232",
+              "name": "Comparative Politics",
+              "credits": 3,
+              "type": "ib-group2"
+            },
+            {
+              "code": "ECON440",
+              "name": "International Economics",
+              "credits": 3,
+              "type": "ib-group2"
+            }
+          ]
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "totalCredits": 12,
+          "courses": [
+            {
+              "code": "MGT410",
+              "name": "Strategic Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT330",
+              "name": "Entrepreneurship and New Venture Creation",
+              "credits": 3,
+              "type": "elective",
+              "cert": "Entrepreneurship"
+            },
+            {
+              "code": "MGT411",
+              "name": "Leadership in Organizations",
+              "credits": 3,
+              "type": "elective",
+              "cert": "Leadership-in-Orgs"
+            }
+          ]
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "totalCredits": 12,
+          "isFinalSemester": true,
+          "courses": [
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "capstone"
+            },
+            {
+              "code": "MGT420",
+              "name": "Entrepreneurship and Innovation",
+              "credits": 3,
+              "type": "elective",
+              "cert": "Entrepreneurship"
+            },
+            {
+              "code": "MGT486A",
+              "name": "Management Consulting",
+              "credits": 3,
+              "type": "elective",
+              "cert": "Consulting"
+            },
+            {
+              "code": "MGT375",
+              "name": "Operations and Supply Chain Management",
+              "credits": 3,
+              "type": "elective",
+              "cert": "Ops&Supply"
+            }
+          ]
+        }
+      ],
+      "electiveSummary": {
+        "required": 4,
+        "scheduled": 4,
+        "courses": [
+          "MGT330",
+          "MGT411",
+          "MGT420",
+          "MGT486A"
+        ],
+        "certsCovered": [
+          "Entrepreneurship",
+          "Leadership-in-Orgs",
+          "Consulting",
+          "Ops&Supply"
+        ]
+      },
+      "ibRequirementsSummary": {
+        "coreRequired": [
+          "FIN475",
+          "MGT435",
+          "MGT475"
+        ],
+        "group1": [
+          "MKT365"
+        ],
+        "group2": [
+          "POLS232",
+          "ECON440"
+        ],
+        "group3": "Auto-satisfied via Spring 2027 abroad semester"
+      },
+      "insights": [
+        {
+          "type": "good",
+          "text": "All four Fall 2026 courses are locked in as required, totaling exactly 12 credits."
+        },
+        {
+          "type": "good",
+          "text": "Spring 2027 abroad semester carries all three IB core requirements plus two Group 2 courses, keeping the plan on track for a Spring 2028 graduation with no wasted semesters."
+        },
+        {
+          "type": "good",
+          "text": "BUS225 is correctly deferred to Fall 2027 per the abroad rule, paired with MGT410 and two certificate-satisfying electives to fill the 12-credit ceiling."
+        },
+        {
+          "type": "good",
+          "text": "All four Management & Innovation electives are drawn from the approved cert list, covering four distinct certificates: Entrepreneurship, Leadership in Organizations, Consulting, and Operations & Supply Chain."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 capstone is reserved for the final semester (Spring 2028) alongside three electives to hit the 12-credit maximum."
+        },
+        {
+          "type": "warning",
+          "text": "Reed's MGT301 grade of C+ satisfies the requirement but may affect GPA-sensitive applications (e.g., graduate school or competitive internships). No action required for graduation."
+        },
+        {
+          "type": "warning",
+          "text": "Spring 2027 abroad semester carries 15 credits, which is the maximum permitted under the abroad exception. Confirm with the registrar that all five courses are approved for transfer credit before departure."
+        },
+        {
+          "type": "info",
+          "text": "Group 2 of the IB concentration requires 6 credits; POLS232 and ECON440 (3cr each) placed abroad satisfy this in one semester, which is efficient but depends on host-institution course availability. Have backup Group 2 courses identified before the abroad term."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Management & Innovation",
+      "secondName": "International Business",
+      "secondKey": "ib",
+      "abroadTerm": "Spring 2027",
+      "path": "minimal",
+      "mode": "traditional"
+    }
+  },
+  {
+    "id": 1782685414558,
+    "name": "[🎓·Trad] Management & Innovation +International Business ✈",
+    "schedule": {
+      "title": "Reed's Academic Plan",
+      "subtitle": "Management & Innovation (Primary) + International Business (Secondary) | Certificate-Focused Path",
+      "mode": "traditional",
+      "path": "cert",
+      "graduationTerm": "Spring 2028",
+      "totalCreditsRemaining": 45,
+      "semesters": [
+        {
+          "term": "Fall 2026",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "CIS370",
+              "name": "Analytics and AI in Business",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "JTC300",
+              "name": "Strategic Writing and Communication",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT320",
+              "name": "Contemporary Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MKT365",
+              "name": "International Marketing",
+              "credits": 3,
+              "type": "elective"
+            }
+          ],
+          "totalCredits": 12,
+          "notes": "Fixed semester per plan rules. 12 of 15cr cap used."
+        },
+        {
+          "term": "Spring 2027",
+          "isAbroad": true,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "FIN475",
+              "name": "International Finance",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "MGT435",
+              "name": "Leading Across Cultures",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "MGT475",
+              "name": "International Management",
+              "credits": 3,
+              "type": "ib-required"
+            },
+            {
+              "code": "POLS232",
+              "name": "Comparative Political Systems (Group 2)",
+              "credits": 3,
+              "type": "ib-group2"
+            },
+            {
+              "code": "ECON440",
+              "name": "International Economics (Group 2)",
+              "credits": 3,
+              "type": "ib-group2"
+            }
+          ],
+          "totalCredits": 15,
+          "notes": "Study abroad semester. IB Group 3 (abroad itself) auto-satisfied. Group 2 fulfilled with 2 courses (6cr). At 15cr hard cap."
+        },
+        {
+          "term": "Fall 2027",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS225",
+              "name": "Transforming Business for Sustainable Impact",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT410",
+              "name": "Strategic Management",
+              "credits": 3,
+              "type": "required"
+            },
+            {
+              "code": "MGT330",
+              "name": "Entrepreneurship and New Ventures",
+              "credits": 3,
+              "type": "elective",
+              "certSatisfies": "Entrepreneurship"
+            },
+            {
+              "code": "MGT420",
+              "name": "Innovation and Entrepreneurial Strategy",
+              "credits": 3,
+              "type": "elective",
+              "certSatisfies": "Entrepreneurship"
+            },
+            {
+              "code": "MGT411",
+              "name": "Leadership in Organizations",
+              "credits": 3,
+              "type": "elective",
+              "certSatisfies": "Leadership-in-Orgs"
+            }
+          ],
+          "totalCredits": 15,
+          "notes": "BUS225 moved here per abroad rule. MGT410 placed in Fall 2027 per plan rules. Three cert-satisfying electives fill remaining elective slots. At 15cr hard cap."
+        },
+        {
+          "term": "Spring 2028",
+          "isAbroad": false,
+          "isSummer": false,
+          "courses": [
+            {
+              "code": "BUS479",
+              "name": "Business Strategy Capstone",
+              "credits": 3,
+              "type": "capstone"
+            },
+            {
+              "code": "MGT350",
+              "name": "Managing Human Resources",
+              "credits": 3,
+              "type": "elective",
+              "certSatisfies": "Managing-HR"
+            },
+            {
+              "code": "MGT486A",
+              "name": "Management Consulting",
+              "credits": 3,
+              "type": "elective",
+              "certSatisfies": "Consulting"
+            },
+            {
+              "code": "MGT476",
+              "name": "Leadership and Organizational Change",
+              "credits": 3,
+              "type": "elective",
+              "certSatisfies": "Leadership-in-Orgs"
+            }
+          ],
+          "totalCredits": 12,
+          "notes": "Final semester. BUS479 capstone placed here with exactly 3 other courses for 12cr total per capstone rules."
+        }
+      ],
+      "certificateProgress": {
+        "Entrepreneurship": {
+          "required": 3,
+          "scheduled": [
+            "MGT330",
+            "MGT420"
+          ],
+          "note": "2 of 3 eligible courses scheduled; MGT360 or MGT440 available if a third is needed and credits allow"
+        },
+        "Leadership-in-Orgs": {
+          "required": 2,
+          "scheduled": [
+            "MGT411",
+            "MGT476"
+          ],
+          "note": "Both required courses scheduled — certificate fully satisfiable"
+        },
+        "Managing-HR": {
+          "required": 1,
+          "scheduled": [
+            "MGT350"
+          ],
+          "note": "Certificate course scheduled"
+        },
+        "Consulting": {
+          "required": 1,
+          "scheduled": [
+            "MGT486A"
+          ],
+          "note": "Certificate course scheduled"
+        }
+      },
+      "ibConcentrationProgress": {
+        "required": [
+          "FIN475 (Spring 2027)",
+          "MGT435 (Spring 2027)",
+          "MGT475 (Spring 2027)"
+        ],
+        "group1": [
+          "MKT365 (Fall 2026, in-progress — satisfied)"
+        ],
+        "group2": [
+          "POLS232 (Spring 2027)",
+          "ECON440 (Spring 2027) — 6cr satisfied"
+        ],
+        "group3": "Auto-satisfied by Spring 2027 study abroad semester"
+      },
+      "insights": [
+        {
+          "type": "good",
+          "text": "All 5 International Business concentration requirements (3 required courses + Group 1 + 2 Group 2 credits) are fully covered within the abroad semester and Fall 2026, making Spring 2027 abroad a clean, efficient double-duty term."
+        },
+        {
+          "type": "good",
+          "text": "The cert-focused path stacks 4 elective slots with courses satisfying Entrepreneurship, Leadership in Organizations, Managing HR, and Consulting certificates — maximizing credential value without exceeding any semester cap."
+        },
+        {
+          "type": "good",
+          "text": "BUS479 capstone is correctly reserved for the final semester (Spring 2028) alongside 3 supporting electives, reaching exactly 12 credits as intended."
+        },
+        {
+          "type": "warning",
+          "text": "MGT301 was completed with a C+. Verify with your advisor whether this meets the minimum grade requirement for the Management & Innovation concentration, as some programs require a C or better in core courses."
+        },
+        {
+          "type": "warning",
+          "text": "POLS232 and ECON440 are listed as example Group 2 IB courses. Confirm current availability and that both are offered during your specific abroad program before finalizing."
+        },
+        {
+          "type": "info",
+          "text": "BUS225 is the only missing required prerequisite and is scheduled for Fall 2027 per the abroad-semester rule. Confirm it has no prerequisites of its own that could create a bottleneck."
+        },
+        {
+          "type": "info",
+          "text": "Total remaining credits are approximately 45 (12 Fall 2026 + 15 Spring 2027 + 15 Fall 2027 + 12 Spring 2028), keeping Reed on track for a Spring 2028 graduation with a full course load each term."
+        }
+      ]
+    },
+    "sel": {
+      "primaryName": "Management & Innovation",
+      "secondName": "International Business",
+      "secondKey": "ib",
+      "abroadTerm": "Spring 2027",
+      "path": "cert",
+      "mode": "traditional"
+    }
+  }
+]
