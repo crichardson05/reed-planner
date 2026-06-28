@@ -664,6 +664,56 @@ function loadSchedules(){
     .catch(()=>{}); // keep empty state if file not uploaded yet
 }
 
+function buildSchedCertChart(semesters){
+  const CERT_MAP = {
+    'B2B Selling':          {courses:['MKT330','MKT362','MKT363'], done:[], total:3},
+    'Entrepreneurship':     {courses:['MGT340','MGT330','MGT360','MGT420','MGT440'], done:['MGT340'], total:3},
+    'Managing HR':          {courses:['MGT310','MGT350','MGT374','MGT474'], done:['MGT310'], total:3},
+    'Leadership in Orgs':   {courses:['MGT410','MGT411','MGT476'], done:[], total:3},
+    'Strategic Marketing':  {courses:['MKT320','MKT330','MKT364','MKT440'], done:[], total:3},
+    'Mkt Research':         {courses:['MKT370','MKT410','MKT450'], done:[], total:3},
+    'Customer Exp Mgmt':    {courses:['MKT330','MKT361','MKT366'], done:[], total:3},
+    'Consulting':           {courses:['MGT486A'], done:[], total:4},
+    'Ops & Supply':         {courses:['MGT301','MGT375','MGT478'], done:['MGT301'], total:4},
+    'International Business':{courses:['MKT300','MKT365','MGT435','FIN475','MGT475'], done:['MKT300','MKT365'], total:5}
+  };
+  const scheduled = new Set();
+  for(const sem of(semesters||[])) for(const c of(sem.courses||[])) scheduled.add(c.code.toUpperCase());
+  const results = [];
+  for(const [certName, cert] of Object.entries(CERT_MAP)){
+    const alreadyDone = cert.done.length;
+    const inSched = cert.courses.filter(c=>!cert.done.includes(c)&&scheduled.has(c)).length;
+    if(inSched===0) continue;
+    const satisfied = Math.min(alreadyDone+inSched, cert.total);
+    const pct = Math.round((satisfied/cert.total)*100);
+    results.push({certName, pct, satisfied, total:cert.total, alreadyDone, inSched, stillNeeded:Math.max(0,cert.total-satisfied)});
+  }
+  results.sort((a,b)=>b.pct-a.pct);
+  if(!results.length) return '';
+  let html = `<div style="margin-top:20px"><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);margin-bottom:10px;display:flex;align-items:center;gap:10px">Certificate progress from this schedule<span style="flex:1;height:0.5px;background:var(--bd);display:block"></span></div><div style="display:grid;gap:8px">`;
+  for(const c of results){
+    const color = c.pct>=100?'#3d9e5f':c.pct>=60?'#4f8ef7':'#534AB7';
+    const badge = c.pct>=100
+      ? `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:#0f2a1a;color:#6dcc94;font-weight:500">Complete ✓</span>`
+      : `<span style="font-size:11px;color:var(--tm)">${c.stillNeeded} more needed</span>`;
+    html += `<div style="background:var(--s1);border:0.5px solid var(--bd);border-left:3px solid ${color};border-radius:12px;padding:12px 14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:500;color:var(--tp)">${c.certName}</div>${badge}
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div style="flex:1;height:6px;background:var(--s0);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;background:${color};width:${c.pct}%"></div></div>
+        <span style="font-size:12px;font-weight:600;color:var(--tp);min-width:34px;text-align:right">${c.pct}%</span>
+      </div>
+      <div style="font-size:11px;color:var(--tm);display:flex;gap:14px">
+        <span style="color:#3d9e5f">${c.alreadyDone} already done</span>
+        <span style="color:#AFA9EC">${c.inSched} in this schedule</span>
+        ${c.stillNeeded>0?`<span>${c.stillNeeded} still needed</span>`:''}
+      </div>
+    </div>`;
+  }
+  return html + `</div></div>`;
+}
+
 function renderSchedules(entries, el){
   if(!entries||!entries.length) return;
 
@@ -767,12 +817,16 @@ function renderSchedules(entries, el){
         bodyHtml += renderComparisonPath(spData, '#6dcc94', `Switch — ${sp.concentration||''}`);
       }
       bodyHtml += `</div>`;
+      // Cert chart from both paths combined
+      const allSems = [...(cp.schedule||[]), ...(sp ? sp.schedule||[] : [])];
+      bodyHtml += buildSchedCertChart(allSems);
       bodyHtml += renderInsights(s.insights);
     } else {
       // Standard semester list
       bodyHtml += `<div style="display:grid;gap:10px">`;
       (s.semesters||[]).forEach(sem=>{ bodyHtml += renderSemBlock(sem); });
       bodyHtml += `</div>`;
+      bodyHtml += buildSchedCertChart(s.semesters);
       bodyHtml += renderInsights(s.insights);
     }
 
