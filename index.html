@@ -668,75 +668,122 @@ function renderSchedules(entries, el){
   if(!entries||!entries.length) return;
 
   const codeColor = t =>
-    t==='abroad'   ? 'var(--gt)' :
-    t==='cert'     ? 'var(--put)' :
-    t==='ib'       ? '#AFA9EC' :
-    t==='elective' ? 'var(--tm)' : 'var(--at)';
+    t==='abroad' ? 'var(--gt)' : t==='cert' ? 'var(--put)' :
+    t==='ib' ? '#AFA9EC' : t==='elective' ? 'var(--tm)' : 'var(--at)';
 
-  // Tab buttons across the top
+  const renderSemBlock = (sem) => {
+    const cr = (sem.courses||[]).reduce((a,c)=>a+c.credits,0);
+    const crOk = cr>=12&&cr<=15;
+    const isFa26 = sem.term==='Fall 2026';
+    const abroadBadge = sem.isAbroad ? `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--gd);color:var(--gt);font-weight:500;margin-left:6px">✈ Abroad</span>` : '';
+    const ipBadge = isFa26 ? `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--amd);color:var(--amt);font-weight:500;margin-left:6px">↻ In Progress</span>` : '';
+    const crColor = isFa26 ? 'var(--amt)' : crOk ? '#6dcc94' : '#f0a840';
+    let h = `<div style="background:var(--s1);border:0.5px solid ${isFa26?'var(--am)':'var(--bd)'};border-radius:14px;overflow:hidden">
+      <div style="padding:10px 14px;background:${isFa26?'var(--amd)':'var(--s2)'};border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:13px;font-weight:600;color:var(--tp)">${sem.term}${abroadBadge}${ipBadge}</div>
+        <div style="font-size:13px;font-weight:600;color:${crColor}">${cr} cr</div>
+      </div>`;
+    (sem.courses||[]).forEach((c,ci)=>{
+      const border = ci<(sem.courses.length-1)?`border-bottom:0.5px solid var(--bd);`:'';
+      h += `<div style="display:flex;align-items:baseline;gap:10px;padding:8px 14px;${border}">
+        <span style="font-size:11px;font-weight:600;color:${codeColor(c.type)};white-space:nowrap;min-width:60px">${c.code}</span>
+        <span style="font-size:12px;color:var(--tp);flex:1;line-height:1.35">${c.name}</span>
+        <span style="font-size:12px;color:var(--tm);font-weight:500;flex-shrink:0">${c.credits} cr</span>
+      </div>`;
+    });
+    return h + `</div>`;
+  };
+
+  const renderInsights = (insights) => {
+    if(!insights||!insights.length) return '';
+    let h = `<div style="margin-top:14px">`;
+    insights.forEach(ins=>{
+      const bg = ins.type==='warn'?'var(--amd)':ins.type==='good'?'var(--gd)':'var(--s1)';
+      const bc = ins.type==='warn'?'var(--am)':ins.type==='good'?'var(--gn)':'var(--ac)';
+      h += `<div style="background:${bg};border:0.5px solid var(--bd);border-left:3px solid ${bc};border-radius:var(--r);padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--ts);line-height:1.6">${ins.text}</div>`;
+    });
+    return h + `</div>`;
+  };
+
+  const renderComparisonPath = (pathData, color, title) => {
+    if(!pathData) return '';
+    let h = `<div style="background:var(--s1);border:0.5px solid ${color};border-radius:14px;overflow:hidden">
+      <div style="padding:10px 14px;background:var(--s2);border-bottom:0.5px solid var(--bd)">
+        <div style="font-size:12px;font-weight:600;color:${color}">${title}</div>
+        <div style="font-size:11px;color:var(--tm);margin-top:2px">${pathData.rationale||''}</div>
+      </div>`;
+    (pathData.schedule||[]).forEach(sem=>{
+      const cr=(sem.courses||[]).reduce((a,c)=>a+c.credits,0);
+      const isFa26=sem.term==='Fall 2026';
+      h+=`<div style="padding:6px 14px;border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;background:${isFa26?'var(--amd)':''}">
+        <span style="font-size:11px;font-weight:500;color:var(--ts)">${sem.term}${isFa26?' ↻':''}</span>
+        <span style="font-size:11px;font-weight:600;color:${cr>=12&&cr<=15?'#6dcc94':'#f0a840'}">${cr} cr</span>
+      </div>`;
+      (sem.courses||[]).forEach(c=>{
+        h+=`<div style="display:flex;gap:8px;padding:4px 14px 4px 20px;border-bottom:0.5px solid var(--bd)">
+          <span style="font-size:10px;font-weight:600;color:${codeColor(c.type)};min-width:54px">${c.code}</span>
+          <span style="font-size:11px;color:var(--tp);flex:1;line-height:1.3">${c.name}</span>
+          <span style="font-size:10px;color:var(--tm)">${c.credits}cr</span>
+        </div>`;
+      });
+    });
+    return h + `</div>`;
+  };
+
+  // Tab buttons
   let tabHtml = `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;border-bottom:0.5px solid var(--bd);padding-bottom:10px">`;
   entries.forEach((e,i)=>{
     tabHtml += `<button onclick="showSched(${i})" id="stab-${i}" class="nvt${i===0?' active':''}" style="border-bottom:2px solid ${i===0?'var(--ac)':'transparent'};padding:8px 14px;font-size:12px">${e.name}</button>`;
   });
   tabHtml += `</div>`;
 
-  // All schedule panels (first visible)
   let panelsHtml = '';
   entries.forEach((e,i)=>{
     const s = e.schedule;
     const sel = e.sel || {};
     const visible = i===0 ? 'block' : 'none';
+    const pathLabel = s.path==='cert'?'🎓 Certificate Path':s.path==='minimal'?'⚡ Minimal Path':'';
+    const modeLabel = {traditional:'Traditional Fall/Spring',modfa26:'Modify Fall 2026'}[s.mode]||'';
 
     let pills = `<div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px">`;
     pills += `<span class="s-pill sp-conc">${sel.primaryName||''}</span>`;
     if(sel.secondName) pills += `<span class="s-pill" style="background:var(--pud);color:var(--put)">${sel.secondName} (2nd)</span>`;
-    if(sel.certNameList&&sel.certNameList.length) pills += `<span class="s-pill sp-cert">${sel.certNameList.length} cert${sel.certNameList.length>1?'s':''}</span>`;
+    if(pathLabel) pills += `<span class="s-pill" style="background:var(--pud);color:var(--put)">${pathLabel}</span>`;
+    if(modeLabel) pills += `<span class="s-pill" style="background:var(--s2);color:var(--ts)">${modeLabel}</span>`;
     if(sel.abroadTerm) pills += `<span class="s-pill sp-abroad">✈ ${sel.abroadTerm}</span>`;
     pills += `<span class="s-pill sp-total">Grad: ${s.graduationTerm}</span></div>`;
 
-    let semHtml = `<div style="display:grid;gap:10px">`;
-    (s.semesters||[]).forEach(sem=>{
-      const cr = (sem.courses||[]).reduce((a,c)=>a+c.credits,0);
-      const crOk = cr>=12&&cr<=15;
-      const abroadBadge = sem.isAbroad ? `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--gd);color:var(--gt);font-weight:500;margin-left:6px">✈ Abroad</span>` : '';
-      semHtml += `<div style="background:var(--s1);border:0.5px solid var(--bd);border-radius:14px;overflow:hidden">
-        <div style="padding:10px 14px;background:var(--s2);border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:center">
-          <div style="font-size:13px;font-weight:600;color:var(--tp)">${sem.term}${abroadBadge}</div>
-          <div style="font-size:13px;font-weight:600;color:${crOk?'#6dcc94':'#f0a840'}">${cr} cr</div>
-        </div>`;
-      (sem.courses||[]).forEach((c,ci)=>{
-        const border = ci<(sem.courses.length-1)?`border-bottom:0.5px solid var(--bd);`:'';
-        semHtml += `<div style="display:flex;align-items:baseline;gap:10px;padding:8px 14px;${border}">
-          <span style="font-size:11px;font-weight:600;color:${codeColor(c.type)};white-space:nowrap;min-width:60px">${c.code}</span>
-          <span style="font-size:12px;color:var(--tp);flex:1;line-height:1.35">${c.name}</span>
-          <span style="font-size:12px;color:var(--tm);font-weight:500;flex-shrink:0">${c.credits} cr</span>
-        </div>`;
-      });
-      semHtml += `</div>`;
-    });
-    semHtml += `</div>`;
+    let bodyHtml = '';
 
-    let insHtml = '';
-    if(s.insights&&s.insights.length){
-      insHtml = `<div style="margin-top:14px">`;
-      s.insights.forEach(ins=>{
-        const bg = ins.type==='warn'?'var(--amd)':ins.type==='good'?'var(--gd)':'var(--s1)';
-        const bc = ins.type==='warn'?'var(--am)':ins.type==='good'?'var(--gn)':'var(--ac)';
-        insHtml += `<div style="background:${bg};border:0.5px solid var(--bd);border-left:3px solid ${bc};border-radius:var(--r);padding:10px 14px;margin-bottom:8px;font-size:12px;color:var(--ts);line-height:1.6">${ins.text}</div>`;
-      });
-      insHtml += `</div>`;
+    // modfa26 comparison layout
+    if(s.mode==='modfa26' && s.comparison){
+      const cp = s.comparison.currentPath;
+      const sp = s.comparison.switchPath;
+      bodyHtml += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">`;
+      bodyHtml += renderComparisonPath(cp, '#4f8ef7', `Current — ${cp.concentration||''}`);
+      if(sp){
+        const swapNote = sp.fall2026Swap ? `Swap MKT365 → ${sp.fall2026Swap.add}. ${sp.fall2026Swap.addRationale||''}` : '';
+        const spData = {...sp, rationale: swapNote};
+        bodyHtml += renderComparisonPath(spData, '#6dcc94', `Switch — ${sp.concentration||''}`);
+      }
+      bodyHtml += `</div>`;
+      bodyHtml += renderInsights(s.insights);
+    } else {
+      // Standard semester list
+      bodyHtml += `<div style="display:grid;gap:10px">`;
+      (s.semesters||[]).forEach(sem=>{ bodyHtml += renderSemBlock(sem); });
+      bodyHtml += `</div>`;
+      bodyHtml += renderInsights(s.insights);
     }
 
     panelsHtml += `<div id="sched-${i}" style="display:${visible}">
-      <div style="font-size:18px;font-weight:500;color:var(--tp);margin-bottom:4px">${s.title}</div>
+      <div style="font-size:18px;font-weight:500;color:var(--tp);margin-bottom:4px">${s.title||''}</div>
       <div style="font-size:13px;color:var(--ts);margin-bottom:12px">${s.subtitle||''}</div>
-      ${pills}${semHtml}${insHtml}
+      ${pills}${bodyHtml}
     </div>`;
   });
 
   el.innerHTML = tabHtml + panelsHtml;
-
-  // wire up tab clicks properly after render
   entries.forEach((_,i)=>{
     const t = document.getElementById('stab-'+i);
     if(t) t.onclick = ()=>showSched(i);
