@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reed's Schedule Planner — What If</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1013;--s0:#161719;--s1:#1e2023;--s2:#25272b;
+  --bd:#2e3035;--bds:#3a3d44;
+  --tp:#e8e9eb;--ts:#9a9da6;--tm:#5c6070;
+  --ac:#4f8ef7;--ad:#1a2d52;--at:#7fb3ff;
+  --gn:#3d9e5f;--gd:#0f2a1a;--gt:#6dcc94;
+  --am:#c47d1a;--amd:#2d1f06;--amt:#f0a840;
+  --pu:#7F77DD;--pud:#1a1838;--put:#AFA9EC;
+  --r:10px;--rl:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tp);min-height:100vh;font-size:14px;line-height:1.5}
+
+/* Header */
+.hdr{background:var(--s0);border-bottom:1px solid var(--bd);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100}
+.hlogo{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7F77DD,#4f8ef7);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0}
+.htitle{font-size:15px;font-weight:600}.hsub{font-size:12px;color:var(--tm);margin-top:1px}
+.hstats{display:flex;gap:8px;flex-wrap:wrap}
+.spill{background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--ts)}
+.spill strong{color:var(--tp);font-weight:500}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:320px 1fr;gap:0;min-height:calc(100vh - 65px)}
+.sidebar{background:var(--s0);border-right:1px solid var(--bd);padding:20px;overflow-y:auto;max-height:calc(100vh - 65px);position:sticky;top:65px}
+.main{padding:24px;overflow-y:auto}
+
+/* Sidebar sections */
+.sb-section{margin-bottom:20px}
+.sb-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tm);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sb-label::after{content:'';flex:1;height:0.5px;background:var(--bd)}
+
+/* Toggle buttons */
+.toggle-group{display:flex;flex-direction:column;gap:5px}
+.tog{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bd);cursor:pointer;transition:all .12s;background:var(--s1);font-size:12px;color:var(--ts);font-family:inherit;text-align:left;width:100%}
+.tog:hover{border-color:var(--bds);color:var(--ts)}
+.tog.sel{background:var(--ad);color:var(--at);border-color:var(--ac)}
+.tog.sel-pu{background:var(--pud);color:var(--put);border-color:var(--pu)}
+.tog .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid currentColor;flex-shrink:0;transition:background .12s}
+.tog.sel .dot{background:var(--ac)}.tog.sel-pu .dot{background:var(--pu)}
+.tog .name{flex:1;font-weight:500}
+.tog .pct{font-size:10px;opacity:.7}
+
+/* Options row */
+.options-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.opt-btn{padding:4px 11px;border-radius:20px;border:0.5px solid var(--bd);font-size:11px;cursor:pointer;color:var(--ts);background:var(--s1);font-family:inherit;transition:all .12s}
+.opt-btn:hover{background:var(--s2)}.opt-btn.active{background:var(--gd);color:var(--gt);border-color:var(--gn)}
+
+/* Cert multi-select */
+.cert-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.cert-tog{padding:6px 8px;border-radius:var(--rs);border:0.5px solid var(--bd);cursor:pointer;font-size:11px;color:var(--ts);background:var(--s1);font-family:inherit;text-align:left;transition:all .12s;line-height:1.3}
+.cert-tog:hover{border-color:var(--bds)}.cert-tog.sel{background:var(--pud);color:var(--put);border-color:var(--pu)}
+
+/* Generate button */
+.gen-btn{width:100%;padding:11px;border-radius:var(--r);border:none;background:var(--ac);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s;margin-top:8px}
+.gen-btn:hover{opacity:.85}.gen-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Saved schedules */
+.saved-list{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.saved-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);border:0.5px solid var(--bd);background:var(--s1);font-size:12px;cursor:pointer;transition:all .12s}
+.saved-item:hover{border-color:var(--bds)}.saved-item.active-save{border-color:var(--pu)}
+.saved-name{flex:1;color:var(--ts)}.saved-del{color:var(--tm);font-size:14px;line-height:1;background:none;border:none;cursor:pointer;color:var(--tm);padding:2px 4px;border-radius:4px}
+.saved-del:hover{background:var(--s2);color:#f07070}
+
+/* Main area states */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;gap:16px;text-align:center}
+.empty-icon{font-size:48px;opacity:.3}
+.empty-title{font-size:18px;font-weight:500;color:var(--ts)}
+.empty-sub{font-size:13px;color:var(--tm);max-width:360px;line-height:1.6}
+
+/* Loading */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;gap:16px}
+.spinner{width:32px;height:32px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-msg{font-size:13px;color:var(--ts);animation:fade 2s ease-in-out infinite}
+@keyframes fade{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* Schedule output */
+.schedule-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.schedule-title{font-size:20px;font-weight:600;color:var(--tp)}
+.schedule-sub{font-size:13px;color:var(--ts);margin-top:3px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.action-btn{padding:7px 14px;border-radius:var(--r);border:0.5px solid var(--bds);font-size:12px;cursor:pointer;color:var(--ts);background:var(--s1);font-family:inherit;transition:all .12s}
+.action-btn:hover{background:var(--s2);color:var(--tp)}
+.action-btn.primary{background:var(--ac);color:#fff;border-color:var(--ac)}
+.action-btn.primary:hover{opacity:.85}
+
+/* Summary pills */
+.summary-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.s-pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.sp-conc{background:var(--ad);color:var(--at)}
+.sp-cert{background:var(--pud);color:var(--put)}
+.sp-abroad{background:var(--gd);color:var(--gt)}
+.sp-total{background:var(--s2);color:var(--ts)}
+
+/* Semester blocks */
+.semester-grid{display:grid;gap:12px}
+.sem-block{background:var(--s1);border:0.5px solid var(--bd);border-radius:var(--rl);overflow:hidden}
+.sem-header{padding:12px 16px;background:var(--s2);border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.sem-name{font-size:13px;font-weight:600;color:var(--tp)}
+.sem-meta{font-size:11px;color:var(--tm)}
+.sem-special{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500}
+.ss-abroad{background:var(--gd);color:var(--gt)}
+.ss-online{background:var(--s0);color:var(--tm);border:0.5px solid var(--bd)}
+.courses-list{padding:10px 0}
+.course-row{display:flex;align-items:flex-start;gap:10px;padding:8px 16px;border-bottom:0.5px solid var(--bd);transition:background .1s}
+.course-row:last-child{border-bottom:none}
+.course-row:hover{background:var(--s2)}
+.cr-left{display:flex;flex-direction:column;gap:2px;flex:1}
+.cr-code{font-size:11px;font-weight:600}
+.cr-code.done{color:var(--gt)}.cr-code.abroad{color:var(--gt)}.cr-code.req{color:var(--at)}.cr-code.elec{color:var(--tm)}.cr-code.cert{color:var(--put)}
+.cr-name{font-size:12px;color:var(--tp);line-height:1.35}
+.cr-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+.cr-tag{font-size:9px;padding:1px 6px;border-radius:20px}
+.t-conc{background:var(--ad);color:var(--at)}
+.t-cert{background:var(--pud);color:var(--put)}
+.t-ib{background:#1a1838;color:#7F77DD;border:0.5px solid var(--pu)}
+.t-done{background:var(--gd);color:var(--gt)}
+.t-elec{background:var(--s0);color:var(--tm);border:0.5px solid var(--bd)}
+.cr-credits{font-size:12px;color:var(--tm);font-weight:500;min-width:20px;text-align:right;padding-top:1px}
+.cr-note{font-size:10px;color:var(--tm);margin-top:2px;line-height:1.4}
+.sem-footer{padding:8px 16px;background:var(--s0);border-top:0.5px solid var(--bd);display:flex;justify-content:space-between;font-size:11px;color:var(--tm)}
+
+/* Notes/insights */
+.insights{margin-top:20px}
+.insight-card{background:var(--s1);border:0.5px solid var(--bd);border-left:3px solid var(--ac);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;font-size:12px;color:var(--ts);line-height:1.6}
+.insight-card strong{color:var(--tp)}
+.insight-card.warn{border-left-color:var(--am);background:var(--amd)}
+.insight-card.good{border-left-color:var(--gn);background:var(--gd)}
+
+/* Error */
+.error-card{background:#2a0f0f;border:0.5px solid #f07070;border-radius:var(--r);padding:14px;font-size:12px;color:#f07070;line-height:1.6;margin-top:20px}
+
+/* Responsive */
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none;border-right:none;border-bottom:1px solid var(--bd)}
+  .cert-grid{grid-template-columns:1fr 1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="hlogo">?</div>
+    <div><div class="htitle">What If — Schedule Planner</div><div class="hsub">Reed Richardson · CSU College of Business · 2025-2026 catalog</div></div>
+  </div>
+  <div class="hstats">
+    <div class="spill">GPA <strong>3.259</strong></div>
+    <div class="spill"><strong>70</strong> cr done</div>
+    <div class="spill">Junior · Fa 2026 in progress</div>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar">
+
+  <div class="sb-section">
+    <div class="sb-label">Primary concentration</div>
+    <div class="toggle-group" id="primaryGroup">
+      <button class="tog sel" data-val="mgti" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Mgmt &amp; Innovation</span><span class="pct">55%</span></button>
+      <button class="tog" data-val="mkt" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Marketing</span><span class="pct">46%</span></button>
+      <button class="tog" data-val="hrm" onclick="selPrimary(this)"><span class="dot"></span><span class="name">HR Management</span><span class="pct">35%</span></button>
+      <button class="tog" data-val="scm" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Supply Chain</span><span class="pct">30%</span></button>
+      <button class="tog" data-val="re" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Real Estate</span><span class="pct">28%</span></button>
+      <button class="tog" data-val="is" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Info Systems</span><span class="pct">25%</span></button>
+      <button class="tog" data-val="sub" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Sustainable Business</span><span class="pct">25%</span></button>
+      <button class="tog" data-val="fpl" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Financial Planning</span><span class="pct">25%</span></button>
+      <button class="tog" data-val="acct" onclick="selPrimary(this)"><span class="dot"></span><span class="name">Accounting</span><span class="pct">22%</span></button>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Second concentration</div>
+    <div class="toggle-group" id="secondGroup">
+      <button class="tog" data-val="none" onclick="selSecond(this)"><span class="dot"></span><span class="name">None</span></button>
+      <button class="tog sel" data-val="ib" onclick="selSecond(this)"><span class="dot"></span><span class="name">International Business</span></button>
+      <button class="tog" data-val="mkt" onclick="selSecond(this)"><span class="dot"></span><span class="name">Marketing</span></button>
+      <button class="tog" data-val="is" onclick="selSecond(this)"><span class="dot"></span><span class="name">Information Systems</span></button>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Certificates to target</div>
+    <div class="cert-grid">
+      <button class="cert-tog" data-val="b2b" onclick="togCert(this)">B2B Selling</button>
+      <button class="cert-tog sel" data-val="entr" onclick="togCert(this)">Entrepreneurship</button>
+      <button class="cert-tog sel" data-val="mhr" onclick="togCert(this)">Managing HR</button>
+      <button class="cert-tog" data-val="lead" onclick="togCert(this)">Leadership in Orgs</button>
+      <button class="cert-tog" data-val="smkt" onclick="togCert(this)">Strategic Mktg</button>
+      <button class="cert-tog" data-val="mrd" onclick="togCert(this)">Mkt Research &amp; Analytics</button>
+      <button class="cert-tog" data-val="mcb" onclick="togCert(this)">Mktg Comm &amp; Branding</button>
+      <button class="cert-tog" data-val="cem" onclick="togCert(this)">Customer Exp Mgmt</button>
+      <button class="cert-tog" data-val="consul" onclick="togCert(this)">Consulting</button>
+      <button class="cert-tog" data-val="olsm" onclick="togCert(this)">Ops &amp; Supply Mgmt</button>
+      <button class="cert-tog" data-val="itbp" onclick="togCert(this)">IT for Business</button>
+      <button class="cert-tog" data-val="banalytics" onclick="togCert(this)">Business Analytics</button>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Study abroad</div>
+    <div class="options-row">
+      <button class="opt-btn" data-val="none" onclick="selAbroad(this)">None</button>
+      <button class="opt-btn active" data-val="sp27" onclick="selAbroad(this)">Spring 2027</button>
+      <button class="opt-btn" data-val="fa27" onclick="selAbroad(this)">Fall 2027</button>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate schedule</button>
+
+  <div class="sb-section" style="margin-top:16px">
+    <div class="sb-label">Saved schedules</div>
+    <div class="saved-list" id="savedList">
+      <div style="font-size:12px;color:var(--tm)">No saved schedules yet.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="main" id="mainArea">
+  <div class="empty-state">
+    <div class="empty-icon">📅</div>
+    <div class="empty-title">Build your schedule</div>
+    <div class="empty-sub">Select a concentration, any certificates you want to target, and whether you're studying abroad. Hit Generate to see a personalized semester-by-semester plan.</div>
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<script>
+const REED = {
+  done: ['BUS100','BUS201','BUS220','BUS260','ACT210','ACT220','CIS200','ECON202','ECON204','CO150','MATH117','STAT201','SOC205','HIST151','GEOL120','GEOL121','AA100','FIN300','MGT301','MGT310','MGT340','MKT300'],
+  inprog: ['CIS370','JTC300','MGT320','MKT365'],
+  gpa: 3.259, credits: 70
+};
+
+let state = {
+  primary: 'mgti',
+  second: 'ib',
+  certs: ['entr','mhr'],
+  abroad: 'sp27',
+  savedSchedules: [],
+  currentSchedule: null
+};
+
+function selPrimary(btn){
+  document.querySelectorAll('#primaryGroup .tog').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.primary = btn.dataset.val;
+}
+function selSecond(btn){
+  document.querySelectorAll('#secondGroup .tog').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.second = btn.dataset.val;
+}
+function togCert(btn){
+  btn.classList.toggle('sel');
+  state.certs = Array.from(document.querySelectorAll('.cert-tog.sel')).map(b=>b.dataset.val);
+}
+function selAbroad(btn){
+  document.querySelectorAll('.options-row:nth-of-type(1) .opt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  state.abroad = btn.dataset.val;
+}
+function getSelections(){
+  const concNames = {
+    mgti:'Management & Innovation',mkt:'Marketing',hrm:'Human Resource Management',
+    scm:'Supply Chain Management',re:'Real Estate',
+    is:'Information Systems',sub:'Sustainable Business',fpl:'Financial Planning',acct:'Accounting'
+  };
+  const secondNames = {
+    none: null,
+    ib: 'International Business',
+    mkt: 'Marketing',
+    is: 'Information Systems'
+  };
+  const certNames = {
+    b2b:'B2B Selling',entr:'Entrepreneurship',mhr:'Managing Human Resources',
+    lead:'Leadership in Organizations',smkt:'Strategic Marketing',mrd:'Market Research & Data Analytics',
+    mcb:'Marketing Communication & Branding',cem:'Customer Experience Management',
+    consul:'Consulting',olsm:'Ops, Logistics & Supply Management',
+    itbp:'IT for Business Professionals',banalytics:'Business Analytics'
+  };
+  return {
+    primaryName: concNames[state.primary] || state.primary,
+    secondName: secondNames[state.second] || null,
+    secondKey: state.second,
+    certNameList: state.certs.map(c=>certNames[c]||c),
+    abroadTerm: state.abroad === 'none' ? null : state.abroad === 'sp27' ? 'Spring 2027' : 'Fall 2027'
+  };
+}
+
+async function generate(){
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+
+  const sel = getSelections();
+  const main = document.getElementById('mainArea');
+  main.innerHTML = `<div class="loading"><div class="spinner"></div><div class="loading-msg">Building your schedule…</div></div>`;
+
+  const secondConcContext = {
+    ib: 'International Business 2nd concentration requires: FIN475, MGT435, MGT475 (required 9cr) + Group 1 choose 1 of MGT468/MGT478/MKT365 (MKT365 already in progress Fall 2026 so Group 1 is satisfied) + Group 2 choose 6cr from POLS232/ECON440/ECON442/SPCM434/ECON332/ECON460/ANTH200/JTC412/GR320 etc + Group 3 = the education abroad semester itself. Total 24cr. Abroad semester satisfies Group 3 automatically.',
+    mkt: 'Marketing as 2nd concentration requires: MKT300(done), MKT361, MKT410, MKT479(req MKT410), plus 4 electives from MKT315/320/330/360/362/363/364/365(in prog)/366/367/370/420/440/450/487/492. BUS479 capstone. Total ~21cr of Marketing-specific courses.',
+    is: 'Information Systems as 2nd concentration requires: CIS240 FIRST (missing — must schedule early), then CIS320, CIS355, CIS360 (required upper-div) + CIS370(in progress Fall 2026) + 4 electives from CIS310/340/350/410/411/413/455/563/575/576. BUS479 capstone. CIS240 is a critical prereq gate.',
+    none: 'No second concentration.'
+  };
+  const abroadContext = sel.abroadTerm
+    ? `${sel.abroadTerm} — study abroad semester. ${sel.secondKey === 'ib' ? 'Reserve MGT435, MGT475, FIN475 for abroad. Take 2 Group 2 courses (POLS232 equiv, ECON440 equiv, or SPCM434 equiv) abroad. Group 3 satisfied by the semester itself.' : 'Reserve internationally-themed courses for abroad semester. Take courses that benefit from international context.'}`
+    : 'No study abroad planned.';
+
+  const prompt = `You are an academic advisor for Reed Richardson at Colorado State University College of Business.
+
+REED'S TRANSCRIPT DATA:
+- Current: Junior standing, Fall 2026, GPA 3.259, 70 credits earned
+- Completed CSU courses: BUS100, BUS201, BUS220, BUS260, ACT210, ACT220, CIS200, ECON202, ECON204, CO150, STAT201(transfer equiv STAT204), FIN300, MGT301(C+), MGT310(B+), MGT340(B+), MKT300(B)
+- In progress Fall 2026: CIS370, JTC300, MGT320, MKT365
+- Missing: BUS225 (required — must add to plan)
+- Transfer credits from Arapahoe CC: English Comp I (CO130), Personal Finance (FIN200), MATH117/118/124 (College Algebra), STAT201
+
+REQUESTED PLAN:
+- Primary concentration: ${sel.primaryName}
+- Second concentration: ${sel.secondName || 'None'} — ${secondConcContext[sel.secondKey] || 'None'}
+- Certificates to target: ${sel.certNameList.length ? sel.certNameList.join(', ') : 'None'}
+- Study abroad: ${abroadContext}
+
+KEY CSU CATALOG CONSTRAINTS (verified from 2025-2026 catalog):
+- BUS225 is MISSING and REQUIRED — must be scheduled first available semester
+- MGT410 requires MGT320 (completing Fall 2026) ✓
+- MGT476 requires MGT305 or MGT320 ✓
+- MKT479 requires MKT410; MKT450 requires MKT410
+- ACT311 requires ACT301 (which requires ACT210 done A-) ✓
+- CIS courses in IS concentration ALL require CIS240 first (NOT on transcript — schedule CIS240 in Spring 2027 before any CIS300-level)
+- All concentrations require BUS479 as capstone (must be the FINAL semester)
+- Spring-only courses: MKT363 (Sales Management)
+- International Business Group 3 is satisfied by the study abroad semester itself (no separate courses needed)
+- Do NOT schedule Finance concentration courses — Finance is not an interest
+
+Generate a complete semester-by-semester schedule from Spring 2027 through graduation (Spring 2028 or Fall 2028).
+
+CREDIT HOUR RULES — STRICT:
+- Each semester MUST have between 12 and 15 credit hours. No exceptions.
+- Aim for 4 courses at 3 credits each = 12 credits as the floor
+- 5 courses at 3 credits = 15 credits as the ceiling
+- Count every credit carefully before finalizing each semester
+- If a semester would go below 12cr, add an appropriate elective to fill
+- If a semester would exceed 15cr, move a course to the next semester
+
+Format your response as a single valid JSON object with this exact structure:
+{
+  "title": "Schedule title summarizing the plan",
+  "subtitle": "1-sentence description of what this plan achieves",
+  "graduationTerm": "Spring 2028 or Fall 2028",
+  "totalCreditsRemaining": number,
+  "semesters": [
+    {
+      "term": "Spring 2027",
+      "isAbroad": false,
+      "courses": [
+        {
+          "code": "MGT410",
+          "name": "Leadership and Organizational Behavior",
+          "credits": 3,
+          "type": "required|elective|cert|ib|abroad"
+        }
+      ]
+    }
+  ],
+  "insights": [
+    {
+      "type": "good|warn|info",
+      "text": "Key insight about this schedule"
+    }
+  ]
+}
+
+Rules:
+- Never re-schedule already completed or in-progress courses
+- Mark abroad semester courses with type "abroad", IB courses with type "ib", cert-satisfying courses with type "cert", required concentration courses with type "required", electives with type "elective"
+- STRICTLY 12-15 credits per semester — verify the sum before finalizing each semester
+- BUS225 must appear in Spring 2027
+- BUS479 MUST be in the very last semester
+- Provide 4-6 specific, actionable insights about this exact schedule
+- Return ONLY valid JSON, no markdown fences, no explanation outside the JSON`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:2000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await resp.json();
+    const raw = data.content?.find(c=>c.type==='text')?.text || '';
+    const clean = raw.replace(/```json|```/g,'').trim();
+    const schedule = JSON.parse(clean);
+    state.currentSchedule = schedule;
+    renderSchedule(schedule, sel);
+  } catch(e){
+    main.innerHTML = `<div class="error-card"><strong>Generation failed.</strong> Please try again. If the issue persists, try simplifying your selections.<br><br>Technical details: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+  btn.textContent = '⚡ Generate schedule';
+}
+
+function renderSchedule(s, sel){
+  const main = document.getElementById('mainArea');
+  const certCount = sel.certNameList.length;
+
+  // Summary pills
+  let pills = `<span class="s-pill sp-conc">${sel.primaryName}</span>`;
+  if(sel.secondName) pills += `<span class="s-pill" style="background:var(--pud);color:var(--put)">${sel.secondName} (2nd conc.)</span>`;
+  if(certCount) pills += `<span class="s-pill sp-cert">${certCount} cert${certCount>1?'s':''} targeted</span>`;
+  if(sel.abroadTerm) pills += `<span class="s-pill sp-abroad">✈ ${sel.abroadTerm}</span>`;
+  pills += `<span class="s-pill sp-total">Grad: ${s.graduationTerm}</span>`;
+
+  let html = `
+  <div class="schedule-header">
+    <div>
+      <div class="schedule-title">${s.title}</div>
+      <div class="schedule-sub">${s.subtitle}</div>
+    </div>
+    <div class="header-actions">
+      <button class="action-btn" onclick="saveSchedule()">Save</button>
+      <button class="action-btn primary" onclick="generate()">↻ Regenerate</button>
+    </div>
+  </div>
+  <div class="summary-row">${pills}</div>
+  <div class="semester-grid">`;
+
+  for(const sem of s.semesters){
+    const totalCr = sem.courses.reduce((a,c)=>a+c.credits, 0);
+    const crOk = totalCr >= 12 && totalCr <= 15;
+    const abroadBadge = sem.isAbroad ? `<span class="sem-special ss-abroad">✈ Abroad</span>` : '';
+
+    html += `<div class="sem-block">
+      <div class="sem-header">
+        <div class="sem-name">${sem.term} ${abroadBadge}</div>
+        <div style="font-size:13px;font-weight:600;color:${crOk?'#6dcc94':'#f0a840'}">${totalCr} cr</div>
+      </div>
+      <div class="courses-list">`;
+
+    for(const c of sem.courses){
+      const codeColor =
+        c.type==='abroad'   ? 'var(--gt)' :
+        c.type==='cert'     ? 'var(--put)' :
+        c.type==='ib'       ? '#AFA9EC' :
+        c.type==='elective' ? 'var(--tm)' :
+                              'var(--at)';
+      html += `<div class="course-row">
+        <div style="display:flex;align-items:baseline;gap:10px;flex:1">
+          <span style="font-size:11px;font-weight:600;color:${codeColor};white-space:nowrap">${c.code}</span>
+          <span style="font-size:12px;color:var(--tp);line-height:1.35">${c.name}</span>
+        </div>
+        <span style="font-size:12px;color:var(--tm);font-weight:500;flex-shrink:0">${c.credits} cr</span>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  html += `</div>`;
+
+  if(s.insights?.length){
+    html += `<div class="insights">`;
+    for(const ins of s.insights){
+      const cls = ins.type==='warn' ? 'warn' : ins.type==='good' ? 'good' : '';
+      html += `<div class="insight-card ${cls}">${ins.text}</div>`;
+    }
+    html += `</div>`;
+  }
+
+  main.innerHTML = html;
+}
+
+function saveSchedule(){
+  if(!state.currentSchedule) return;
+  const sel = getSelections();
+  const name = `${sel.primaryName}${sel.secondName?' + '+sel.secondName:''}${sel.certNameList.length?' + certs':''}${sel.abroadTerm?' + abroad':''}`;
+  const entry = {
+    id: Date.now(),
+    name,
+    schedule: state.currentSchedule,
+    sel
+  };
+  state.savedSchedules.unshift(entry);
+  renderSaved();
+  const btn = event.target;
+  btn.textContent = '✓ Saved!';
+  setTimeout(()=>btn.textContent='💾 Save this schedule',1500);
+}
+
+function renderSaved(){
+  const list = document.getElementById('savedList');
+  if(!state.savedSchedules.length){
+    list.innerHTML = '<div style="font-size:12px;color:var(--tm)">No saved schedules yet.</div>';
+    return;
+  }
+  list.innerHTML = state.savedSchedules.map(e=>`
+    <div class="saved-item" data-id="${e.id}">
+      <div class="saved-name">${e.name}</div>
+      <button class="saved-del" onclick="deleteSaved(${e.id})" title="Delete">✕</button>
+    </div>
+  `).join('');
+  list.querySelectorAll('.saved-item').forEach(item=>{
+    item.addEventListener('click', function(ev){
+      if(ev.target.classList.contains('saved-del')) return;
+      const id = parseInt(this.dataset.id);
+      const entry = state.savedSchedules.find(e=>e.id===id);
+      if(entry){
+        state.currentSchedule = entry.schedule;
+        document.querySelectorAll('.saved-item').forEach(i=>i.classList.remove('active-save'));
+        this.classList.add('active-save');
+        renderSchedule(entry.schedule, entry.sel);
+      }
+    });
+  });
+}
+
+function deleteSaved(id){
+  state.savedSchedules = state.savedSchedules.filter(e=>e.id!==id);
+  renderSaved();
+}
+</script>
+</body>
+</html>
