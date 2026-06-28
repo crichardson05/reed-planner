@@ -707,8 +707,8 @@ function renderSchedules(entries, el){
 
   const renderComparisonPath = (pathData, color, title) => {
     if(!pathData) return '';
-    let h = `<div style="background:var(--s1);border:0.5px solid ${color};border-radius:14px;overflow:hidden">
-      <div style="padding:10px 14px;background:var(--s2);border-bottom:0.5px solid var(--bd)">
+    let h = `<div style="background:var(--s1);border:0.5px solid ${color};border-radius:14px;overflow:visible">
+      <div style="padding:10px 14px;background:var(--s2);border-bottom:0.5px solid var(--bd);border-radius:14px 14px 0 0">
         <div style="font-size:12px;font-weight:600;color:${color}">${title}</div>
         <div style="font-size:11px;color:var(--tm);margin-top:2px">${pathData.rationale||''}</div>
       </div>`;
@@ -759,7 +759,7 @@ function renderSchedules(entries, el){
     if(s.mode==='modfa26' && s.comparison){
       const cp = s.comparison.currentPath;
       const sp = s.comparison.switchPath;
-      bodyHtml += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">`;
+      bodyHtml += `<div style="display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px">`;
       bodyHtml += renderComparisonPath(cp, '#4f8ef7', `Current — ${cp.concentration||''}`);
       if(sp){
         const swapNote = sp.fall2026Swap ? `Swap MKT365 → ${sp.fall2026Swap.add}. ${sp.fall2026Swap.addRationale||''}` : '';
