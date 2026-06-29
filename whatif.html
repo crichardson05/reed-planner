@@ -211,20 +211,45 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
   <div class="sb-section">
     <div class="sb-label">Study abroad</div>
-    <div class="options-row">
+    <div class="options-row" id="abroadRow">
       <button class="opt-btn" data-val="none" onclick="selAbroad(this)">None</button>
       <button class="opt-btn active" data-val="sp27" onclick="selAbroad(this)">Spring 2027</button>
       <button class="opt-btn" data-val="fa27" onclick="selAbroad(this)">Fall 2027</button>
     </div>
   </div>
 
-  <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate schedule</button>
+  <div class="sb-section">
+    <div class="sb-label">Graduate path</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px">
+      <button class="path-btn sel" data-val="cert" onclick="selPath(this)" style="padding:8px 6px;border-radius:8px;border:0.5px solid var(--pu);background:var(--pud);color:var(--put);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;text-align:center;line-height:1.3">
+        🎓 Certificate<br><span style="font-size:10px;opacity:.7;font-weight:400">Maximize credentials</span>
+      </button>
+      <button class="path-btn" data-val="minimal" onclick="selPath(this)" style="padding:8px 6px;border-radius:8px;border:0.5px solid var(--bd);background:var(--s1);color:var(--ts);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;text-align:center;line-height:1.3">
+        ⚡ Minimal<br><span style="font-size:10px;opacity:.7;font-weight:400">Lightest load</span>
+      </button>
+    </div>
+
+    <div class="sb-label" style="margin-top:12px">Schedule mode</div>
+    <div class="toggle-group" id="modeGroup">
+      <button class="tog sel" data-val="traditional" onclick="selMode(this)">
+        <span class="dot"></span>
+        <div style="flex:1"><div class="name">1 — Traditional</div><div style="font-size:10px;color:var(--tm);margin-top:1px">Fall &amp; Spring only</div></div>
+      </button>
+      <button class="tog" data-val="modfa26" onclick="selMode(this)">
+        <span class="dot"></span>
+        <div style="flex:1"><div class="name">2 — Modify Fall 2026</div><div style="font-size:10px;color:var(--tm);margin-top:1px">Compare concentration switch trajectory</div></div>
+      </button>
+    </div>
+  </div>
+
+  <button class="gen-btn" id="genBtn" onclick="generate()">⚡ Generate — Certificate Path · Traditional</button>
 
   <div class="sb-section" style="margin-top:16px">
     <div class="sb-label">Saved schedules</div>
     <div class="saved-list" id="savedList">
       <div style="font-size:12px;color:var(--tm)">No saved schedules yet.</div>
     </div>
+    <button class="gen-btn" onclick="exportSchedules()" style="margin-top:8px;background:var(--s2);border:1px solid var(--bds);color:var(--ts);font-weight:500">↓ Export saved schedules</button>
   </div>
 
 </div>
@@ -241,302 +266,476 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 </div><!-- /layout -->
 
 <script>
-const REED = {
-  done: ['BUS100','BUS201','BUS220','BUS260','ACT210','ACT220','CIS200','ECON202','ECON204','CO150','MATH117','STAT201','SOC205','HIST151','GEOL120','GEOL121','AA100','FIN300','MGT301','MGT310','MGT340','MKT300'],
-  inprog: ['CIS370','JTC300','MGT320','MKT365'],
-  gpa: 3.259, credits: 70
-};
-
+// ─── State ───────────────────────────────────────────────────────────────────
 let state = {
-  primary: 'mgti',
-  second: 'ib',
-  certs: ['entr','mhr'],
-  abroad: 'sp27',
-  savedSchedules: [],
-  currentSchedule: null
+  primary: 'mgti', second: 'ib', certs: ['entr','mhr'],
+  abroad: 'sp27', mode: 'traditional', path: 'cert',
+  savedSchedules: [], currentSchedule: null
 };
 
+// ─── UI controls ─────────────────────────────────────────────────────────────
 function selPrimary(btn){
   document.querySelectorAll('#primaryGroup .tog').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  state.primary = btn.dataset.val;
+  btn.classList.add('sel'); state.primary=btn.dataset.val;
 }
 function selSecond(btn){
   document.querySelectorAll('#secondGroup .tog').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  state.second = btn.dataset.val;
+  btn.classList.add('sel'); state.second=btn.dataset.val;
 }
 function togCert(btn){
   btn.classList.toggle('sel');
-  state.certs = Array.from(document.querySelectorAll('.cert-tog.sel')).map(b=>b.dataset.val);
+  state.certs=Array.from(document.querySelectorAll('.cert-tog.sel')).map(b=>b.dataset.val);
 }
 function selAbroad(btn){
-  document.querySelectorAll('.options-row:nth-of-type(1) .opt-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  state.abroad = btn.dataset.val;
+  document.querySelectorAll('#abroadRow .opt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); state.abroad=btn.dataset.val;
 }
+function selPath(btn){
+  document.querySelectorAll('.path-btn').forEach(b=>{
+    b.style.background='var(--s1)'; b.style.color='var(--ts)'; b.style.borderColor='var(--bd)'; b.classList.remove('sel');
+  });
+  btn.classList.add('sel'); btn.style.background='var(--pud)'; btn.style.color='var(--put)'; btn.style.borderColor='var(--pu)';
+  state.path=btn.dataset.val; updateGenBtn();
+}
+function selMode(btn){
+  document.querySelectorAll('#modeGroup .tog').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel'); state.mode=btn.dataset.val; updateGenBtn();
+}
+function updateGenBtn(){
+  const p=state.path==='cert'?'🎓 Certificate':'⚡ Minimal';
+  const m={traditional:'Traditional',modfa26:'Modify Fall 2026'}[state.mode]||'';
+  document.getElementById('genBtn').textContent=`Generate — ${p} · ${m}`;
+}
+
+// ─── Concentration data ───────────────────────────────────────────────────────
+const CONC = {
+  mgti:{
+    name:'Management & Innovation',
+    required:['MGT301(done,C+)','MGT310(done,B+)','MGT320(in-prog)','MGT340(done,B+)','CIS370(in-prog)','MGT410'],
+    seniorRequired:['FIN300(done)','MKT300(done)','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 4 from: MGT330, MGT350, MGT360, MGT375, MGT411, MGT420, MGT435, MGT440, MGT468, MGT475, MGT476, MGT486A',
+    certElectives:['MGT330→Entrepreneurship','MGT350→Managing-HR','MGT360→Entrepreneurship','MGT375→Ops&Supply','MGT411→Leadership-in-Orgs','MGT420→Entrepreneurship','MGT440→Entrepreneurship','MGT476→Leadership-in-Orgs','MGT486A→Consulting'],
+    mkt365Required:false
+  },
+  mkt:{
+    name:'Marketing',
+    required:['MKT300(done)','FIN300(done)','MGT301(done)','CIS370(in-prog)','MGT320(in-prog)','MKT361'],
+    seniorRequired:['MKT410','MKT479(requires MKT410)','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 4 from: MKT315, MKT320, MKT330, MKT360, MKT362, MKT363(spring-only), MKT364, MKT365(in-prog-Fa26), MKT366, MKT367, MKT370, MKT420, MKT440, MKT450, MKT487, MKT492',
+    certElectives:['MKT330→B2B-Selling&Customer-Exp','MKT362→B2B-Selling','MKT363→B2B-Selling','MKT361→Customer-Exp','MKT366→Customer-Exp','MKT320→Strategic-Mktg','MKT364→Strategic-Mktg','MKT440→Strategic-Mktg','MKT370→Mkt-Research','MKT410→Mkt-Research','MKT450→Mkt-Research'],
+    mkt365Required:true
+  },
+  hrm:{
+    name:'Human Resource Management',
+    required:['MGT301(done)','MGT310(done)','BUS260(done)','MGT320(in-prog)','CIS370(in-prog)','MGT350','MGT474'],
+    seniorRequired:['FIN300(done)','MKT300(done)','MGT374','MGT479','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 2 from: MGT410, MGT411, MGT473, MGT476, MGT486A',
+    certElectives:['MGT350→Managing-HR','MGT374→Managing-HR','MGT474→Managing-HR','MGT410→Leadership-in-Orgs','MGT411→Leadership-in-Orgs','MGT476→Leadership-in-Orgs','MGT486A→Consulting'],
+    mkt365Required:false
+  },
+  scm:{
+    name:'Supply Chain Management',
+    required:['MGT301(done)','BUS260(done)','MGT320(in-prog)','CIS370(in-prog)','MGT375','MGT376','MGT377','MGT478'],
+    seniorRequired:['FIN300(done)','MKT300(done)','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 4 from: CIS411, FIN370, MGT330, MGT411, MGT469A, MGT475, MGT476, MGT486B, MGT492A',
+    certElectives:['MGT330→Entrepreneurship','MGT411→Leadership-in-Orgs','MGT476→Leadership-in-Orgs','MGT375→Ops&Supply','MGT478→Ops&Supply'],
+    mkt365Required:false
+  },
+  re:{
+    name:'Real Estate',
+    required:['FIN300(done)','MKT300(done)','CIS370(in-prog)','FIN310','FIN355','REL360','REL367'],
+    seniorRequired:['MGT301(done)','MGT320(in-prog)','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 4 of 5: REL430, REL454/AREC454, REL455, REL460, REL487',
+    certElectives:[],
+    mkt365Required:false
+  },
+  is:{
+    name:'Information Systems',
+    required:['BUS260(done)','FIN300(done)','CIS370(in-prog)','CIS240(MISSING-prereq-for-all-CIS-upper-div)','CIS320(requires CIS240)','CIS355(requires CIS240)'],
+    seniorRequired:['MGT301(done)','MKT300(done)','MGT320(in-prog)','CIS360(requires CIS240)','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 4 from: CIS310, CIS340, CIS350, CIS410, CIS411, CIS413, CIS455, CIS563, CIS575, CIS576',
+    certElectives:['CIS411→IT-for-Business'],
+    mkt365Required:false
+  },
+  sub:{
+    name:'Sustainable Business',
+    required:['FIN300(done)','MKT300(done)','CIS370(in-prog)','MGT360','MKT420'],
+    seniorRequired:['MGT301(done)','MGT320(in-prog)','ACT318','BUS440','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 1 from: BUS487, MKT364, ANTH415, or approved sustainability elective',
+    certElectives:['MGT360→Entrepreneurship','MKT364→Strategic-Mktg'],
+    mkt365Required:false
+  },
+  fpl:{
+    name:'Financial Planning',
+    required:['FIN300(done)','MKT300(done)','CIS370(in-prog)','ACT330','FIN310','FIN320','FIN342','FIN355'],
+    seniorRequired:['MGT301(done)','MGT320(in-prog)','FIN440','FIN442','FIN445','BUS479(capstone-final-sem-only)'],
+    electives:'None — all courses are prescribed',
+    certElectives:[],
+    mkt365Required:false
+  },
+  acct:{
+    name:'Accounting',
+    required:['ACT210(done)','ACT220(done)','FIN300(done)','MKT300(done)','CIS370(in-prog)','ACT301','ACT311(req ACT301)','ACT312','ACT321','ACT350'],
+    seniorRequired:['MGT301(done)','MGT320(in-prog)','ACT330','ACT441','BUS479(capstone-final-sem-only)'],
+    electives:'Choose 1 from: ACT411, ACT421, ACT537',
+    certElectives:['ACT330→Applied-Mgmt-Acct'],
+    mkt365Required:false
+  }
+};
+
+const SECOND_CONC = {
+  none:'No second concentration.',
+  ib:'International Business 2nd concentration: Required: FIN475, MGT435, MGT475. Group 1: MKT365(in-prog Fa26 ✓ satisfied). Group 2: choose 6cr from POLS232/ECON440/ECON442/SPCM434/ECON332/ECON460/ANTH200/JTC412. Group 3: education abroad semester itself (auto-satisfied). Total 24cr.',
+  mkt:'Marketing 2nd concentration: adds MKT361, MKT410, MKT479 + 4 electives to required list.',
+  is:'Information Systems 2nd concentration: CIS240 MISSING — must take before CIS320/355/360. Then CIS320, CIS355, CIS360 + 4 electives.'
+};
+
+const CERT_MAP = {
+  'B2B Selling':       {courses:['MKT330','MKT362','MKT363'], done:[], total:3},
+  'Entrepreneurship':  {courses:['MGT340','MGT330','MGT360','MGT420','MGT440'], done:['MGT340'], total:3},
+  'Managing HR':       {courses:['MGT310','MGT350','MGT374','MGT474'], done:['MGT310'], total:3},
+  'Leadership in Orgs':{courses:['MGT410','MGT411','MGT476'], done:[], total:3},
+  'Strategic Marketing':{courses:['MKT320','MKT330','MKT364','MKT440'], done:[], total:3},
+  'Mkt Research & Analytics':{courses:['MKT370','MKT410','MKT450'], done:[], total:3},
+  'Customer Exp Mgmt': {courses:['MKT330','MKT361','MKT366'], done:[], total:3},
+  'Consulting':        {courses:['MGT486A'], done:[], total:4},
+  'Ops & Supply':      {courses:['MGT301','MGT375','MGT478'], done:['MGT301'], total:4},
+  'International Business':{courses:['MKT300','MKT365','MGT435','FIN475','MGT475'], done:['MKT300','MKT365'], total:5}
+};
+
+// ─── Selections helper ────────────────────────────────────────────────────────
 function getSelections(){
-  const concNames = {
-    mgti:'Management & Innovation',mkt:'Marketing',hrm:'Human Resource Management',
-    scm:'Supply Chain Management',re:'Real Estate',
-    is:'Information Systems',sub:'Sustainable Business',fpl:'Financial Planning',acct:'Accounting'
-  };
-  const secondNames = {
-    none: null,
-    ib: 'International Business',
-    mkt: 'Marketing',
-    is: 'Information Systems'
-  };
-  const certNames = {
-    b2b:'B2B Selling',entr:'Entrepreneurship',mhr:'Managing Human Resources',
-    lead:'Leadership in Organizations',smkt:'Strategic Marketing',mrd:'Market Research & Data Analytics',
-    mcb:'Marketing Communication & Branding',cem:'Customer Experience Management',
-    consul:'Consulting',olsm:'Ops, Logistics & Supply Management',
-    itbp:'IT for Business Professionals',banalytics:'Business Analytics'
-  };
+  const concNames={mgti:'Management & Innovation',mkt:'Marketing',hrm:'Human Resource Management',scm:'Supply Chain Management',re:'Real Estate',is:'Information Systems',sub:'Sustainable Business',fpl:'Financial Planning',acct:'Accounting'};
+  const secondNames={none:null,ib:'International Business',mkt:'Marketing',is:'Information Systems'};
+  const certNames={b2b:'B2B Selling',entr:'Entrepreneurship',mhr:'Managing Human Resources',lead:'Leadership in Organizations',smkt:'Strategic Marketing',mrd:'Mkt Research & Analytics',mcb:'Mktg Comm & Branding',cem:'Customer Exp Mgmt',consul:'Consulting',olsm:'Ops & Supply Mgmt',itbp:'IT for Business',banalytics:'Business Analytics'};
   return {
-    primaryName: concNames[state.primary] || state.primary,
-    secondName: secondNames[state.second] || null,
-    secondKey: state.second,
-    certNameList: state.certs.map(c=>certNames[c]||c),
-    abroadTerm: state.abroad === 'none' ? null : state.abroad === 'sp27' ? 'Spring 2027' : 'Fall 2027'
+    primaryName:concNames[state.primary]||state.primary,
+    secondName:secondNames[state.second]||null,
+    secondKey:state.second,
+    certNameList:state.certs.map(c=>certNames[c]||c),
+    abroadTerm:state.abroad==='none'?null:state.abroad==='sp27'?'Spring 2027':'Fall 2027',
+    path:state.path, mode:state.mode
   };
 }
 
+// ─── Prompt builder ───────────────────────────────────────────────────────────
+function buildPrompt(sel){
+  const pd = CONC[state.primary] || CONC.mgti;
+  const crLimit = state.path==='cert' ? 15 : 15; // cert path also caps at 15
+
+  // ── 120-credit graduation math ──
+  // Earned: 70 cr. Fall 2026 in progress: 12 cr. After Fall 2026: 82 cr.
+  // Need exactly 38 more credits across Sp2027 + Fa2027 + Sp2028 to reach 120.
+  // Courses are 3 credits each, so semesters are 12 or 15 credits.
+  // Valid combos: 12+12+15=39 (1 over), 15+12+12=39, 12+15+12=39 — none hit exactly 38.
+  // BUT: some courses are 1 cr (BUS201 was 1cr). If any required course is 1cr,
+  // total can land on 38. Otherwise min viable is 39 (120+1=121, still graduates).
+  // Rule: schedule only required/cert courses. Do not pad. Total must be ≥38 to graduate.
+  const neededAfterFa26 = 38; // 120 - 82
+
+  const pathDesc = state.path==='cert'
+    ? `Certificate-Focused: maximize cert-satisfying electives. Each semester is 12–15 credits (multiples of 3).`
+    : `Minimal Load: schedule the fewest total credits possible while still reaching 120 credits to graduate by Spring 2028. Reed has 70 earned + 12 in Fall 2026 = 82 credits after Fall 2026. Must schedule at least ${neededAfterFa26} more credits across Spring 2027, Fall 2027, and Spring 2028 combined. Each semester must be 12 or 15 credits (courses are 3 credits each). Do NOT add filler courses — only schedule required concentration courses, BUS225, and directly cert-relevant electives. The total across all 3 remaining semesters must reach at least ${neededAfterFa26} credits.`;
+
+  const abroadCtx = sel.abroadTerm
+    ? `Study abroad ${sel.abroadTerm}. ${state.second==='ib'?'Reserve FIN475, MGT435, MGT475 for abroad + 2 IB Group 2 courses. Group 3 auto-satisfied by abroad semester.':'Reserve internationally-themed required courses for abroad.'}`
+    : 'No study abroad.';
+
+  const BASE = `REED'S TRANSCRIPT:
+Completed: BUS100,BUS201,BUS220,BUS260,ACT210,ACT220,CIS200,ECON202,ECON204,CO150,STAT201≡STAT204,FIN300,MGT301(C+),MGT310(B+),MGT340(B+),MKT300(B)
+In progress Fall 2026: CIS370, JTC300, MGT320, MKT365
+Missing required: BUS225 (must schedule Spring 2027)
+
+PRIMARY CONCENTRATION — ${pd.name}:
+Junior required (remaining): ${pd.required.join(', ')}
+Senior required: ${pd.seniorRequired.join(', ')}
+Electives: ${pd.electives}
+Cert-satisfying electives: ${pd.certElectives.length ? pd.certElectives.join(', ') : 'none identified'}
+
+SECOND CONCENTRATION — ${SECOND_CONC[state.second]}
+
+STUDY ABROAD: ${abroadCtx}
+
+GRADUATE PATH: ${pathDesc}
+
+RULES:
+- GRADUATION REQUIREMENT: Reed needs at least ${neededAfterFa26} more credits after Fall 2026 to reach 120 total. The sum of credits across Spring 2027 + Fall 2027 + Spring 2028 must be ≥${neededAfterFa26}. This is non-negotiable.
+- SEMESTER LOADS: Each semester must be 12 or 15 credits (courses are 3 cr each; standard full-time loads). No semester below 12 or above 15.
+- For minimal-load path: distribute the ${neededAfterFa26} required credits across semesters as efficiently as possible without padding. Valid distributions include 12+12+15, 12+15+12, 15+12+12, or 15+15+9 (avoid 9-credit semesters). Prefer front-loading heavier semesters when more required courses are pending.
+- HARD CEILING: never exceed 15hr in ANY semester.
+- ALWAYS include Fall 2026 as the first semester in the schedule, showing the current in-progress courses exactly as listed. Do not modify Fall 2026.
+- Spring 2027 abroad credit cap: if abroad, the abroad courses (FIN475 + MGT435 + MGT475 + 2 Group 2 courses = 15cr) already fill the semester. Do NOT add BUS225 or any other course to an abroad semester that is already at 15cr. Move BUS225 to Fall 2027 instead if Spring 2027 is abroad and full.
+- If Spring 2027 is NOT abroad: include BUS225 in Spring 2027.
+- MGT410 in Fall 2027 (junior required, first semester back)
+- BUS479 final semester only (Spring 2028), paired with other required courses to reach 12–15 cr
+- Never re-schedule completed or in-progress courses in semesters after Fall 2026
+- Only schedule courses required for selected concentrations
+- For elective slots: choose cert-satisfying courses from the cert-electives list above
+- MKT363 is Spring-only
+- Do NOT schedule Finance concentration courses
+- Before finalizing: sum all credits across Spring 2027 + Fall 2027 + Spring 2028. If total is below ${neededAfterFa26}, add required or cert elective courses to reach it. If total is above ${neededAfterFa26}+6, remove lowest-priority electives.`;
+
+  // ── Mode: Traditional ──
+  if(state.mode==='traditional'){
+    return `You are a JSON-only academic advisor API.
+${BASE}
+MODE: Traditional Fall/Spring only — no summer.
+Schedule Fall 2026 through Spring 2028. Graduation must be Spring 2028 with at least 120 total credits.
+Each semester must be 12 or 15 credits. The 3 remaining semesters (Sp27, Fa27, Sp28) must sum to at least ${neededAfterFa26} credits total.
+Respond with ONLY valid JSON:
+{"title":"string","subtitle":"string","mode":"traditional","path":"${state.path}","graduationTerm":"Spring 2028","totalCreditsRemaining":0,"semesters":[{"term":"Fall 2026","isAbroad":false,"isSummer":false,"courses":[{"code":"CIS370","name":"Analytics and AI in Business","credits":3,"type":"required"},{"code":"JTC300","name":"Strategic Writing and Communication","credits":3,"type":"required"},{"code":"MGT320","name":"Contemporary Management","credits":3,"type":"required"},{"code":"MKT365","name":"International Marketing","credits":3,"type":"elective"}]},{"term":"Spring 2027","isAbroad":false,"isSummer":false,"courses":[{"code":"BUS225","name":"Transforming Business for Sustainable Impact","credits":3,"type":"required"}]}],"insights":[{"type":"good|warn|info","text":"string"}]}`;
+  }
+
+  // ── Mode: Modify Fall 2026 (concentration swap comparison) ──
+  const fromConc = CONC[state.primary] || CONC.mgti;
+  const currentHighCompletion = 'Management & Innovation (55% complete — MGT301, MGT310, MGT340 done; MGT320 in progress)';
+  return `You are a JSON-only academic advisor API.
+${BASE}
+MODE: Modify Fall 2026 — concentration switch comparison.
+CURRENT FALL 2026 SCHEDULE: CIS370(required-all-conc), JTC300(required-core), MGT320(required-all-conc), MKT365(elective, satisfies IB Group 1)
+
+This mode compares two trajectories, both targeting Spring 2028 graduation:
+A) CURRENT PATH: staying in the current highest-completion concentration (${currentHighCompletion}) — show Fall 2026 as-is and the full schedule forward to Spring 2028.
+B) SWITCH PATH: switching to ${fromConc.name} — show what Fall 2026 should look like instead (which course to swap MKT365 for, if any, based on ${fromConc.name} requirements) and the full schedule forward to Spring 2028.
+
+For the SWITCH PATH Fall 2026 swap: only recommend replacing MKT365 with a course that is actually required for ${fromConc.name} and not already completed or in progress. For IS: recommend CIS240 (missing prereq that unlocks entire IS sequence). For other concentrations: recommend the highest-priority remaining required course with no unmet prerequisites. If no valid swap exists, keep MKT365.
+
+Respond with ONLY valid JSON:
+{"title":"string","subtitle":"string","mode":"modfa26","path":"${state.path}","graduationTerm":"Spring 2028","comparison":{"currentPath":{"concentration":"Management & Innovation","fall2026":["CIS370","JTC300","MGT320","MKT365"],"rationale":"string","schedule":[{"term":"Fall 2026","isAbroad":false,"isSummer":false,"courses":[{"code":"CIS370","name":"Analytics and AI in Business","credits":3,"type":"required"},{"code":"JTC300","name":"Strategic Writing and Communication","credits":3,"type":"required"},{"code":"MGT320","name":"Contemporary Management","credits":3,"type":"required"},{"code":"MKT365","name":"International Marketing","credits":3,"type":"elective"}]},{"term":"Spring 2027","isAbroad":false,"isSummer":false,"courses":[{"code":"string","name":"string","credits":3,"type":"required"}]}]},"switchPath":{"concentration":"${fromConc.name}","fall2026Swap":{"drop":"MKT365","add":"string","addName":"string","addRationale":"string"},"proposedFall2026":["CIS370","JTC300","MGT320","SWAPPED-COURSE"],"schedule":[{"term":"Fall 2026","isAbroad":false,"isSummer":false,"courses":[{"code":"CIS370","name":"Analytics and AI in Business","credits":3,"type":"required"},{"code":"JTC300","name":"Strategic Writing and Communication","credits":3,"type":"required"},{"code":"MGT320","name":"Contemporary Management","credits":3,"type":"required"},{"code":"string","name":"string","credits":3,"type":"required"}]},{"term":"Spring 2027","isAbroad":false,"isSummer":false,"courses":[{"code":"string","name":"string","credits":3,"type":"required"}]}]}},"insights":[{"type":"good|warn|info","text":"string"}]}`;
+}
+
+// ─── Generate ─────────────────────────────────────────────────────────────────
 async function generate(){
-  const btn = document.getElementById('genBtn');
-  btn.disabled = true;
-  btn.textContent = 'Generating…';
+  const btn=document.getElementById('genBtn');
+  const main=document.getElementById('mainArea');
+  btn.disabled=true;
+  main.innerHTML=`<div class="loading"><div class="spinner"></div><div class="loading-msg">Building schedule…</div></div>`;
 
-  const sel = getSelections();
-  const main = document.getElementById('mainArea');
-  main.innerHTML = `<div class="loading"><div class="spinner"></div><div class="loading-msg">Building your schedule…</div></div>`;
+  const sel=getSelections();
+  const prompt=buildPrompt(sel);
 
-  const secondConcContext = {
-    ib: 'International Business 2nd concentration requires: FIN475, MGT435, MGT475 (required 9cr) + Group 1 choose 1 of MGT468/MGT478/MKT365 (MKT365 already in progress Fall 2026 so Group 1 is satisfied) + Group 2 choose 6cr from POLS232/ECON440/ECON442/SPCM434/ECON332/ECON460/ANTH200/JTC412/GR320 etc + Group 3 = the education abroad semester itself. Total 24cr. Abroad semester satisfies Group 3 automatically.',
-    mkt: 'Marketing as 2nd concentration requires: MKT300(done), MKT361, MKT410, MKT479(req MKT410), plus 4 electives from MKT315/320/330/360/362/363/364/365(in prog)/366/367/370/420/440/450/487/492. BUS479 capstone. Total ~21cr of Marketing-specific courses.',
-    is: 'Information Systems as 2nd concentration requires: CIS240 FIRST (missing — must schedule early), then CIS320, CIS355, CIS360 (required upper-div) + CIS370(in progress Fall 2026) + 4 electives from CIS310/340/350/410/411/413/455/563/575/576. BUS479 capstone. CIS240 is a critical prereq gate.',
-    none: 'No second concentration.'
-  };
-  const abroadContext = sel.abroadTerm
-    ? `${sel.abroadTerm} — study abroad semester. ${sel.secondKey === 'ib' ? 'Reserve MGT435, MGT475, FIN475 for abroad. Take 2 Group 2 courses (POLS232 equiv, ECON440 equiv, or SPCM434 equiv) abroad. Group 3 satisfied by the semester itself.' : 'Reserve internationally-themed courses for abroad semester. Take courses that benefit from international context.'}`
-    : 'No study abroad planned.';
-
-  const prompt = `You are an academic advisor for Reed Richardson at Colorado State University College of Business.
-
-REED'S TRANSCRIPT DATA:
-- Current: Junior standing, Fall 2026, GPA 3.259, 70 credits earned
-- Completed CSU courses: BUS100, BUS201, BUS220, BUS260, ACT210, ACT220, CIS200, ECON202, ECON204, CO150, STAT201(transfer equiv STAT204), FIN300, MGT301(C+), MGT310(B+), MGT340(B+), MKT300(B)
-- In progress Fall 2026: CIS370, JTC300, MGT320, MKT365
-- Missing: BUS225 (required — must add to plan)
-- Transfer credits from Arapahoe CC: English Comp I (CO130), Personal Finance (FIN200), MATH117/118/124 (College Algebra), STAT201
-
-REQUESTED PLAN:
-- Primary concentration: ${sel.primaryName}
-- Second concentration: ${sel.secondName || 'None'} — ${secondConcContext[sel.secondKey] || 'None'}
-- Certificates to target: ${sel.certNameList.length ? sel.certNameList.join(', ') : 'None'}
-- Study abroad: ${abroadContext}
-
-KEY CSU CATALOG CONSTRAINTS (verified from 2025-2026 catalog):
-- BUS225 is MISSING and REQUIRED — must be scheduled first available semester
-- MGT410 requires MGT320 (completing Fall 2026) ✓
-- MGT476 requires MGT305 or MGT320 ✓
-- MKT479 requires MKT410; MKT450 requires MKT410
-- ACT311 requires ACT301 (which requires ACT210 done A-) ✓
-- CIS courses in IS concentration ALL require CIS240 first (NOT on transcript — schedule CIS240 in Spring 2027 before any CIS300-level)
-- All concentrations require BUS479 as capstone (must be the FINAL semester)
-- Spring-only courses: MKT363 (Sales Management)
-- International Business Group 3 is satisfied by the study abroad semester itself (no separate courses needed)
-- Do NOT schedule Finance concentration courses — Finance is not an interest
-
-Generate a complete semester-by-semester schedule from Spring 2027 through graduation (Spring 2028 or Fall 2028).
-
-CREDIT HOUR RULES — STRICT:
-- Each semester MUST have between 12 and 15 credit hours. No exceptions.
-- Aim for 4 courses at 3 credits each = 12 credits as the floor
-- 5 courses at 3 credits = 15 credits as the ceiling
-- Count every credit carefully before finalizing each semester
-- If a semester would go below 12cr, add an appropriate elective to fill
-- If a semester would exceed 15cr, move a course to the next semester
-
-Format your response as a single valid JSON object with this exact structure:
-{
-  "title": "Schedule title summarizing the plan",
-  "subtitle": "1-sentence description of what this plan achieves",
-  "graduationTerm": "Spring 2028 or Fall 2028",
-  "totalCreditsRemaining": number,
-  "semesters": [
-    {
-      "term": "Spring 2027",
-      "isAbroad": false,
-      "courses": [
-        {
-          "code": "MGT410",
-          "name": "Leadership and Organizational Behavior",
-          "credits": 3,
-          "type": "required|elective|cert|ib|abroad"
-        }
-      ]
-    }
-  ],
-  "insights": [
-    {
-      "type": "good|warn|info",
-      "text": "Key insight about this schedule"
-    }
-  ]
-}
-
-Rules:
-- Never re-schedule already completed or in-progress courses
-- Mark abroad semester courses with type "abroad", IB courses with type "ib", cert-satisfying courses with type "cert", required concentration courses with type "required", electives with type "elective"
-- STRICTLY 12-15 credits per semester — verify the sum before finalizing each semester
-- BUS225 must appear in Spring 2027
-- BUS479 MUST be in the very last semester
-- Provide 4-6 specific, actionable insights about this exact schedule
-- Return ONLY valid JSON, no markdown fences, no explanation outside the JSON`;
-
-  try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:2000,
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6', max_tokens:3000,
+        system:'You are a JSON-only API. Respond with a single valid JSON object only. No explanation, no markdown, no text outside the JSON. Start with { end with }.',
         messages:[{role:'user',content:prompt}]
       })
     });
-    const data = await resp.json();
-    const raw = data.content?.find(c=>c.type==='text')?.text || '';
-    const clean = raw.replace(/```json|```/g,'').trim();
-    const schedule = JSON.parse(clean);
-    state.currentSchedule = schedule;
-    renderSchedule(schedule, sel);
-  } catch(e){
-    main.innerHTML = `<div class="error-card"><strong>Generation failed.</strong> Please try again. If the issue persists, try simplifying your selections.<br><br>Technical details: ${e.message}</div>`;
+    const data=await resp.json();
+    const raw=data.content?.find(c=>c.type==='text')?.text||'';
+    const s=raw.indexOf('{'), e=raw.lastIndexOf('}');
+    if(s===-1||e===-1) throw new Error('No JSON in response');
+    const schedule=JSON.parse(raw.slice(s,e+1));
+    state.currentSchedule=schedule;
+    renderSchedule(schedule,sel);
+  }catch(err){
+    main.innerHTML=`<div class="error-card"><strong>Generation failed.</strong> Please try again.<br><br>${err.message}</div>`;
   }
-  btn.disabled = false;
-  btn.textContent = '⚡ Generate schedule';
+  btn.disabled=false; updateGenBtn();
 }
 
-function renderSchedule(s, sel){
-  const main = document.getElementById('mainArea');
-  const certCount = sel.certNameList.length;
+// ─── Cert progress chart ──────────────────────────────────────────────────────
+function buildCertChart(semesters){
+  // Collect all course codes in this schedule
+  const scheduled=new Set();
+  for(const sem of(semesters||[])) for(const c of(sem.courses||[])) scheduled.add(c.code.toUpperCase());
 
-  // Summary pills
-  let pills = `<span class="s-pill sp-conc">${sel.primaryName}</span>`;
-  if(sel.secondName) pills += `<span class="s-pill" style="background:var(--pud);color:var(--put)">${sel.secondName} (2nd conc.)</span>`;
-  if(certCount) pills += `<span class="s-pill sp-cert">${certCount} cert${certCount>1?'s':''} targeted</span>`;
-  if(sel.abroadTerm) pills += `<span class="s-pill sp-abroad">✈ ${sel.abroadTerm}</span>`;
-  pills += `<span class="s-pill sp-total">Grad: ${s.graduationTerm}</span>`;
+  const results=[];
+  for(const [certName,cert] of Object.entries(CERT_MAP)){
+    const alreadyDone=cert.done.length;
+    const inSchedule=cert.courses.filter(c=>!cert.done.includes(c)&&scheduled.has(c)).length;
+    if(inSchedule===0) continue; // only show certs with at least one course in schedule
+    const satisfied=Math.min(alreadyDone+inSchedule,cert.total);
+    const pct=Math.round((satisfied/cert.total)*100);
+    results.push({certName,pct,satisfied,total:cert.total,alreadyDone,inSchedule,stillNeeded:Math.max(0,cert.total-satisfied)});
+  }
+  results.sort((a,b)=>b.pct-a.pct);
+  if(!results.length) return '';
 
-  let html = `
-  <div class="schedule-header">
-    <div>
-      <div class="schedule-title">${s.title}</div>
-      <div class="schedule-sub">${s.subtitle}</div>
-    </div>
+  let html=`<div style="margin-top:20px"><div class="slab">Certificate progress from this schedule</div><div style="display:grid;gap:8px">`;
+  for(const c of results){
+    const color=c.pct>=100?'#3d9e5f':c.pct>=60?'#4f8ef7':'#534AB7';
+    const complete=c.pct>=100?'<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:#0f2a1a;color:#6dcc94;font-weight:500">Complete ✓</span>':'';
+    html+=`<div style="background:var(--s1);border:0.5px solid var(--bd);border-left:3px solid ${color};border-radius:12px;padding:12px 14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:13px;font-weight:500;color:var(--tp)">${c.certName}</div>
+        ${complete||`<span style="font-size:11px;color:var(--tm)">${c.stillNeeded} more needed</span>`}
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+        <div style="flex:1;height:6px;background:var(--s0);border-radius:3px;overflow:hidden"><div style="height:100%;border-radius:3px;background:${color};width:${c.pct}%"></div></div>
+        <span style="font-size:12px;font-weight:600;color:var(--tp);min-width:34px;text-align:right">${c.pct}%</span>
+      </div>
+      <div style="font-size:11px;color:var(--tm);display:flex;gap:14px">
+        <span style="color:#3d9e5f">${c.alreadyDone} already done</span>
+        <span style="color:#AFA9EC">${c.inSchedule} in this schedule</span>
+        ${c.stillNeeded>0?`<span>${c.stillNeeded} still needed</span>`:''}
+      </div>
+    </div>`;
+  }
+  return html+`</div></div>`;
+}
+
+// ─── Render schedule ──────────────────────────────────────────────────────────
+function renderSchedule(s,sel){
+  const main=document.getElementById('mainArea');
+  const pathLabel=s.path==='cert'?'🎓 Certificate Path':'⚡ Minimal Path';
+  const modeLabel={traditional:'Traditional Fall/Spring',modfa26:'Modify Fall 2026'}[s.mode||state.mode]||'';
+  const pathColor=s.path==='cert'?'var(--pud)':'var(--gd)';
+  const pathText=s.path==='cert'?'var(--put)':'var(--gt)';
+
+  let pills=`<span class="s-pill sp-conc">${sel.primaryName}</span>`;
+  if(sel.secondName) pills+=`<span class="s-pill" style="background:var(--pud);color:var(--put)">${sel.secondName} (2nd)</span>`;
+  pills+=`<span class="s-pill" style="background:${pathColor};color:${pathText}">${pathLabel}</span>`;
+  if(sel.abroadTerm) pills+=`<span class="s-pill sp-abroad">✈ ${sel.abroadTerm}</span>`;
+  pills+=`<span class="s-pill" style="background:var(--s2);color:var(--ts);border:0.5px solid var(--bds)">${modeLabel}</span>`;
+  pills+=`<span class="s-pill sp-total">Grad: ${s.graduationTerm}</span>`;
+
+  let html=`<div class="schedule-header">
+    <div><div class="schedule-title">${s.title}</div><div class="schedule-sub">${s.subtitle||''}</div></div>
     <div class="header-actions">
       <button class="action-btn" onclick="saveSchedule()">Save</button>
       <button class="action-btn primary" onclick="generate()">↻ Regenerate</button>
     </div>
   </div>
-  <div class="summary-row">${pills}</div>
-  <div class="semester-grid">`;
+  <div class="summary-row">${pills}</div>`;
 
-  for(const sem of s.semesters){
-    const totalCr = sem.courses.reduce((a,c)=>a+c.credits, 0);
-    const crOk = totalCr >= 12 && totalCr <= 15;
-    const abroadBadge = sem.isAbroad ? `<span class="sem-special ss-abroad">✈ Abroad</span>` : '';
+  // Mode 3: comparison view
+  if(s.mode==='modfa26'&&s.comparison){
+    const cp=s.comparison.currentPath, sp=s.comparison.switchPath;
+    html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">`;
 
-    html += `<div class="sem-block">
-      <div class="sem-header">
-        <div class="sem-name">${sem.term} ${abroadBadge}</div>
-        <div style="font-size:13px;font-weight:600;color:${crOk?'#6dcc94':'#f0a840'}">${totalCr} cr</div>
-      </div>
-      <div class="courses-list">`;
-
-    for(const c of sem.courses){
-      const codeColor =
-        c.type==='abroad'   ? 'var(--gt)' :
-        c.type==='cert'     ? 'var(--put)' :
-        c.type==='ib'       ? '#AFA9EC' :
-        c.type==='elective' ? 'var(--tm)' :
-                              'var(--at)';
-      html += `<div class="course-row">
-        <div style="display:flex;align-items:baseline;gap:10px;flex:1">
-          <span style="font-size:11px;font-weight:600;color:${codeColor};white-space:nowrap">${c.code}</span>
-          <span style="font-size:12px;color:var(--tp);line-height:1.35">${c.name}</span>
+    const renderCompCol=(title,color,fa26courses,rationale,semesters)=>{
+      const crTotal=fa26courses.length*3;
+      let col=`<div style="background:var(--s1);border:0.5px solid ${color};border-radius:14px;overflow:hidden">
+        <div style="padding:10px 14px;background:var(--s2);border-bottom:0.5px solid var(--bd)">
+          <div style="font-size:12px;font-weight:600;color:${color};margin-bottom:3px">${title}</div>
+          <div style="font-size:11px;color:var(--tm)">${rationale||''}</div>
         </div>
-        <span style="font-size:12px;color:var(--tm);font-weight:500;flex-shrink:0">${c.credits} cr</span>
-      </div>`;
+        <div style="padding:8px 14px;border-bottom:0.5px solid var(--bd)">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tm);margin-bottom:6px">Fall 2026 (${crTotal} cr)</div>`;
+      for(const c of fa26courses){
+        const isNew=sp&&sp.proposedFall2026&&title.includes(sp.concentration)&&c===sp.fall2026Swap?.add;
+        col+=`<div style="font-size:12px;color:${isNew?'#6dcc94':'var(--tp)'};padding:2px 0">${c}${isNew?' ← new':''}</div>`;
+      }
+      col+=`</div>`;
+      // Semester list compact
+      for(const sem of(semesters||[])){
+        const cr=sem.courses.reduce((a,c)=>a+c.credits,0);
+        const crOk=cr>=12&&cr<=15;
+        const sumBadge=sem.isSummer?'☀ ':'';
+        col+=`<div style="padding:7px 14px;border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-size:11px;font-weight:500;color:var(--ts)">${sumBadge}${sem.term}</div>
+          <div style="font-size:11px;font-weight:600;color:${crOk?'#6dcc94':'#f0a840'}">${cr} cr</div>
+        </div>`;
+        for(const c of sem.courses){
+          col+=`<div style="padding:3px 14px 3px 20px;display:flex;gap:8px;border-bottom:0.5px solid var(--bd)">
+            <span style="font-size:10px;font-weight:600;color:var(--at);min-width:52px">${c.code}</span>
+            <span style="font-size:11px;color:var(--tp);flex:1;line-height:1.3">${c.name}</span>
+            <span style="font-size:10px;color:var(--tm)">${c.credits}cr</span>
+          </div>`;
+        }
+      }
+      col+=`</div>`;
+      return col;
+    };
+
+    html+=renderCompCol(`Current Path — ${cp.concentration}`,'#4f8ef7',cp.fall2026||['CIS370','JTC300','MGT320','MKT365'],cp.rationale,cp.schedule);
+    const swFa26=sp.proposedFall2026||['CIS370','JTC300','MGT320',sp.fall2026Swap?.add||'TBD'];
+    html+=renderCompCol(`Switch Path — ${sp.concentration}`,'#6dcc94',swFa26,`Swap: drop MKT365 → add ${sp.fall2026Swap?.add||'TBD'}. ${sp.fall2026Swap?.addRationale||''}`,sp.schedule);
+    html+=`</div>`;
+
+    // Cert charts for both paths
+    const allSems=[...(cp.schedule||[]),...(sp.schedule||[])];
+    html+=buildCertChart(allSems);
+  } else {
+    // Standard semester list
+    const codeColor=t=>t==='abroad'?'var(--gt)':t==='cert'?'var(--put)':t==='ib'?'#AFA9EC':t==='elective'?'var(--tm)':'var(--at)';
+    html+=`<div class="semester-grid">`;
+    let runningTotal = 70; // already earned before Fall 2026
+    for(const sem of(s.semesters||[])){
+      const cr=sem.courses.reduce((a,c)=>a+c.credits,0);
+      runningTotal += cr;
+      const isFa26=sem.term==='Fall 2026';
+      // Each semester must be 12 or 15 credits (multiples of 3, full-time)
+      const crOk = cr===12 || cr===15;
+      const crColor=isFa26?'var(--amt)':crOk?'#6dcc94':cr>15?'#f07070':'#f0a840';
+      const abroad=sem.isAbroad?`<span class="sem-special ss-abroad">✈ Abroad</span>`:'';
+      const summer=sem.isSummer?`<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:#1a1838;color:#AFA9EC;margin-left:6px">☀ Summer</span>`:'';
+      const inProg=isFa26?`<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--amd);color:var(--amt);margin-left:6px;font-weight:500">↻ In Progress</span>`:'';
+      const totalPill = runningTotal>=120
+        ? `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--gd);color:var(--gt);margin-left:6px;font-weight:600">${runningTotal}/120 ✓</span>`
+        : `<span style="font-size:10px;padding:2px 8px;border-radius:20px;background:var(--s2);color:var(--ts);margin-left:6px">${runningTotal}/120</span>`;
+      html+=`<div class="sem-block" style="${isFa26?'border-color:var(--am)':''}">
+        <div class="sem-header" style="${isFa26?'background:var(--amd)':''}">
+          <div class="sem-name">${sem.term}${abroad}${summer}${inProg}${totalPill}</div>
+          <div style="font-size:13px;font-weight:600;color:${crColor}">${cr} cr</div>
+        </div>
+        <div class="courses-list">`;
+      for(const c of sem.courses){
+        html+=`<div class="course-row">
+          <div style="display:flex;align-items:baseline;gap:10px;flex:1">
+            <span style="font-size:11px;font-weight:600;color:${codeColor(c.type)};white-space:nowrap">${c.code}</span>
+            <span style="font-size:12px;color:var(--tp);line-height:1.35">${c.name}</span>
+          </div>
+          <span style="font-size:12px;color:var(--tm);font-weight:500;flex-shrink:0">${c.credits} cr</span>
+        </div>`;
+      }
+      html+=`</div></div>`;
     }
-
-    html += `</div></div>`;
+    html+=`</div>`;
+    html+=buildCertChart(s.semesters);
   }
-
-  html += `</div>`;
 
   if(s.insights?.length){
-    html += `<div class="insights">`;
-    for(const ins of s.insights){
-      const cls = ins.type==='warn' ? 'warn' : ins.type==='good' ? 'good' : '';
-      html += `<div class="insight-card ${cls}">${ins.text}</div>`;
-    }
-    html += `</div>`;
+    html+=`<div class="insights">`;
+    for(const i of s.insights) html+=`<div class="insight-card ${i.type==='warn'?'warn':i.type==='good'?'good':''}">${i.text}</div>`;
+    html+=`</div>`;
   }
-
-  main.innerHTML = html;
+  main.innerHTML=html;
 }
 
+// ─── Save / Export ────────────────────────────────────────────────────────────
 function saveSchedule(){
   if(!state.currentSchedule) return;
-  const sel = getSelections();
-  const name = `${sel.primaryName}${sel.secondName?' + '+sel.secondName:''}${sel.certNameList.length?' + certs':''}${sel.abroadTerm?' + abroad':''}`;
-  const entry = {
-    id: Date.now(),
-    name,
-    schedule: state.currentSchedule,
-    sel
-  };
-  state.savedSchedules.unshift(entry);
+  const sel=getSelections();
+  const pathTag=state.path==='cert'?'🎓 Cert':'⚡ Min';
+  const modeTag={traditional:'Traditional',modfa26:'Modify Fa26'}[state.mode]||'';
+  const name=`[${pathTag} · ${modeTag}] ${sel.primaryName}${sel.secondName?' + '+sel.secondName:''}${sel.abroadTerm?' + abroad':''}`;
+  state.savedSchedules.unshift({id:Date.now(),name,schedule:state.currentSchedule,sel});
   renderSaved();
-  const btn = event.target;
-  btn.textContent = '✓ Saved!';
-  setTimeout(()=>btn.textContent='💾 Save this schedule',1500);
+  const btn=event.target; btn.textContent='✓ Saved!';
+  setTimeout(()=>btn.textContent='Save',1500);
 }
-
 function renderSaved(){
-  const list = document.getElementById('savedList');
-  if(!state.savedSchedules.length){
-    list.innerHTML = '<div style="font-size:12px;color:var(--tm)">No saved schedules yet.</div>';
-    return;
-  }
-  list.innerHTML = state.savedSchedules.map(e=>`
+  const list=document.getElementById('savedList');
+  if(!state.savedSchedules.length){list.innerHTML='<div style="font-size:12px;color:var(--tm)">No saved schedules yet.</div>';return;}
+  list.innerHTML=state.savedSchedules.map(e=>`
     <div class="saved-item" data-id="${e.id}">
       <div class="saved-name">${e.name}</div>
-      <button class="saved-del" onclick="deleteSaved(${e.id})" title="Delete">✕</button>
-    </div>
-  `).join('');
+      <button class="saved-del" onclick="deleteSaved(${e.id})">✕</button>
+    </div>`).join('');
   list.querySelectorAll('.saved-item').forEach(item=>{
-    item.addEventListener('click', function(ev){
+    item.addEventListener('click',function(ev){
       if(ev.target.classList.contains('saved-del')) return;
-      const id = parseInt(this.dataset.id);
-      const entry = state.savedSchedules.find(e=>e.id===id);
-      if(entry){
-        state.currentSchedule = entry.schedule;
-        document.querySelectorAll('.saved-item').forEach(i=>i.classList.remove('active-save'));
-        this.classList.add('active-save');
-        renderSchedule(entry.schedule, entry.sel);
-      }
+      const entry=state.savedSchedules.find(e=>e.id===parseInt(this.dataset.id));
+      if(entry){state.currentSchedule=entry.schedule;document.querySelectorAll('.saved-item').forEach(i=>i.classList.remove('active-save'));this.classList.add('active-save');renderSchedule(entry.schedule,entry.sel);}
     });
   });
 }
-
 function deleteSaved(id){
-  state.savedSchedules = state.savedSchedules.filter(e=>e.id!==id);
-  renderSaved();
+  state.savedSchedules=state.savedSchedules.filter(e=>e.id!==id); renderSaved();
 }
+function exportSchedules(){
+  if(!state.savedSchedules.length) return;
+  const blob=new Blob([JSON.stringify(state.savedSchedules,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='reed-schedules.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
 </script>
 </body>
 </html>
